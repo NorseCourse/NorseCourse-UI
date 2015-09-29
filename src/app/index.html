@@ -2,13 +2,27 @@
 <html lang="en" ng-app="norseCourse">
   <head>
     <title>NorseCourse</title>
+    
+    <!-- Angular, Angular Material, Material Icons -->
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- NorseCourse specific styles -->
     <link rel="stylesheet" type="text/css" href="css/style.css" />
   </head>
-  <body ng-controller="test">
+  
+  <body layout="column" ng-controller="test">
     <h1>{{ "Hello" + ", " + name + "!!!" }}</h1>
     <input type="text" ng-model="name" />
 
+    <!-- Angular and Angular Material -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.js"></script>
+    
+    <!-- NorseCourse specific js -->
     <script src="/js/main.js"></script>
   </body>
 </html>
