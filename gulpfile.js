@@ -4,9 +4,7 @@ var jshint = require('gulp-jshint');
 var sass = require('gulp-sass');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
-var browserify = require('gulp-browserify');
 var concat = require('gulp-concat');
-var clean = require('gulp-clean');
 var gutil = require('gulp-util');
 var browserSync = require('browser-sync').create();
 var ngAnnotate = require('gulp-ng-annotate')
@@ -15,14 +13,14 @@ var minifyCss = require('gulp-minify-css');
 
 // lint task
 gulp.task('lint', function() {
-    return gulp.src('src/*/*.js')
+    return gulp.src('src/**/*.js')
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });
 
 // compile sass
 gulp.task('sass', function() {
-    return gulp.src('src/*/*.scss')
+    return gulp.src('src/**/*.scss')
         .pipe(concat('style.scss'))
         .pipe(sass({onError: function(e) { console.log(e); } }))
         .pipe(minifyCss())
@@ -45,7 +43,7 @@ gulp.task('html', function() {
     gulp.src('src/app/index.html')
         .pipe(gulp.dest('dist/'));
     gulp.src('src/**/*.html')
-        .pipe(gulp.dest('dist/js'));
+        .pipe(gulp.dest('dist/views'));
 });
 
 // serve task
