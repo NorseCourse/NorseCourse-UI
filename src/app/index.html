@@ -15,6 +15,24 @@
   <body layout="column" ng-controller="test">
     <h1>{{ "Hello" + ", " + name + "!!!" }}</h1>
     <input type="text" ng-model="name" />
+    
+
+    <md-tabs md-dynamic-height="" md-border-bottom="">
+          <md-tab label="one">
+            <md-content class="md-padding">
+              <h1 class="md-display-2">Tab One</h1>
+                <md-chips ng-model='chips'>
+            </md-chips>
+
+          </md-content>
+      </md-tab>
+      <md-tab label="two">
+            <md-content class="md-padding">
+              <h1 class="md-display-2">Tab Two</h1>
+
+          </md-content>
+      </md-tab>
+    </md-tabs>
 
     <!-- Angular and Angular Material -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.min.js"></script>
