@@ -15,6 +15,8 @@
   
   <body layout="column" ng-controller="test">
 
+
+
     <md-tabs md-dynamic-height="" md-border-bottom="">
           <md-tab label="Courses">
 
@@ -22,17 +24,45 @@
             <input type="text" ng-model="name" />
             <md-content class="md-padding">
 
+
+            <div>
+                <h1 class="md-title">Find a course</h1>
+                <div layout="row">
+
+                  <md-input-container>
+                    <label>Department</label>
+                    <input type="text" ng-model="dept" >
+                  </md-input-container>
+
+                  <md-input-container>
+                    <label>Class</label>
+                    <input type="text" ng-model="class" >
+                  </md-input-container>
+                </div>
+              </div>
+
           </md-content>
+
       </md-tab>
+
+
+
       <md-tab label="Schedules">
             <md-content class="md-padding">
-            <h3> Classes Currently Selected: <h4>
+            <h3> Classes Currently Selected: </h3>
+            <h4>{{ "Department Selected:  " + dept }}</h4>
+            <h4>{{ "Course Selected:  " + class }}</h4>
               <md-chips ng-model='chips'>
             </md-chips>
 
           </md-content>
       </md-tab>
     </md-tabs>
+
+
+
+
+
 
     <!-- Angular and Angular Material -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.min.js"></script>
