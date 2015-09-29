@@ -2,6 +2,7 @@
 <html lang="en" ng-app="norseCourse">
   <head>
     <title>NorseCourse</title>
+    <h1> NorseCourse</h1>
     
     <!-- Angular, Angular Material, Material Icons -->
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css">
@@ -15,7 +16,7 @@
   <body layout="column" ng-controller="test">
 
     <md-tabs md-dynamic-height="" md-border-bottom="">
-          <md-tab label="one">
+          <md-tab label="Courses">
 
             <h1>{{ "Hello" + ", " + name + "!!!" }}</h1>
             <input type="text" ng-model="name" />
@@ -23,7 +24,7 @@
 
           </md-content>
       </md-tab>
-      <md-tab label="two">
+      <md-tab label="Schedules">
             <md-content class="md-padding">
               <md-chips ng-model='chips'>
             </md-chips>
