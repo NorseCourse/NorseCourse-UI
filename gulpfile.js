@@ -51,7 +51,7 @@ gulp.task('serve', ['lint', 'html', 'sass', 'js'], function() {
     browserSync.init({
         server: "./dist"
     });
-    gulp.watch('src/**/*.js', ['js']).on('change', browserSync.reload);
+    gulp.watch('src/**/*.js', ['lint', 'js']).on('change', browserSync.reload);
     gulp.watch('src/**/*.scss', ['sass']).on('change', browserSync.reload);
     gulp.watch('src/**/*.html', ['html']).on('change', browserSync.reload);
 });
