@@ -2,7 +2,6 @@
 <html lang="en" ng-app="norseCourse">
   <head>
     <title>NorseCourse</title>
-    <h1>NorseCourse</h1>
     
     <!-- Angular, Angular Material, Material Icons -->
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.9.4/angular-material.min.css">
@@ -15,54 +14,14 @@
   
   <body layout="column" ng-controller="test">
 
-
-
-    <md-tabs md-dynamic-height="" md-border-bottom="">
-          <md-tab label="Courses">
-
-            <h1>{{ "Hello" + ", " + name + "!!!" }}</h1>
-            <input type="text" ng-model="name" />
-            <md-content class="md-padding">
-
-
-            <div>
-                <h1 class="md-title">Find a course</h1>
-                <div layout="row">
-
-                  <md-input-container>
-                    <label>Department</label>
-                    <input type="text" ng-model="dept" >
-                  </md-input-container>
-
-                  <md-input-container>
-                    <label>Class</label>
-                    <input type="text" ng-model="class" >
-                  </md-input-container>
-                </div>
-              </div>
-
-          </md-content>
-
-      </md-tab>
-
-
-
-      <md-tab label="Schedules">
-            <md-content class="md-padding">
-            <h3> Classes Currently Selected: </h3>
-            <h4>{{ "Department Selected:  " + dept }}</h4>
-            <h4>{{ "Course Selected:  " + class }}</h4>
-              <md-chips ng-model='chips'>
-            </md-chips>
-
-          </md-content>
-      </md-tab>
+    <md-toolbar>
+      <div class="md-toolbar-tools">NorseCourse</div>
+    </md-toolbar>
+    <md-tabs class="md-primary">
+      <md-tab label="Find"><p>This is some content</p></md-tab>
+      <md-tab label="Plan"></md-tab>
+      <md-tab label="Browse"></md-tab>
     </md-tabs>
-
-
-
-
-
 
     <!-- Angular and Angular Material -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.6/angular.min.js"></script>
