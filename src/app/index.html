@@ -18,9 +18,15 @@
       <div class="md-toolbar-tools">NorseCourse</div>
     </md-toolbar>
     <md-tabs class="md-primary">
-      <md-tab label="Find"><p>This is some content</p></md-tab>
-      <md-tab label="Plan"></md-tab>
-      <md-tab label="Browse"></md-tab>
+      <md-tab label="Find">
+        <ng-include src="'views/app/find.html'"></ng-include>
+      </md-tab>
+      <md-tab label="Plan">
+        <ng-include src="'views/app/plan.html'"></ng-include>
+      </md-tab>
+      <md-tab label="Browse">
+        <ng-include src="'views/app/browse.html'"></ng-include>
+      </md-tab>
     </md-tabs>
 
     <!-- Angular and Angular Material -->
