@@ -10,6 +10,7 @@ var browserSync = require('browser-sync').create();
 var ngAnnotate = require('gulp-ng-annotate')
 var sourcemaps = require('gulp-sourcemaps')
 var minifyCss = require('gulp-minify-css');
+var debug = require('gulp-debug');
 
 // lint task
 gulp.task('lint', function() {
@@ -30,10 +31,12 @@ gulp.task('sass', function() {
 // prepare scripts
 gulp.task('js', function() {
     gulp.src(['src/**/module.js', 'src/**/*.js'])
+        .pipe(debug())
         .pipe(sourcemaps.init())
         .pipe(concat('main.js'))
-        .pipe(ngAnnotate())
-        .pipe(uglify())
+        .pipe(debug())
+        //.pipe(ngAnnotate())
+        //.pipe(uglify())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest('dist/js'));
 });

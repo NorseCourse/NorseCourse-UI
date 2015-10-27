@@ -1,1 +1,21 @@
-<p>Find!</p>
+<md-content ng-controller="courseFinderController" layout-padding>
+  <md-chips
+     ng-model="courseSearchTerms"
+     md-autocomplete-snap>
+    <md-autocomplete
+       md-selected-item="foo"
+       md-search-text="queryText"
+       md-items="item in autocompleteQuery(queryText)"
+       md-item-text="item.display"
+       placeholder="Enter a department or gen ed!">
+      <md-item-template>
+        <span>{{item.data.name}}</span>
+        <span>({{item.type | uppercase}})</span>
+      </md-item-template>
+    </md-autocomplete>
+    <md-chip-template>
+      <span>{{$chip.data.name}}</span>
+      <span>({{$chip.type | uppercase}})</span>
+    </md-chip-template>
+  <md-chips>
+</md-content>
