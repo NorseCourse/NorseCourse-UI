@@ -49,8 +49,11 @@ gulp.task('html', function() {
         .pipe(gulp.dest('dist/views'));
 });
 
+// build task
+gulp.task('build', ['lint', 'html', 'sass', 'js'])
+
 // serve task
-gulp.task('serve', ['lint', 'html', 'sass', 'js'], function() {
+gulp.task('serve', ['build'], function() {
     browserSync.init({
         server: "./dist"
     });
