@@ -1,7 +1,8 @@
 <md-content ng-controller="courseFinderController" layout-padding>
   <md-chips
      ng-model="courseSearchTerms"
-     md-autocomplete-snap>
+     md-on-append="newKeyword($chip)"
+     md-require-match="">
     <md-autocomplete
        md-selected-item="foo"
        md-search-text="queryText"

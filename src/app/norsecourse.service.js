@@ -52,11 +52,9 @@
         var courses = [
             {
                 name: 'CS 420',
-                description: 'Machine learning: topics include neural nets, classifiers, etc'
             },
             {
                 name: 'CS 440',
-                description: 'Database management systems'
             }
         ];
 
@@ -80,8 +78,7 @@
                     break;
                 case 'course':
                     angular.forEach(courses, function(course) {
-                        if (course.name.toLowerCase().includes(queryText) ||
-                            course.description.toLowerCase().includes(queryText)) {
+                        if (course.name.toLowerCase().includes(queryText)) {
                             results.push({
                                 type: 'course',
                                 data: course
@@ -97,6 +94,15 @@
                                 type: 'gen ed',
                                 data: genEd
                             });
+                        }
+                    });
+                    break;
+                case 'keyword':
+                    results.push({
+                        type: 'keyword',
+                        data: {
+                            name: queryText,
+                            text: queryText
                         }
                     });
                     break;
