@@ -1,0 +1,7 @@
+md-autocomplete input:not(.md-input) {
+    /**
+     * one of the md rules set this width to 200px,
+     * which tended to cut off some text
+     */
+    width: 300px;
+}

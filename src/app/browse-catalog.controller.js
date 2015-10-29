@@ -14,15 +14,43 @@
 	    //return [{value:'John'}];
 	    return deferred.promise;
 	};
-	$scope.deptNames = [
-	    {value:'Computer Science'},
-	    {value:'Physics'},
-	    {value:'Chemistry'},
-	    {value:'Mathematics'},
-	    {value:'Nursing'}
+	$scope.deptNames =[
+	    {
+		"abbreviation": "CS",
+		"department_id": 21,
+		"division_id": 5,
+		"name": "Computer Science"
+	    },
+	    {
+		"abbreviation": "ACCTG",
+		"department_id": 22,
+		"division_id": 5,
+		"name": "Accounting"
+	    },
+	    {
+		"abbreviation": "NURS",
+		"department_id": 25,
+		"division_id": 5,
+		"name": "Nursing"
+	    },
+	    {
+		"abbreviation": "MATH",
+		"department_id": 26,
+		"division_id": 5,
+		"name": "Mathematics"
+	    }
 	];
+	$scope.tempNames = [
+	    {value:'CS'},
+	    {value:'Phys'},
+	    {value:'Chem'},
+	    {value:'Math'},
+	    {value:'Nurs'}
+	];
+	
 	$scope.querySearch = function(queryText){
-	    var results = queryText ? $scope.deptNames : $scope.deptNames;
+	    console.log(queryText ? "cat": "dog")
+	    var results = queryText ? $scope.deptNames :$scope.tempNames;// $scope.deptNames;
 	    return results;
 	};
 
@@ -35,32 +63,13 @@ $scope.querySearch = function(queryText){
     var results = query ? call some function : function to list all department names;
 };
 
+$scope.loadNames = function(){
+//Note: This info could be gotten from the service. For now I'll 
+    
+};
 
-[
-  {
-    "abbreviation": "CS",
-    "department_id": 21,
-    "division_id": 5,
-    "name": "Computer Science"
-  },
-  {
-    "abbreviation": "ACCTG",
-    "department_id": 22,
-    "division_id": 5,
-    "name": "Accounting"
-  },
-  {
-    "abbreviation": "NURS",
-    "department_id": 25,
-    "division_id": 5,
-    "name": "Nursing"
-  },
-  {
-    "abbreviation": "MATH",
-    "department_id": 26,
-    "division_id": 5,
-    "name": "Mathematics"
-  },
+
+
   {
     "abbreviation": "CHEM",
     "department_id": 29,

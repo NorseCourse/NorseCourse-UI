@@ -4,8 +4,8 @@
         .config(function($mdThemingProvider) {
             $mdThemingProvider.theme('default')
                 .primaryPalette('indigo')
-                .accentPalette('pink')
-                .warnPalette('red')
+                .accentPalette('yellow')
+                .warnPalette('orange')
                 .backgroundPalette('grey');
         });
 })();
