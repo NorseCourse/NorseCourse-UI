@@ -1,4 +1,4 @@
-<md-content ng-controller="courseFinderController" layout-padding>
+<md-content ng-controller="courseFinderController" layout-padding layout-padding-large>
   <md-chips
      ng-model="courseSearchTerms"
      md-on-append="newKeyword($chip)"
@@ -8,7 +8,8 @@
        md-search-text="queryText"
        md-items="item in autocompleteQuery(queryText)"
        md-item-text="item.display"
-       placeholder="Enter a department or gen ed!">
+       placeholder="Enter a department or gen ed!"
+       md-no-cache>
       <md-item-template>
         <span>{{item.data.name}}</span>
         <span>({{item.type | uppercase}})</span>
@@ -18,5 +19,21 @@
       <span>{{$chip.data.name}}</span>
       <span>({{$chip.type | uppercase}})</span>
     </md-chip-template>
-  <md-chips>
+  </md-chips>
+  <md-progress-circular ng-hide="loading===null"
+                        md-mode="{{loading}}"
+                        md-diameter="84">
+  </md-progress-circular>
+  <br/>
+  <md-grid-list md-cols="5"
+                md-gutter="8px"
+                md-row-height="4:3">
+    <md-grid-tile ng-repeat="course in matchingCourses"
+                  layout="column"
+                  style="background-color:#EEEEEE;">
+      <md-grid-tile-header>
+        <h3>{{course.name}}</h3>
+      </md-grid-tile-header>
+    </md-grid-tile>
+  </md-grid-list>
 </md-content>
