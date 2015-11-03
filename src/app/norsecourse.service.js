@@ -1,62 +1,26 @@
 (function() {
     'use strict';
-    angular.module('norseCourse').service('norseCourseService', function($q, $http) {
+    angular.module('norseCourse').service('norseCourseService', function($q, $http, apiUrl) {
         var publicApi = {};
 
-        var departments = [
-            {
-                abbreviation: 'CS',
-                name: 'Computer Science'
-            },
-            {
-                abbreviation: 'BIO',
-                name: 'Biology'
-            },
-            {
-                abbreviation: 'CHEM',
-                name: 'Chemistry'
-            },
-            {
-                abbreviation: 'LING',
-                name: 'Linguistics'
-            },
-            {
-                abbreviation: 'SOC',
-                name: 'Sociology'
-            },
-            {
-                abbreviation: 'MATH',
-                name: 'Mathematics'
-            }
-        ];
+        var departments = [];
+        var genEds = [];
+        var courses = [];
 
-        var genEds = [
-            {
-                abbreviation: 'NWNL',
-                name: 'Natural World Non-lab'
-            },
-            {
-                abbreviation: 'NWL',
-                name: 'Natural World Lab'
-            },
-            {
-                abbreviation: 'QUANT',
-                name: 'Quantitative'
-            },
-            {
-                abbreviation: 'HE',
-                name: 'Human Expression'
-            }
-        ];
+        var genEdsRequest = $http.get(apiUrl + '/genEds');
+        genEdsRequest.success(function(data) {
+            genEds = data;
+        });
 
-        var courses = [
-            {
-                name: 'CS 420',
-            },
-            {
-                name: 'CS 440',
-            }
-        ];
+        var departmentsRequest = $http.get(apiUrl + '/departments');
+        departmentsRequest.success(function(data) {
+            departments = data;
+        });
+
+        var coursesRequest = $http.get(apiUrl + '/courses');
+        coursesRequest.success(function(data) {
+            courses = data;
+        });
 
         publicApi.autocompleteQuery = function(queryText, types) {
             var deferred = $q.defer();
@@ -116,6 +80,14 @@
             });
             deferred.resolve(results);
             
+            return deferred.promise;
+        };
+
+        publicApi.searchCourses = function(courseTerms) {
+            var deferred = $q.defer();
+            setTimeout(function() {
+                deferred.resolve(courses.slice(0, 100));
+            },  500);
             return deferred.promise;
         };
         

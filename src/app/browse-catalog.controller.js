@@ -46,7 +46,7 @@
 	
 	$scope.querySearch = function(queryText){
 	    
-	    console.log($scope.names)
+	    console.log($scope.names);
 	    var results = queryText ? $scope.names.filter($scope.createFilterFor(queryText))  : $scope.names;// to list all department names;
 
 	    return results;
