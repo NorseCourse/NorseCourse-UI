@@ -3,13 +3,12 @@
   <md-autocomplete
      md-selected-item="selectedItem"
      md-search-text="searchText"
-     md-items="item in querySearch(searchText)"
+     md-items="item in autocompleteQuery(searchText)"
      md-item-text="item.abbreviation"
-     md-min-length="0"
      placeholder="Enter the name or abbreviation of the department you would like to browse!">
     <md-item-template>
-      <span md-highlight-text="searchText">{{item.name }}</span>
-      <span>({{item.abbreviation | lowercase }})</span>
+      <span md-highlight-text="searchText">{{item.data.name }}</span>
+      <span>({{item.type | lowercase }})</span>
     </md-item-template>
     <md-not-found>
       No matches found.

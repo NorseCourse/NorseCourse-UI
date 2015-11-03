@@ -60,7 +60,11 @@
 
         publicApi.autocompleteQuery = function(queryText, types) {
             var deferred = $q.defer();
-
+	    //include some if statement to return all
+	    /**
+	    results = queryText ? fooQuery : bazQuery;
+	    //baz query returns everything in the highest priority 
+	    **/
             queryText = queryText.toLowerCase();
             var results = [];
             angular.forEach(types, function(type) {
