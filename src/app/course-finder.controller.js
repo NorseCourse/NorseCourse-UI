@@ -19,7 +19,7 @@
                         name: text,
                         text: text
                     }
-                }
+                };
             } else {
                 // a keyword was always created when enter hit
                 // not sure what's goign on here

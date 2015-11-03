@@ -1,1 +1,24 @@
-<p>Browse!</p>
+<div ng-controller="browseCatalog">
+
+  <md-autocomplete
+     md-selected-item="selectedItem"
+     md-search-text="searchText"
+     md-items="item in querySearch(searchText)"
+     md-item-text="item.abbreviation"
+     md-min-length="0"
+     placeholder="Enter the name or abbreviation of the department you would like to browse!">
+    <md-item-template>
+      <span md-highlight-text="searchText">{{item.name }}</span>
+      <span>({{item.abbreviation | lowercase }})</span>
+    </md-item-template>
+    <md-not-found>
+      No matches found.
+    </md-not-found>
+  </md-autocomplete>
+  
+  <md-content layout-padding>
+    Insert nonsense here
+  </md-content>
+
+ </div>
+
