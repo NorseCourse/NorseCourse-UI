@@ -1,0 +1,11 @@
+<md-grid-list md-cols="3"
+              md-gutter="8px"
+              md-row-height="4:3">
+  <md-grid-tile ng-repeat="course in courses"
+                layout="column"
+                style="background-color:#EEEEEE;">
+    <md-grid-tile-header>
+      <h3>{{course.name}}</h3>
+    </md-grid-tile-header>
+  </md-grid-tile>
+</md-grid-list>
