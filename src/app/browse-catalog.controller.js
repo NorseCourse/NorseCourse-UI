@@ -2,64 +2,31 @@
     'use strict';
     angular.module('norseCourse').controller('browseCatalog',function($scope,$q,$timeout,norseCourseService){
 	$scope.res = [];
+	$scope.deptSearchTerms = [];
+	$scope.loading = null;
 
-	$scope.autocompleteQuery = function(queryText) {
-	    console.log(queryText);
-	    var types = ['dept'];
-	    return norseCourseService.autocompleteQuery(queryText,types);
-	};
 	
+	$scope.autocompleteQuery = function(queryText) {
+	    //console.log($scope.selectedItem);
+	    var types = ['dept'];
+	    return norseCourseService.autocompleteQuery(queryText,types);//maybe include some keyword to drop down
+	};
+
+	$scope.$watch('selectedItem', function(newValue,oldValue){
+	    //write function in that goes through the courses in catalog to match depart to beginning of courses strings. THIS WON'T BE USED IN THE FUTURE. just fore practice.
+	    //console.log(newValue);
+	    console.log(newValue)
+	    norseCourseService.foo(newValue).then(function(data) {
+		$scope.matchingCourses = data;
+		console.log(data);
+	    });
+	},true);
+	//write function that watches for change of selected item
+	//when changes, query api to get courses with department = selected item.
+	//No chips.
+	// 
     });
 })();
-	/**
-	$scope.loadNames = function(){
-	    //Note: This info could be gotten from the service. For now I'll 
-	    return [
-		{
-		    "abbreviation": "CS",
-		    "department_id": 21,
-		    "division_id": 5,
-		    "name": "Computer Science"
-		},
-		{
-		    "abbreviation": "ACCTG",
-		    "department_id": 22,
-		    "division_id": 5,
-		    "name": "Accounting"
-		},
-		{
-		    "abbreviation": "NURS",
-		    "department_id": 25,
-		    "division_id": 5,
-		    "name": "Nursing"
-		},
-		{
-		    "abbreviation": "MATH",
-		    "department_id": 26,
-		    "division_id": 5,
-		    "name": "Mathematics"
-		}
-	    ];
-	};
-	$scope.names = $scope.loadNames();
 
-	
-	$scope.querySearch = function(queryText){
-	    
-	    console.log($scope.names);
-	    var results = queryText ? $scope.names.filter($scope.createFilterFor(queryText))  : $scope.names;// to list all department names;
-
-	    return results;
-	};
-
-	$scope.createFilterFor= function(queryText) {
-	    var lowercaseQuery = queryText.toLowerCase();
-	    
-	     $scope.filterFn = function(dept) {
-		 return(dept.name.toLowerCase().includes(lowercaseQuery));	 
-	     };
-	    return $scope.filterFn; 
-	};
-**/
 	
 

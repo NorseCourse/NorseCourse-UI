@@ -34,6 +34,6 @@
                 $scope.matchingCourses = data;
                 $scope.loading = null;
             });
-        }, true);
+        }, true); //object equality 
     });
 })();
