@@ -15,7 +15,7 @@
 	$scope.$watch('selectedItem', function(newValue,oldValue){
 	    //write function in that goes through the courses in catalog to match depart to beginning of courses strings. THIS WON'T BE USED IN THE FUTURE. just fore practice.
 	    //console.log(newValue);
-	    console.log(newValue)
+	    console.log(newValue);
 	    norseCourseService.foo(newValue).then(function(data) {
 		$scope.matchingCourses = data;
 		console.log(data);

@@ -96,18 +96,18 @@
 
 	publicApi.foo= function(department){
 	    var deferred = $q.defer();
-	    var dept = department.data.abbreviation
+	    var dept = department.data.abbreviation;
 	    var matchingCourses = [];
 	    angular.forEach(courses,function(course){
 		//console.log(typeof course.name);
 		if (course.name.startsWith(dept)){
 		    console.log('here');
 		    matchingCourses.push(course);
-		};
+		}
 
 	    });
 	    deferred.resolve( matchingCourses);
-	    console.log(matchingCourses.length)
+	    console.log(matchingCourses.length);
 	    return deferred.promise;
 	    //include an angular ForEach Here
 	    //var dept = department.abbreviation
