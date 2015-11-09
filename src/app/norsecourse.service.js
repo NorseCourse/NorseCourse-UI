@@ -24,7 +24,6 @@
 
         publicApi.autocompleteQuery = function(queryText, types) {
             var deferred = $q.defer();
-
             queryText = queryText.toLowerCase();
             var results = [];
             angular.forEach(types, function(type) {
@@ -86,7 +85,39 @@
             },  500);
             return deferred.promise;
         };
-        
+        publicApi.searchDepartments = function(departmentTerms){
+	    var deferred = $q.defer();
+	    setTimeout(function(){
+		deferred.resolve(departments);
+		      
+	    }, 500);
+	    return deferred.promise;
+	};
+
+	publicApi.foo= function(department){
+	    var deferred = $q.defer();
+	    var dept = department.data.abbreviation;
+	    var matchingCourses = [];
+	    angular.forEach(courses,function(course){
+		//console.log(typeof course.name);
+		if (course.name.startsWith(dept)){
+		    console.log('here');
+		    matchingCourses.push(course);
+		}
+
+	    });
+	    deferred.resolve( matchingCourses);
+	    console.log(matchingCourses.length);
+	    return deferred.promise;
+	    //include an angular ForEach Here
+	    //var dept = department.abbreviation
+	    //resultingDepartments.append(item)
+	    //for item in courses:
+	    //   if item.id.startswith (or includes, or indexOf):
+	    //        resultingDepartments.append(item)
+	    
+	};
+	
         return publicApi;
     });
 })();
