@@ -8,6 +8,10 @@
           Schedule Preferences
         </h6>
         <span class="flex"></span>
+        <md-button class="md-accent md-icon-button"
+                   ng-click="getSchedules()">
+          <md-icon>search</md-icon>
+        </md-button>
         <md-button class="md-icon-button"
                    ng-click="toggleExpanded('form')">
           <md-icon>{{expanded==='form' ? 'expand_less' : 'expand_more'}}</md-icon>
@@ -15,7 +19,8 @@
       </div>
     </md-toolbar>
     <md-content class="schedule-planner__section"
-                ng-class="{'schedule-planner__section--expanded': expanded!=='form'}">
+                ng-class="{'schedule-planner__section--expanded': expanded==='form'}"
+                layout-padding>
       <form>
         <md-input-container>
           <label>Required Courses</label>
@@ -126,7 +131,7 @@
       </div>
     </md-toolbar>
     <md-content class="schedule-planner__section"
-                ng-class="{'schedule-planner__section--expanded': expanded!=='results'}">
+                ng-class="{'schedule-planner__section--expanded': expanded==='results'}">
     </md-content>
   </md-content>
   
@@ -148,7 +153,7 @@
       </div>
     </md-toolbar>
     <md-content class="schedule-planner__section"
-                ng-class="{'schedule-planner__section--expanded': expanded!=='saved'}">
+                ng-class="{'schedule-planner__section--expanded': expanded==='saved'}">
     </md-content>
   </md-content>
 </md-content>

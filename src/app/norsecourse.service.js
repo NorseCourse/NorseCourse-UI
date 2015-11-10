@@ -78,6 +78,46 @@
             return deferred.promise;
         };
 
+        publicApi.getSchedules = function(requiredCourses,
+                                          preferredCourses,
+                                          requiredGenEds,
+                                          preferredGenEds) {
+            var deferred = $q.defer();
+
+            var requiredCourseIds = requiredCourses.map(function(course) {
+                return course.data.courseId;
+            });
+            var preferredCourseIds = preferredCourses.map(function(course) {
+                return course.data.courseId;
+            });
+            var requiredGenEdAbbreviations = requiredGenEds.map(function(genEd) {
+                return genEd.data.abbreviation;
+            });
+            var preferredGenEdAbbreviations = preferredGenEds.map(function(genEd) {
+                return genEd.data.abbreviation;
+            });
+
+            var url = apiUrl + '/schedules?'
+            if (requiredCourseIds.length) {
+                url += 'required=' + requiredCourseIds.join(',') + '&';
+            }
+            if (preferredCourseIds.length) {
+                url += 'preferred=' + preferredCourseIds.join(',') + '&';
+            }
+            if (requiredGenEdAbbreviations.length ||
+                preferredGenEdAbbreviations.length) {
+                url += 'genEds=' + requiredGenEdAbbreviations.concat(preferredGenEdAbbreviations).join(',') + '&';
+            }
+
+            $http.get(url).success(function(data) {
+                deferred.resolve(data);
+            }).catch(function() {
+                deferred.reject();
+            });
+                         
+            return deferred.promise;
+        }
+
         publicApi.searchCourses = function(courseTerms) {
             var deferred = $q.defer();
             setTimeout(function() {

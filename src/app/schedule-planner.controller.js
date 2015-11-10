@@ -24,5 +24,17 @@
             var types = ['gen ed'];
             return norseCourseService.autocompleteQuery(queryText, types);
         };
+
+        $scope.getSchedules = function() {
+            norseCourseService.getSchedules(
+                $scope.requiredCourses,
+                $scope.preferredCourses,
+                $scope.requiredGenEds,
+                $scope.preferredGenEds).then(function(data) {
+                    $scope.results = data;
+                    console.log($scope.results)
+                });
+        };
+                                             
     });
 })();
