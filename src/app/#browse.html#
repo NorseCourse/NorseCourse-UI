@@ -1,0 +1,26 @@
+<div ng-controller="browseCatalog">
+     <md-autocomplete
+       md-selected-item="selectedItem"
+       md-search-text="searchText"
+       md-items="item in autocompleteQuery(searchText)"
+       md-item-text="item.data.name"
+       placeholder="Enter the name or abbreviation of the department you would like to browse!">
+      <md-item-template>
+	<span>{{item.data.name }}</span>
+	<span>({{item.type | uppercase }})</span>
+      </md-item-template>
+      <md-not-found>
+	No matches found.
+      </md-not-found>
+    </md-autocomplete>
+
+  <md-content layout-padding>
+
+    <nc-course-list courses="matchingCourses"></nc-course-list>
+  </md-content>
+  
+  <!--<md-progress-circular ng-hide="loading===null"
+                        md-mode="{{loading}}"
+                        md-diameter="84">
+  </md-progress-circular>-->
+ </div>

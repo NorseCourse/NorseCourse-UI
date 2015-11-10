@@ -5,3 +5,22 @@ md-autocomplete input:not(.md-input) {
      */
     width: 300px;
 }
+
+/** try to fix up the figcaption html **/
+.layout-align-center-center>*, .layout-align-end-center>*, .layout-align-space-around-center>*, .layout-align-space-between-center>*, .layout-align-start-center>* {
+    width: 100%;
+    height: 100%;
+}
+
+.md-menu {
+    float: right;
+    align-items: center;
+    
+}
+
+h2 {
+    margin: auto;
+}
+md-grid-list md-grid-tile md-grid-tile-footer, md-grid-list md-grid-tile md-grid-tile-header {
+    height: 65;
+}

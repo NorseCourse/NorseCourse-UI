@@ -4,22 +4,36 @@
         var publicApi = {};
 
         var departments = [];
-        var genEds = [];
-        var courses = [];
+	var departmentIdMap = {}; //mapping of department abbreviation to id
 
+	var genEds = [];
+	var genEdIdMap = {};  // mapping of genEd abbreviation to id
+	
+	var courses = [];
+	var courseIdMap = {};  //mapping of course name to id
+	
         var genEdsRequest = $http.get(apiUrl + '/genEds');
         genEdsRequest.success(function(data) {
             genEds = data;
+	    angular.forEach(data,function(genEd){
+		genEdIdMap[genEd.abbreviation] = genEd.genEdId; 
+	    });
         });
 
         var departmentsRequest = $http.get(apiUrl + '/departments');
         departmentsRequest.success(function(data) {
             departments = data;
+	    angular.forEach(data,function(department){
+		departmentIdMap[department.abbreviation] = department.departmentId; 
+	    });
         });
 
         var coursesRequest = $http.get(apiUrl + '/courses');
         coursesRequest.success(function(data) {
             courses = data;
+	    angular.forEach(data,function(course){
+		courseIdMap[course.name] = course.courseId; 
+	    });
         });
 
         publicApi.autocompleteQuery = function(queryText, types) {
@@ -94,30 +108,34 @@
 	    return deferred.promise;
 	};
 
+	publicApi.fetchCoursesByDepartment = function(department){
+	    var deferred = $q.defer();
+	    var deptId = department.data.abbreviation;
+	    var matchingCourses= [];
+	    //make query
+	    deferred.resolve(matchingCourses);
+	    return deferred.promise;
+	};
+
 	publicApi.foo= function(department){
 	    var deferred = $q.defer();
-	    var dept = department.data.abbreviation
+	    var dept = department.data.abbreviation;
+	    console.log(departmentIdMap);
 	    var matchingCourses = [];
 	    angular.forEach(courses,function(course){
 		//console.log(typeof course.name);
 		if (course.name.startsWith(dept)){
-		    console.log('here');
 		    matchingCourses.push(course);
-		};
+		}
 
 	    });
 	    deferred.resolve( matchingCourses);
-	    console.log(matchingCourses.length)
 	    return deferred.promise;
-	    //include an angular ForEach Here
-	    //var dept = department.abbreviation
-	    //resultingDepartments.append(item)
-	    //for item in courses:
-	    //   if item.id.startswith (or includes, or indexOf):
-	    //        resultingDepartments.append(item)
-	    
 	};
 	
         return publicApi;
     });
 })();
+
+
+

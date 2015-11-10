@@ -3,9 +3,36 @@
               md-row-height="4:3">
   <md-grid-tile ng-repeat="course in courses"
                 layout="column"
-                style="background-color:#EEEEEE;">
-    <md-grid-tile-header>
-      <h3>{{course.name}}</h3>
+                style="background-color:white;">
+    <md-grid-tile-header layout="row" layout-align="space-between center" style="background-color: #5555EE;">
+      <h2>{{course.name}}
+	<span class="menu">
+	  <md-menu aria-label="Open add course menu">
+	    <md-button ng-click="$mdOpenMenu($event)" aria-label="add to prefered"><!-- class="md-icon-button">-->
+	      <md-icon class=".material-icons">add_circle_outline</md-icon>
+	    </md-button>
+	    <md-menu-content>
+	      <md-menu-item><md-button ng-click="clickAlert()">Add Prefered Course</md-button></md-menu-item>
+	      <md-menu-item><md-button ng-click="clickAlert()">Add Required Course</md-button></md-menu-item>
+	    </md-menu-content>
+	  </md-menu>
+	</span>
+      </h2>
+      <h3>Title Goes Here</h3>
     </md-grid-tile-header>
+    <div class="tileContent"> <!--Rename this later.Make sure to change alignment-->
+      {{course.description}}
+
+    </div>
+    <md-grid-tile-footer>
+      <md-chips ng-model="courses2" readonly="true">
+	<md-chip-template>
+	  {{$chip.gen_ed}} <!-- replace with gen_eds once that is ready-->
+	</md-chip-template>
+      </md-chips> 
+    </md-grid-tile-footer>
   </md-grid-tile>
 </md-grid-list>
+
+
+<!--class="md-primary">-->

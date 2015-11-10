@@ -6,3 +6,28 @@ html {
 h1 {
 	color: blue;
 }
+
+menu {
+     float: right;
+     
+}
+foo {
+    float:left;
+}
+
+.material-icons {
+		font-family: 'Material Icons';
+		font-weight: normal; 
+		font-style: normal;	
+       		font-size: 36px;  /* A little larger than preferred icon size */
+	  	display: inline-block;
+	    	width: 1em;
+	      	height: 1em;
+	        line-height: 1;
+		text-transform: none;
+		letter-spacing: normal;
+		word-wrap: normal;
+		white-space: nowrap;
+		direction: ltr;
+
+}
