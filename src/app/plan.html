@@ -1,1 +1,160 @@
-<p>Plan!</p>
+<md-content ng-controller="schedulePlannerController"
+            layout-padding
+            layout-padding-large>
+  <md-content class="md-whiteframe-3dp">
+    <md-toolbar class="md-menu-toolbar">
+      <div class="md-toolbar-tools">
+        <h6>
+          Schedule Preferences
+        </h6>
+        <span class="flex"></span>
+        <md-button class="md-accent md-icon-button"
+                   ng-click="getSchedules()">
+          <md-icon>search</md-icon>
+        </md-button>
+        <md-button class="md-icon-button"
+                   ng-click="toggleExpanded('form')">
+          <md-icon>{{expanded==='form' ? 'expand_less' : 'expand_more'}}</md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-content class="schedule-planner__section"
+                ng-class="{'schedule-planner__section--expanded': expanded==='form'}"
+                layout-padding>
+      <form>
+        <md-input-container>
+          <label>Required Courses</label>
+          <md-chips
+             ng-model="requiredCourses"
+             md-require-match="true">
+            <md-autocomplete
+               md-selected-item="requiredCourse"
+               md-search-text="requiredCourseQueryText"
+               md-items="item in courseQuery(requiredCourseQueryText)"
+               placeholder="DEPT ###"
+               md-autoselect="true"
+               md-no-cache="true">
+              <md-item-template>
+                <span>{{item.data.name}}</span>
+              </md-item-template>
+            </md-autocomplete>
+            <md-chip-template>
+              <span>{{$chip.data.name}}</span>
+            </md-chip-template>
+          </md-chips>
+        </md-input-container>
+        
+        <md-input-container>
+          <label>Preferred Courses</label>
+          <md-chips
+             ng-model="preferredCourses"
+             md-require-match="true">
+            <md-autocomplete
+               md-selected-item="preferredCourse"
+               md-search-text="preferredCourseQueryText"
+               md-items="item in courseQuery(preferredCourseQueryText)"
+               placeholder="DEPT ###"
+               md-autoselect="true"
+               md-no-cache="true">
+              <md-item-template>
+                <span>{{item.data.name}}</span>
+              </md-item-template>
+            </md-autocomplete>
+            <md-chip-template>
+              <span>{{$chip.data.name}}</span>
+            </md-chip-template>
+          </md-chips>
+        </md-input-container>
+
+        <md-input-container>
+          <label>Required Gen Eds</label>
+          <md-chips
+             ng-model="requiredGenEds"
+             md-require-match="true">
+            <md-autocomplete
+               md-selected-item="requiredGenEds"
+               md-search-text="requiredGenEdQueryText"
+               md-items="item in genEdQuery(requiredGenEdQueryText)"
+               placeholder="Gen Ed"
+               md-autoselect="true"
+               md-no-cache="true">
+              <md-item-template>
+                <span>{{item.data.name}}</span>
+              </md-item-template>
+            </md-autocomplete>
+            <md-chip-template>
+              <span>{{$chip.data.name}}</span>
+            </md-chip-template>
+          </md-chips>
+        </md-input-container>
+        
+        <md-input-container>
+          <label>Preferred GenEds</label>
+          <md-chips
+             ng-model="preferredGenEds"
+             md-require-match="true">
+            <md-autocomplete
+               md-selected-item="preferredGenEd"
+               md-search-text="preferredGenEdQueryText"
+               md-items="item in genEdQuery(preferredGenEdQueryText)"
+               placeholder="Gen Ed"
+               md-autoselect="true"
+               md-no-cache="true">
+              <md-item-template>
+                <span>{{item.data.name}}</span>
+              </md-item-template>
+            </md-autocomplete>
+            <md-chip-template>
+              <span>{{$chip.data.name}}</span>
+            </md-chip-template>
+          </md-chips>
+        </md-input-container>
+      </form>
+    </md-content>
+  </md-content>
+
+  <br/>
+  
+  <md-content class="md-whiteframe-3dp">
+    <md-toolbar class="md-menu-toolbar">
+      <div class="md-toolbar-tools">
+        <h6>
+          Results
+        </h6>
+        <span class="flex"></span>
+        <md-button class="md-icon-button"
+                   ng-click="toggleExpanded('results')">
+          <md-icon>
+            {{expanded==='results' ? 'expand_less' : 'expand_more'}}
+          </md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-content class="schedule-planner__section"
+                ng-class="{'schedule-planner__section--expanded': expanded==='results'}">
+    </md-content>
+  </md-content>
+  
+  <br/>
+  
+  <md-content class="md-whiteframe-3dp">
+    <md-toolbar class="md-menu-toolbar">
+      <div class="md-toolbar-tools">
+        <h6>
+          Saved Schedules
+        </h6>
+        <span class="flex"></span>
+        <md-button class="md-icon-button"
+                   ng-click="toggleExpanded('saved')">
+          <md-icon>
+            {{expanded==='saved' ? 'expand_less' : 'expand_more'}}
+          </md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-content class="schedule-planner__section"
+                ng-class="{'schedule-planner__section--expanded': expanded==='saved'}">
+    </md-content>
+  </md-content>
+</md-content>
+  
