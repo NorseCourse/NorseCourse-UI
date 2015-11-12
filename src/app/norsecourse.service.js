@@ -3,39 +3,88 @@
     angular.module('norseCourse').service('norseCourseService', function($q, $http, apiUrl) {
         var publicApi = {};
 
+        var departmentsReady = $q.defer();
         var departments = [];
-	var departmentIdMap = {}; //mapping of department abbreviation to id
+	var departmentAbbreviationIdMap = {}; //mapping of department abbreviation to id
+        var departmentIdObjectMap = {};
 
+        var genEdsReady = $q.defer();
 	var genEds = [];
-	var genEdIdMap = {};  // mapping of genEd abbreviation to id
-	
+	var genEdAbbreviationIdMap = {};  // mapping of genEd abbreviation to id
+        var genEdIdObjectMap = {};
+
+        var coursesReady = $q.defer();
 	var courses = [];
-	var courseIdMap = {};  //mapping of course name to id
+	var courseNameIdMap = {};  //mapping of course name to id
+        var courseIdObjectMap = {};
 	
         var genEdsRequest = $http.get(apiUrl + '/genEds');
         genEdsRequest.success(function(data) {
             genEds = data;
 	    angular.forEach(data,function(genEd){
-		genEdIdMap[genEd.abbreviation] = genEd.genEdId; 
+		genEdAbbreviationIdMap[genEd.abbreviation] = genEd.genEdId; 
 	    });
+            genEdsReady.resolve();
         });
 
         var departmentsRequest = $http.get(apiUrl + '/departments');
         departmentsRequest.success(function(data) {
             departments = data;
 	    angular.forEach(data,function(department){
-		departmentIdMap[department.abbreviation] = department.departmentId; 
+		departmentAbbreviationIdMap[department.abbreviation] = department.departmentId; 
 	    });
+            departmentsReady.resolve();
         });
 
         var coursesRequest = $http.get(apiUrl + '/courses');
         coursesRequest.success(function(data) {
             courses = data;
 	    angular.forEach(data,function(course){
-		courseIdMap[course.name] = course.courseId; 
+		courseNameIdMap[course.name] = course.courseId; 
 	    });
+            coursesReady.resolve();
         });
 
+        publicApi.getSection = function(sectionId) {
+            var deferred = $q.defer();
+            $http.get(apiUrl + '/sections/' + sectionId).success(function(data) {
+                deferred.resolve(data);
+            }).error(function() {
+                deferred.reject();
+            });
+            return deferred.promise;
+        };
+
+        publicApi.getGenEd = function(genEdId) {
+            var deferred = $q.defer();
+            genEdsReady.promise.then(function() {
+                deferred.resolve(genEdIdObjectMap[genEdId]);
+            }).catch(function() {
+                deferred.reject();
+            });
+            return deferred.promise;
+        };
+
+        publicApi.getDepartment = function(departmentId) {
+            var deferred = $q.defer();
+            departmentsReady.promise.then(function() {
+                deferred.resolve(departmentIdObjectMap[departmentId]);
+            }).catch(function() {
+                deferred.reject();
+            });
+            return deferred.promise;
+        };
+
+        publicApi.getCourse = function(courseId) {
+            var deferred = $q.defer();
+            coursesReady.promise.then(function() {
+                deferred.resolve(courseIdObjectMap[courseId]);
+            }).catch(function() {
+                deferred.reject();
+            });
+            return deferred.promise;
+        };
+        
         publicApi.autocompleteQuery = function(queryText, types) {
             var deferred = $q.defer();
             queryText = queryText.toLowerCase();
@@ -113,10 +162,10 @@
 
             var url = apiUrl + '/schedules?'
             if (requiredCourseIds.length) {
-                url += 'required=' + requiredCourseIds.join(',') + '&';
+                url += 'requiredCourses=' + requiredCourseIds.join(',') + '&';
             }
             if (preferredCourseIds.length) {
-                url += 'preferred=' + preferredCourseIds.join(',') + '&';
+                url += 'preferredCourses=' + preferredCourseIds.join(',') + '&';
             }
             if (requiredGenEdAbbreviations.length ||
                 preferredGenEdAbbreviations.length) {
@@ -125,8 +174,10 @@
 
             $http.get(url).success(function(data) {
                 deferred.resolve(data);
-            }).catch(function() {
+                console.log(url);
+            }).error(function() {
                 deferred.reject();
+                console.log(url);
             });
                          
             return deferred.promise;
