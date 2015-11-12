@@ -10,9 +10,8 @@
 		    .title('Wow!')
 		    .content('You selected a course. Don\'t worry, selecting doesn\'t actually do anything')
 		    .ok('Cool'));
-	
 	};
-
+	$scope.formatBody = null;
 
     });
 })();

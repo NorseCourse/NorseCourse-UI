@@ -150,13 +150,20 @@
 
 	publicApi.fetchCoursesByDepartment = function(department){
 	    var deferred = $q.defer();
-	    var deptId = department.data.abbreviation;
+	    var deptId = department.data.abbreviation; //poorly named
 	    var matchingCourses= [];
 	    //make query
 	    deferred.resolve(matchingCourses);
 	    return deferred.promise;
 	};
-
+	publicApi.fetchSectionsByCourse = function(course){
+	    //input: course object
+	    var deferred = $q.defer();
+	    var courseId = course.id; //check name
+	    var matchingSections = [];
+	    var genEdsRequest = $http.get(apiUrl + '/section');
+	};
+	
 	publicApi.foo= function(department){
 	    var deferred = $q.defer();
 	    var dept = department.data.abbreviation;
