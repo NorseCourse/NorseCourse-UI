@@ -32,7 +32,7 @@
                 $scope.requiredGenEds,
                 $scope.preferredGenEds).then(function(data) {
                     $scope.results = data;
-                    console.log($scope.results)
+                    console.log($scope.results);
                 });
         };
                                              
