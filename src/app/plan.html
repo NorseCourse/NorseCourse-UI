@@ -132,6 +132,11 @@
     </md-toolbar>
     <md-content class="schedule-planner__section"
                 ng-class="{'schedule-planner__section--expanded': expanded==='results'}">
+      <md-list>
+        <md-list-item ng-repeat="section in currentSchedule">
+          {{section}}
+        </md-list-item>
+      </md-list>
     </md-content>
   </md-content>
   

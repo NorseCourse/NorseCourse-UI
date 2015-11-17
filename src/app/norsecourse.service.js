@@ -162,7 +162,9 @@
             var preferredGenEdAbbreviations = preferredGenEds.map(function(genEd) {
                 return genEd.data.abbreviation;
             });
+
 	    var url = apiUrl + '/schedules?';
+
             if (requiredCourseIds.length) {
                 url += 'requiredCourses=' + requiredCourseIds.join(',') + '&';
             }
@@ -183,7 +185,7 @@
             });
                          
             return deferred.promise;
-        }
+        };
 
         publicApi.searchCourses = function(courseTerms) {
             var deferred = $q.defer();
