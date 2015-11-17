@@ -17,7 +17,7 @@
 	    //console.log(newValue);
 	    console.log(newValue);
 	    norseCourseService.foo(newValue).then(function(data) {
-		$scope.matchingCourses = data;
+		$scope.matchingCourses = data; //maybe call matchingData
 		//console.log(data);
 	    });
 	},true);

@@ -23,6 +23,7 @@
             genEds = data;
 	    angular.forEach(data,function(genEd){
 		genEdAbbreviationIdMap[genEd.abbreviation] = genEd.genEdId; 
+		genEdIdObjectMap[genEd.genEdId] = genEd;
 	    });
             genEdsReady.resolve();
         });
@@ -32,6 +33,7 @@
             departments = data;
 	    angular.forEach(data,function(department){
 		departmentAbbreviationIdMap[department.abbreviation] = department.departmentId; 
+		departmentIdObjectMap[department.departmentId] = department;
 	    });
             departmentsReady.resolve();
         });
@@ -40,7 +42,8 @@
         coursesRequest.success(function(data) {
             courses = data;
 	    angular.forEach(data,function(course){
-		courseNameIdMap[course.name] = course.courseId; 
+		courseNameIdMap[course.name] = course.courseId;
+		courseIdObjectMap[course.courseId] = course;
 	    });
             coursesReady.resolve();
         });
@@ -159,8 +162,7 @@
             var preferredGenEdAbbreviations = preferredGenEds.map(function(genEd) {
                 return genEd.data.abbreviation;
             });
-
-            var url = apiUrl + '/schedules?'
+	    var url = apiUrl + '/schedules?';
             if (requiredCourseIds.length) {
                 url += 'requiredCourses=' + requiredCourseIds.join(',') + '&';
             }
@@ -211,10 +213,49 @@
 	    //input: course object
 	    var deferred = $q.defer();
 	    var courseId = course.id; //check name
-	    var matchingSections = [];
-	    var genEdsRequest = $http.get(apiUrl + '/section');
+	    //var matchingSections =
+	    $http.get(apiUrl + '/section?courses='+course.id).success(function(data) {
+                deferred.resolve(data);
+            }).error(function() {
+                deferred.reject();
+            });
+            return deferred.promise;
+        };
+
+	    
+	publicApi.getCourseAndSectionData = function(parameters){
+	    /**
+	       parameters -> JSON Object that maps query parameters to arrays of id's 
+	     **/
+	    var deferred = $q.defer();
+	    /**
+	       Try to make this so that is can take parameters that aren't 
+	       just departments. Maybe allow it a similar functionality to 
+	       autocomplete. Once you enter in search terms, query the api 
+	       based on those. This will require further understanding of 
+	       how the api works. Anyway, supposing this just works for 
+	       department, you'll call fetchCoursesByDepartment followed by
+	       fetchSectionsbyCourse. Combining this into a single object
+	       with all of the information, an array of complete course info
+	       will be supplied to the ui.
+	    **/
+	    var requestString = 'SOMETHING';
+	    //http://norsecourse.com:5000/api/courses?genEds=5&departments=29%2C30
+	    var url = apiUrl + '/courses?'; //apiUrl + '/schedules?'url += 'requiredCourses=' + requiredCourseIds.join(',') + '&';
+	    angular.forEach(parameters, function(value,key){
+		url += key + '?';
+		angular.forEach(value, function(item){
+		    url += item + ''
+		});
+	    });
+	    /**
+	       for each key in the json object, there is an array associated with it. 
+	     **/
+	    $http.get(apiUrl + '/section?courses='+course.id).success(function(data) {
 	};
 	
+					  
+					  
 	publicApi.foo= function(department){
 	    var deferred = $q.defer();
 	    var dept = department.data.abbreviation;
