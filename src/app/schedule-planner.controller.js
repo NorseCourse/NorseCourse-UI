@@ -32,8 +32,21 @@
                 $scope.requiredGenEds,
                 $scope.preferredGenEds).then(function(data) {
                     $scope.results = data;
-                    console.log($scope.results)
+                    $scope.loadSchedule(data[0].schedule);
+                    if ($scope.expanded !== 'results') {
+                        $scope.toggleExpanded('results');
+                    }
+                    console.log($scope.results);
                 });
+        };
+
+        $scope.getSchedules = function(sectionIds) {
+            $scope.currentSchedule = [];
+            angular.forEach(sectionIds, function(sectionId) {
+                norseCourseService.getSection(sectionId).then(function(section) {
+                    $scope.currentSchedule.push(section);
+                });
+            });
         };
                                              
     });
