@@ -134,7 +134,7 @@
                 ng-class="{'schedule-planner__section--expanded': expanded==='results'}">
       <md-list>
         <md-list-item ng-repeat="section in currentSchedule">
-          {{section}}
+          <span><b>{{section.name}}</b> {{section.shortTitle}}</span>
         </md-list-item>
       </md-list>
     </md-content>

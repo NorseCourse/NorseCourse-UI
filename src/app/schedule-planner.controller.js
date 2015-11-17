@@ -39,11 +39,13 @@
                 });
         };
 
-        $scope.getSchedules = function(sectionIds) {
+        $scope.loadSchedule = function(sectionIds) {
             $scope.currentSchedule = [];
             angular.forEach(sectionIds, function(sectionId) {
                 norseCourseService.getSection(sectionId).then(function(section) {
                     $scope.currentSchedule.push(section);
+                }, function() {
+                    console.log('Failed to load section', sectionId);
                 });
             });
         };

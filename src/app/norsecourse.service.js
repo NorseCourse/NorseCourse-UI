@@ -253,7 +253,7 @@
 	    /**
 	       for each key in the json object, there is an array associated with it. 
 	     **/
-	    $http.get(apiUrl + '/section?courses='+course.id).success(function(data) {
+	    //$http.get(apiUrl + '/section?courses='+course.id).success(function(data) {
 	};
 	
 					  
