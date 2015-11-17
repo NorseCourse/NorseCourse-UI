@@ -36,7 +36,6 @@
                     if ($scope.expanded !== 'results') {
                         $scope.toggleExpanded('results');
                     }
-                    console.log($scope.results);
                 });
         };
 
