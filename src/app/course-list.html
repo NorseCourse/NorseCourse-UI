@@ -1,11 +1,11 @@
 <md-grid-list md-cols="3"
               md-gutter="8px"
               md-row-height="4:4">
-  <md-grid-tile ng-repeat="course in courses"
+  <md-grid-tile ng-repeat="courseSection in courseSectionArray"
                 layout="column"
                 style="background-color:white;">
     <md-grid-tile-header layout="row" layout-align="space-between center" style="background-color: #5555EE;">
-      <h2>{{course.name}}
+      <h2>{{courseSection.course.name}}
 	<span class="menu">
 	  <md-menu aria-label="Open add course menu">
 	    <md-button ng-click="$mdOpenMenu($event)" aria-label="add to prefered"><!-- class="md-icon-button">-->
@@ -18,7 +18,7 @@
 	  </md-menu>
 	</span>
       </h2>
-      <h3>Title Goes Here</h3>
+      <h3>courseSection.section.name</h3>
     </md-grid-tile-header>
     <div class="tileContent"> <!--Rename this later.Make sure to change alignment-->
       {{course.description}}

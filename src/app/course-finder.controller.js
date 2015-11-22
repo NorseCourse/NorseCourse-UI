@@ -30,6 +30,7 @@
 
         $scope.$watch('courseSearchTerms', function(newValue, oldValue) {
             $scope.loading = 'indeterminate';
+	    console.log(newValue)
             norseCourseService.searchCourses(newValue).then(function(data) {
                 $scope.matchingCourses = data;
                 $scope.loading = null;

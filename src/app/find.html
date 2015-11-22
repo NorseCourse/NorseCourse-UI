@@ -12,12 +12,12 @@
        md-no-cache>
       <md-item-template>
         <span>{{item.data.name}}</span>
-        <span>({{item.type | uppercase}})</span>
+        <span>({{item.display | uppercase}})</span>
       </md-item-template>
     </md-autocomplete>
     <md-chip-template>
       <span>{{$chip.data.name}}</span>
-      <span>({{$chip.type | uppercase}})</span>
+      <span>({{$chip.display | uppercase}})</span>
     </md-chip-template>
   </md-chips>
   <md-progress-circular ng-hide="loading===null" <!--should this be centered? -->
@@ -25,6 +25,6 @@
                         md-diameter="84">
   </md-progress-circular>
   <br/>
-  <nc-course-list courses="matchingCourses"></nc-course-list>
+  <nc-course-list courseSectionArray="matchingCourses"></nc-course-list>
 </md-content>
 

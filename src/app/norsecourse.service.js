@@ -99,8 +99,9 @@
                         if (department.abbreviation.toLowerCase().includes(queryText) ||
                             department.name.toLowerCase().includes(queryText)) {
                             results.push({
-                                type: 'dept',
-                                data: department
+                                type: 'department',
+                                data: department,
+				display: 'dept'
                             });
                         }
                     });
@@ -110,18 +111,20 @@
                         if (course.name.toLowerCase().includes(queryText)) {
                             results.push({
                                 type: 'course',
-                                data: course
+                                data: course,
+				display: 'course'
                             });
                         }
                     });
                     break;
-                case 'gen ed':
+		case 'gen ed':
                     angular.forEach(genEds, function(genEd) {
                         if (genEd.abbreviation.toLowerCase().includes(queryText) ||
                             genEd.name.toLowerCase().includes(queryText)) {
                             results.push({
-                                type: 'gen ed',
-                                data: genEd
+                                type: 'genEd',
+                                data: genEd,
+				display: 'gen ed'
                             });
                         }
                     });
@@ -132,7 +135,8 @@
                         data: {
                             name: queryText,
                             text: queryText
-                        }
+                        },
+			display: 'keyword'
                     });
                     break;
                 default:
@@ -203,20 +207,14 @@
 	    return deferred.promise;
 	};
 
-	publicApi.fetchCoursesByDepartment = function(department){
-	    var deferred = $q.defer();
-	    var deptId = department.data.abbreviation; //poorly named
-	    var matchingCourses= [];
-	    //make query
-	    deferred.resolve(matchingCourses);
-	    return deferred.promise;
-	};
 	publicApi.fetchSectionsByCourse = function(course){
 	    //input: course object
 	    var deferred = $q.defer();
-	    var courseId = course.id; //check name
+	    var courseId = course.courseId; //check name
 	    //var matchingSections =
-	    $http.get(apiUrl + '/section?courses='+course.id).success(function(data) {
+	    var url = apiUrl + '/sections?courses='+courseId;
+	    console.log('IN SECTION FETCH: ', url);
+	    $http.get(url).success(function(data) {
                 deferred.resolve(data);
             }).error(function() {
                 deferred.reject();
@@ -242,21 +240,85 @@
 	       will be supplied to the ui.
 	    **/
 	    var requestString = 'SOMETHING';
-	    //http://norsecourse.com:5000/api/courses?genEds=5&departments=29%2C30
-	    var url = apiUrl + '/courses?'; //apiUrl + '/schedules?'url += 'requiredCourses=' + requiredCourseIds.join(',') + '&';
+	    
+	    var url = apiUrl + '/courses?'; 
+
+	    //section off into it's own function
 	    angular.forEach(parameters, function(value,key){
-		url += key + '?';
+		url += key + '=';
 		angular.forEach(value, function(item){
-		    url += item + ''
+		    url += item + '%2C';
+		});
+		url = url.slice(0,-3)+"&";
+	    });
+	    
+	    url = url.slice(0,-1);
+	    console.log(url);
+	    $http.get(url).success(function(arrayOfCourses) {
+		console.log(arrayOfCourses);
+		$q.all(arrayOfCourses.map(function(course) { //MAKING TOO MANY API CALLS
+		    return publicApi.fetchSectionsByCourse(course);
+		})).then(function(arrayOfSectionArrays) {
+		    var matchingSections = [];
+		    angular.forEach(arrayOfCourses,function(course,index){
+			
+			var obj = {};
+			obj['info']={
+			    'course':course,
+			    'section':arrayOfSectionArrays[index],
+			    'basic_display': getBasicDisplay(course,arrayOfSectionArrays[index])
+			};
+			matchingSections.push(obj);
+			deferred.resolve(matchingSections);
+		    });
+				   
 		});
 	    });
-	    /**
-	       for each key in the json object, there is an array associated with it. 
-	     **/
-	    $http.get(apiUrl + '/section?courses='+course.id).success(function(data) {
+	    return deferred.promise;
+	    //$q.all(array of promises.
 	};
 	
-					  
+	var getBasicDisplay= function(course,sectionArray){
+	    /**What do I wanto display?
+	       Course name
+	       Section shorttitle. Not sure how to best do this
+	       Gen_eds (Could I color the ones that are offered by all differently?
+	       Latest Term
+	       
+	     **/
+	    var res = {};
+	    res.name=course.name;
+	    res.description = course.description;
+	    
+	    if (sectionArray.length === 1 ){
+		var section = sectionArray[0];
+		res.title = section.shortTitle;
+		res.mainGenEds = section.generalEducationFulfillments;
+		res.term = section.term;
+		res.extraGenEds=null;
+	    }
+	    else{
+		var firstSection = sectionArray[0];
+		var foo = function(item){
+		    return item.shortTitle === firstSection.shortTitle;
+		};
+		if (sectionArray.every(foo)){
+		    res['title']=firstSection.shortTitle;
+		}
+		else{
+		    res['title']='Click for Details';
+		}
+
+		res.mainGenEds = firstSection.generalEducationFulfillments; //gened objects
+		res.term = firstSection.term;
+		res.extraGenEds =null;
+		
+
+	    }
+
+	    return res;
+	    
+	};
 					  
 	publicApi.foo= function(department){
 	    var deferred = $q.defer();
@@ -270,7 +332,7 @@
 
 	    });
 	    deferred.resolve( matchingCourses);
-	    console.log(matchingCourses.length);
+	    //console.log(matchingCourses.length);
 
 	    return deferred.promise;
 	};
