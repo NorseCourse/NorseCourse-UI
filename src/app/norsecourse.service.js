@@ -463,7 +463,7 @@
 	    }
 	    else
 	    {
-		res = courseDescription;
+		res = courseDescription.substr(0,500);
 	    };
 
 	    return res;
