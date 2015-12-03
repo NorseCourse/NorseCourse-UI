@@ -133,8 +133,28 @@
     <md-content class="schedule-planner__section"
                 ng-class="{'schedule-planner__section--expanded': expanded==='results'}">
       <md-list>
-        <md-list-item ng-repeat="section in currentSchedule">
-          <span><b>{{section.name}}</b> {{section.shortTitle}}</span>
+        <md-list-item ng-repeat="section in currentSchedule" layout="column" style="align-items: flex-start; padding-bottom: 20px;">
+          <p>
+            <b>{{section.name}}</b> {{section.shortTitle}}
+          </p>
+          <p ng-repeat="meeting in section.sectionMeetings">
+            Meets {{meeting.days}} {{meeting.startTime}}-{{meeting.endTime}} in {{meeting.room[0].buildingName}} {{meeting.room[0].number}} {{section.sevenWeeks === 1 ? 'for the first seven weeks' : 'section.sevenWeeks' === 2 ? 'for the second seven weeks' : ''}}
+          </p>
+          <p>
+            Taught by <span ng-repeat="teacher in section.faculty">{{teacher.firstInitial}}. {{teacher.lastName}} {{!$last ? ', ' : ' '}}</span>
+          </p>
+          <md-chips ng-if="section.genEdFulfillments.length"
+                    ng-model="section.genEdFulfillments"
+                    readonly="true">
+            <md-chip-template>
+              {{$chip.abbreviation}}
+            </md-chip-template>
+          </md-chips>
+          <md-chips ng-if="!section.genEdFulfillments.length"
+                    ng-model="section.genEdFulfillments"
+                    readonly="true"
+                    placeholder="This section fulfills no gen eds :(">
+          </md-chips>
         </md-list-item>
       </md-list>
     </md-content>

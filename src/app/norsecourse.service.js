@@ -147,8 +147,13 @@
         publicApi.getSchedules = function(requiredCourses,
                                           preferredCourses,
                                           requiredGenEds,
-                                          preferredGenEds) {
+                                          preferredGenEds,
+                                          numCourses) {
             var deferred = $q.defer();
+
+            if (numCourses === null || numCourses === undefined) {
+                numCourses = 4;
+            }
 
             var requiredCourseIds = requiredCourses.map(function(course) {
                 return course.data.courseId;
@@ -171,10 +176,13 @@
             if (preferredCourseIds.length) {
                 url += 'preferredCourses=' + preferredCourseIds.join(',') + '&';
             }
-            if (requiredGenEdAbbreviations.length ||
-                preferredGenEdAbbreviations.length) {
-                url += 'genEds=' + requiredGenEdAbbreviations.concat(preferredGenEdAbbreviations).join(',') + '&';
+            if (requiredGenEdAbbreviations.length) {
+                url += 'requiredGenEds=' + requiredGenEdAbbreviations.join(',') + '&';
             }
+            if (preferredGenEdAbbreviations.length) {
+                url += 'preferredGenEds=' + preferredGenEdAbbreviations.join(',') + '&';
+            }
+            url += 'numCourses=' + numCourses + '&';
 
             $http.get(url).success(function(data) {
                 deferred.resolve(data);
