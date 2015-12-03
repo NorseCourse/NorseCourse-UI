@@ -148,6 +148,7 @@
                     // do nothing
                 }
             });
+	    
             deferred.resolve(results);
             
             return deferred.promise;
@@ -261,6 +262,7 @@
 	    publicApi.getCourseAndSectionData(parameters).then(function(data){
 		//console.log(data);
 		deferred.resolve(data);
+		console.log(data);
 	    });
 	    return deferred.promise;
 	};
