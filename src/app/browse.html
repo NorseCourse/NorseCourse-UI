@@ -1,6 +1,8 @@
-<div ng-controller="browseCatalog">
-     <md-autocomplete
+
+  <md-content ng-controller="browseCatalog" layout-padding layout-padding-large>
+    <md-autocomplete
        md-selected-item="selectedItem"
+       md-selected-item-change="queryFunction(selectedItem)"
        md-search-text="searchText"
        md-items="item in autocompleteQuery(searchText)"
        md-item-text="item.data.name"
@@ -13,9 +15,9 @@
 	No matches found.
       </md-not-found>
     </md-autocomplete>
-
-  <md-content layout-padding>
-
+    
+    
+    <br/>
     <nc-course-list courses="matchingCourses"></nc-course-list>
   </md-content>
   
@@ -23,4 +25,4 @@
                         md-mode="{{loading}}"
                         md-diameter="84">
   </md-progress-circular>-->
- </div>
+

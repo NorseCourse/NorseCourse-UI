@@ -21,16 +21,30 @@
                     }
                 };
             } else {
-                // a keyword was always created when enter hit
-                // not sure what's goign on here
                 $scope.courseSearchTerms.pop();
                 return text;
             }
         };
 
-        $scope.$watch('courseSearchTerms', function(newValue, oldValue) {
+	$scope.$watch('courseSearchTerms',function(newValue,oldValue){
+	    
+	    if (newValue !== undefined && newValue.length != 0) {
+		$scope.loading = 'indeterminate';
+		//console.log('find',newValue,oldValue);
+		norseCourseService.queryApi(newValue,oldValue).then(function(data){
+		    
+		    $scope.matchingCourses = data;
+		    $scope.loading = null;
+		});
+	    }
+	},true);
+	
+
+
+	
+        $scope.$watch('courseSearchTermsOFF', function(newValue, oldValue) {
             $scope.loading = 'indeterminate';
-	    console.log(newValue)
+	    console.log(newValue);
             norseCourseService.searchCourses(newValue).then(function(data) {
                 $scope.matchingCourses = data;
                 $scope.loading = null;

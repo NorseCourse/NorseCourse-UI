@@ -87,7 +87,12 @@
             });
             return deferred.promise;
         };
-        
+
+
+        publicApi.getCourseNoPromise= function(courseId) {
+            return courseIdObjectMap[courseId];
+        };
+	
         publicApi.autocompleteQuery = function(queryText, types) {
             var deferred = $q.defer();
             queryText = queryText.toLowerCase();
@@ -207,55 +212,101 @@
 	    return deferred.promise;
 	};
 
-	publicApi.fetchSectionsByCourse = function(course){
-	    //input: course object
-	    var deferred = $q.defer();
-	    var courseId = course.courseId; //check name
-	    //var matchingSections =
-	    var url = apiUrl + '/sections?courses='+courseId;
-	    console.log('IN SECTION FETCH: ', url);
-	    $http.get(url).success(function(data) {
-                deferred.resolve(data);
-            }).error(function() {
-                deferred.reject();
-            });
-            return deferred.promise;
-        };
 
+	publicApi.queryApi = function(newValue,oldValue){
+	    console.log('QUERYING API',newValue);
+	    var deferred = $q.defer();
+	    
+	    var temp_array = [];
+	    if (angular.isArray(newValue)){
+		temp_array = newValue;
+	    }else{
+		temp_array = [newValue];
+	    }
+
+	    /** set up parameters object **/
+	    //console.log('START setting up parameters');
+	    var parameters = {};
+	    //console.log(temp_array);
+
+	    //TODO: make multiple api calls for each added course they add
+	    
+	    var keys = [];                      //may be in the wrong spot
+
+	    angular.forEach(temp_array,function(chip){
+		var type = chip.type + 's';//temporary fix for department. 
+		console.log(chip, type);
+		var id = '';		
+		if (type !== 'keyword'){ //change to keywords in order to allow keywords. Right now we have a problem with the chips that's going to cause more issues than we want.
+		
+		    id = eval('chip.data.'+ chip.type+'Id');
+		    console.log('Chip Id:', id);
+		}else{
+		    //console.log(type);
+		    id = chip.data.text;
+		};
+
+		for(var k in parameters) keys.push(k);     // object.keys() isn't working
+
+		if (keys.indexOf(type) === -1){
+		    parameters[type] = [id];
+		}else{
+		    parameters[type].push(id);
+		};
+		keys = [];                      //may be in the wrong spot
+		//console.log(parameters);
+	    });
+	    /** end set up parameters object **/
+
+	    publicApi.getCourseAndSectionData(parameters).then(function(data){
+		//console.log(data);
+		deferred.resolve(data);
+	    });
+	    return deferred.promise;
+	};
 	    
 	publicApi.getCourseAndSectionData = function(parameters){
+	    //console.log('inCourseAndSectionData');
 	    /**
 	       parameters -> JSON Object that maps query parameters to arrays of id's 
 	     **/
 	    var deferred = $q.defer();
-	    /**
-	       Try to make this so that is can take parameters that aren't 
-	       just departments. Maybe allow it a similar functionality to 
-	       autocomplete. Once you enter in search terms, query the api 
-	       based on those. This will require further understanding of 
-	       how the api works. Anyway, supposing this just works for 
-	       department, you'll call fetchCoursesByDepartment followed by
-	       fetchSectionsbyCourse. Combining this into a single object
-	       with all of the information, an array of complete course info
-	       will be supplied to the ui.
-	    **/
 	    var requestString = 'SOMETHING';
-	    
 	    var url = apiUrl + '/courses?'; 
-
+	    console.log('apiUrl: ', url);
 	    //section off into it's own function
+	    console.log('parameters: ',parameters);
 	    angular.forEach(parameters, function(value,key){
-		url += key + '=';
-		angular.forEach(value, function(item){
-		    url += item + '%2C';
-		});
-		url = url.slice(0,-3)+"&";
+		//consol.log(
+		if (key !== 'courses'){
+		    url += key + '=';
+		    angular.forEach(value, function(item){
+			url += item + '%2C';
+		    });
+		    url = url.slice(0,-3)+"&";
+		}
+		
 	    });
-	    
+	    if (url === apiUrl + '/courses?'){ //no parameters other than courses
+		url += 'genEds=123134';    //THIS IS A REALLY SHITTY QUICK FIX. LOOK AT THIS LATER.
+	    }
 	    url = url.slice(0,-1);
 	    console.log(url);
 	    $http.get(url).success(function(arrayOfCourses) {
-		console.log(arrayOfCourses);
+		console.log('what the heck?');
+		//console.log(arrayOfCourses.length);
+		console.log(url);
+		angular.forEach(parameters['courses'],function(courseId,index){
+		    arrayOfCourses.push(publicApi.getCourseNoPromise(courseId));
+		    /**publicApi.getCourse(courseId).then(function(course){
+		        console.log('COURSE: ', course,courseId); // I might need this to not be a promise.
+			arrayOfCourses.push(course);
+		    });
+		    **/
+		    
+		});
+
+		console.log('ARRAY OF COURSES',arrayOfCourses);
 		$q.all(arrayOfCourses.map(function(course) { //MAKING TOO MANY API CALLS
 		    return publicApi.fetchSectionsByCourse(course);
 		})).then(function(arrayOfSectionArrays) {
@@ -266,7 +317,7 @@
 			obj['info']={
 			    'course':course,
 			    'section':arrayOfSectionArrays[index],
-			    'basic_display': getBasicDisplay(course,arrayOfSectionArrays[index])
+			    'basicDisplay': getBasicDisplay(course,arrayOfSectionArrays[index])
 			};
 			matchingSections.push(obj);
 			deferred.resolve(matchingSections);
@@ -277,8 +328,26 @@
 	    return deferred.promise;
 	    //$q.all(array of promises.
 	};
-	
+	    
+	publicApi.fetchSectionsByCourse = function(course){
+	    //input: course object
+	    var deferred = $q.defer();
+	    var courseId = course.courseId; //check name
+	    //var matchingSections =
+	    var url = apiUrl + '/sections?courses='+courseId;
+	    //console.log('IN SECTION FETCH: ', url);
+	    $http.get(url).success(function(data) {
+                deferred.resolve(data);
+            }).error(function() {
+                deferred.reject();
+            });
+            return deferred.promise;
+        };
+
+
+	    
 	var getBasicDisplay= function(course,sectionArray){
+	    console.log('Getting Basic Display',course.name);
 	    /**What do I wanto display?
 	       Course name
 	       Section shorttitle. Not sure how to best do this
@@ -288,12 +357,16 @@
 	     **/
 	    var res = {};
 	    res.name=course.name;
-	    res.description = course.description;
+	    res.description = descriptionDisplay(course.description);//course.description;
 	    
 	    if (sectionArray.length === 1 ){
 		var section = sectionArray[0];
 		res.title = section.shortTitle;
-		res.mainGenEds = section.generalEducationFulfillments;
+		var temp = section.genEdFulfillments['0'];
+		//console.log(temp);
+		if( temp !== undefined){
+		    res.mainGenEds = [section.genEdFulfillments['0'].abbreviation];
+		}
 		res.term = section.term;
 		res.extraGenEds=null;
 	    }
@@ -308,8 +381,11 @@
 		else{
 		    res['title']='Click for Details';
 		}
-
-		res.mainGenEds = firstSection.generalEducationFulfillments; //gened objects
+		//console.log('Section Display');
+		console.log('genEdDisplay(sectionArray)',sectionArray);
+		var genEdArray = genEdDisplay(sectionArray);//firstSection.generalEdFulfillments; //gened objects
+		res.mainGenEds = genEdArray[0];
+		res.extraGenEds = genEdArray[1]; 
 		res.term = firstSection.term;
 		res.extraGenEds =null;
 		
@@ -319,27 +395,74 @@
 	    return res;
 	    
 	};
-					  
-	publicApi.foo= function(department){
-	    var deferred = $q.defer();
-	    var dept = department.data.abbreviation;
-	    var matchingCourses = [];
-	    angular.forEach(courses,function(course){
-		//console.log(typeof course.name);
-		if (course.name.startsWith(dept)){
-		    matchingCourses.push(course);
-		}
-
-	    });
-	    deferred.resolve( matchingCourses);
-	    //console.log(matchingCourses.length);
-
-	    return deferred.promise;
-	};
 	
+	var genEdDisplay = function(sectionArray){
+	    var mainGenEds = [];
+	    var extraGenEds = [];
+	    //first section and find it's
+	    var genEdCounts = {};
+	    var keys = [];                      
+	    angular.forEach(sectionArray,function(section){
+		
+		//angular.forEach(genEdCounts,function(counts,genEd){ keys.push(genEd );});
+		
+		angular.forEach(section.genEdFulfillments,function(genEd){
+		    console.log('FULFILLMENTS: ',section.genEdFulfillments);
+		    
+		    if (keys.indexOf(genEd.abbreviation) === -1){
+			genEdCounts[genEd.abbreviation] = 1;
+			keys.push(genEd.abbreviation);
+		    }else{
+			
+			genEdCounts[genEd.abbreviation] += 1;
+		    };
+		});
+	    });
+	    
+	    console.log('GenEdCounts:',genEdCounts);
+	    //console.log(genEdCounts);	    
+	    var arrayLength = sectionArray.length;
+	    //console.log(arrayLength);
+	    angular.forEach(genEdCounts,function(count, genEd){
+		//console.log(count);
+		if (count === arrayLength){
+		    mainGenEds.push(genEd);
+		}
+		else{
+		    console.log('extraGenEd being pushed ',genEd,count,arrayLength);
+		    extraGenEds.push(genEd);
+		};
+	
+	    });
+	    return [mainGenEds,extraGenEds];
+	    
+	};
+	var nthIndex = function(str, pat, n){
+	    var L= str.length, ind= -1;
+	    while(n-- && ind++<L){
+		i= str.indexOf(pat, ind);
+	    }
+	    return i;
+	};
+	var descriptionDisplay = function(courseDescription){
+	    var res = '';
+	    //console.log(courseDescription);
+	    //console.log(typeof courseDescription);
+	    if (courseDescription==='nan'){
+		res = 'No description included. Contact your advisor or the department head for more details.'; 
+	    }
+	    else
+	    {
+		res = courseDescription;
+	    };
+
+	    return res;
+	};
+
         return publicApi;
     });
 })();
 
 
 
+//* Insert and splitNode go together
