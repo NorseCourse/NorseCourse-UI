@@ -253,7 +253,7 @@
 		}else{
 		    //console.log(type);
 		    id = chip.data.text;
-		};
+		}
 
 		for(var k in parameters) keys.push(k);     // object.keys() isn't working
 
@@ -261,7 +261,7 @@
 		    parameters[type] = [id];
 		}else{
 		    parameters[type].push(id);
-		};
+		}
 		keys = [];                      //may be in the wrong spot
 		//console.log(parameters);
 	    });
@@ -287,7 +287,7 @@
 	    //section off into it's own function
 	    console.log('parameters: ',parameters);
 	    angular.forEach(parameters, function(value,key){
-		//consol.log(
+		//consol.log( 
 		if (key !== 'courses'){
 		    url += key + '=';
 		    angular.forEach(value, function(item){
@@ -306,7 +306,7 @@
 		console.log('what the heck?');
 		//console.log(arrayOfCourses.length);
 		console.log(url);
-		angular.forEach(parameters['courses'],function(courseId,index){
+		angular.forEach(parameters.courses,function(courseId,index){
 		    arrayOfCourses.push(publicApi.getCourseNoPromise(courseId));
 		    /**publicApi.getCourse(courseId).then(function(course){
 		        console.log('COURSE: ', course,courseId); // I might need this to not be a promise.
@@ -324,7 +324,7 @@
 		    angular.forEach(arrayOfCourses,function(course,index){
 			
 			var obj = {};
-			obj['info']={
+			obj.info={
 			    'course':course,
 			    'section':arrayOfSectionArrays[index],
 			    'basicDisplay': getBasicDisplay(course,arrayOfSectionArrays[index])
@@ -386,10 +386,10 @@
 		    return item.shortTitle === firstSection.shortTitle;
 		};
 		if (sectionArray.every(foo)){
-		    res['title']=firstSection.shortTitle;
+		    res.title=firstSection.shortTitle;
 		}
 		else{
-		    res['title']='Click for Details';
+		    res.title='Click for Details';
 		}
 		//console.log('Section Display');
 		console.log('genEdDisplay(sectionArray)',sectionArray);
@@ -425,7 +425,7 @@
 		    }else{
 			
 			genEdCounts[genEd.abbreviation] += 1;
-		    };
+		    }
 		});
 	    });
 	    
@@ -441,7 +441,7 @@
 		else{
 		    console.log('extraGenEd being pushed ',genEd,count,arrayLength);
 		    extraGenEds.push(genEd);
-		};
+		}
 	
 	    });
 	    return [mainGenEds,extraGenEds];
@@ -464,7 +464,7 @@
 	    else
 	    {
 		res = courseDescription.substr(0,500);
-	    };
+	    }
 
 	    return res;
 	};

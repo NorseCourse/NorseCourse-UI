@@ -22,8 +22,8 @@
 	    console.log('browse',newValue);
 	    norseCourseService.queryApi(newValue).then(function(data){
 		$scope.matchingCourses = data;
-	    })
-	}
+	    });
+	};
 	/**
 	$scope.$watch('seledctedItem',function(newValue,oldValue){
 	     //write function in that goes through the courses in catalog to match depart to beginning of courses strings. THIS WON'T BE USED IN THE FUTURE. just for practice.

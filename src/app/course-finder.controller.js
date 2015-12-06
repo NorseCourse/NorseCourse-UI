@@ -28,7 +28,7 @@
 
 	$scope.$watch('courseSearchTerms',function(newValue,oldValue){
 	    
-	    if (newValue !== undefined && newValue.length != 0) {
+	    if (newValue !== undefined && newValue.length !== 0) {
 		$scope.loading = 'indeterminate';
 		//console.log('find',newValue,oldValue);
 		norseCourseService.queryApi(newValue,oldValue).then(function(data){
