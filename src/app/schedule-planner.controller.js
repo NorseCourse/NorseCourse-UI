@@ -6,6 +6,9 @@
         $scope.preferredCourses = [];
         $scope.requiredGenEds = [];
         $scope.preferredGenEds = [];
+        $scope.results = [];
+        $scope.currentSchedule = [];
+        $scope.currentScheduleIndex = -1;
 
         $scope.toggleExpanded = function(section) {
             if ($scope.expanded === section) {
@@ -32,6 +35,7 @@
                 $scope.requiredGenEds,
                 $scope.preferredGenEds).then(function(data) {
                     $scope.results = data;
+                    $scope.currentScheduleIndex = 0;
                     $scope.loadSchedule(data[0].schedule);
                     if ($scope.expanded !== 'results') {
                         $scope.toggleExpanded('results');
@@ -40,16 +44,33 @@
         };
 
         $scope.loadSchedule = function(sectionIds) {
-            $scope.currentSchedule = [];
+            var schedule = [];
+            $scope.currentSchedule = schedule;
             angular.forEach(sectionIds, function(sectionId) {
                 norseCourseService.getSection(sectionId).then(function(section) {
-                    console.log(section);
-                    $scope.currentSchedule.push(section);
+                    schedule.push(section);
                 }, function() {
                     console.log('Failed to load section', sectionId);
                 });
             });
         };
-                                             
+
+        $scope.loadNextSchedule = function() {
+            if ($scope.currentScheduleIndex < $scope.results.length - 1) {
+                $scope.currentScheduleIndex++;
+                var schedule = $scope.results[$scope.currentScheduleIndex];
+                console.log(schedule);
+                $scope.loadSchedule(schedule.schedule);
+            }
+        };
+
+        $scope.loadPreviousSchedule = function() {
+            if ($scope.currentScheduleIndex > 0) {
+                $scope.currentSceduleIndex--;
+                var schedule = $scope.results[$scope.currentScheduleIndex];
+                console.log(schedule);
+                $scope.loadSchedule(schedule.schedule);
+            }
+        };
     });
 })();

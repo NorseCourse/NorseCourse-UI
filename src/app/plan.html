@@ -130,6 +130,31 @@
         </md-button>
       </div>
     </md-toolbar>
+    <md-divider></md-divider>
+    <md-toolbar class="md-menu-toolbar"
+                ng-show="expanded==='results' && results.length">
+      <div class="md-toolbar-tools">
+        <md-button class="md-icon-button"
+                   ng-click="loadPreviousSchedule()"
+                   ng-disabled="currentScheduleIndex <= 0">
+          <md-icon>
+            chevron_left
+          </md-icon>
+        </md-button>
+        <span flex></span>
+        <h6>
+          Schedule {{currentScheduleIndex + 1}} / {{results.length}}
+        </h6>
+        <span flex></span>
+        <md-button class="md-icon-button"
+                   ng-click="loadNextSchedule()"
+                   ng-disabled="currentScheduleIndex >= results.length - 1">
+          <md-icon>
+            chevron_right
+          </md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
     <md-content class="schedule-planner__section"
                 ng-class="{'schedule-planner__section--expanded': expanded==='results'}">
       <md-list>
