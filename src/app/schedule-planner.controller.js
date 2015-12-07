@@ -66,7 +66,7 @@
 
         $scope.loadPreviousSchedule = function() {
             if ($scope.currentScheduleIndex > 0) {
-                $scope.currentSceduleIndex--;
+                $scope.currentScheduleIndex--;
                 var schedule = $scope.results[$scope.currentScheduleIndex];
                 console.log(schedule);
                 $scope.loadSchedule(schedule.schedule);

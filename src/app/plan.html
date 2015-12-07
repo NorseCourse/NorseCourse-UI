@@ -14,7 +14,10 @@
         </md-button>
         <md-button class="md-icon-button"
                    ng-click="toggleExpanded('form')">
-          <md-icon>{{expanded==='form' ? 'expand_less' : 'expand_more'}}</md-icon>
+          <md-icon class="schedule-planner__toolbar__icon"
+                   ng-class="{'schedule-planner__toolbar__icon--flipped': expanded=='form'}">
+            expand_more
+          </md-icon>
         </md-button>
       </div>
     </md-toolbar>
@@ -124,8 +127,9 @@
         <span class="flex"></span>
         <md-button class="md-icon-button"
                    ng-click="toggleExpanded('results')">
-          <md-icon>
-            {{expanded==='results' ? 'expand_less' : 'expand_more'}}
+          <md-icon class="schedule-planner__toolbar__icon"
+                   ng-class="{'schedule-planner__toolbar__icon--flipped': expanded=='results'}">
+            expand_more
           </md-icon>
         </md-button>
       </div>
@@ -196,8 +200,9 @@
         <span class="flex"></span>
         <md-button class="md-icon-button"
                    ng-click="toggleExpanded('saved')">
-          <md-icon>
-            {{expanded==='saved' ? 'expand_less' : 'expand_more'}}
+          <md-icon class="schedule-planner__toolbar__icon"
+                   ng-class="{'schedule-planner__toolbar__icon--flipped': expanded=='saved'}">
+            expand_more
           </md-icon>
         </md-button>
       </div>
