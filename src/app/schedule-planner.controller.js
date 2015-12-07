@@ -2,56 +2,13 @@
     'use strict';
     angular.module('norseCourse').controller('schedulePlannerController', function($scope, norseCourseService, schedulesService) {
         $scope.expanded = 'form';
-        $scope.requiredCourses = [];
+        $scope.requiredCourses = schedulesService.getRequiredCourses();
         $scope.preferredCourses = [];
-        $scope.requiredGenEds = [];
+        $scope.requiredGenEds = schedulesService.getRequiredGenEds();;
         $scope.preferredGenEds = [];
         $scope.results = [];
         $scope.currentSchedule = [];
         $scope.currentScheduleIndex = -1;
-
-        // watches 'tab', which is inhereted from main scope
-        // refreshes the required/preferred courses/gen eds
-        // in case they were changed in other tabs
-        $scope.watch('tab', function() {
-            $scope.preferredCourses = schedulesService.getPreferredCourses();
-            $scope.requiredCourses = schedulesService.getRequriedCourses();
-            $scope.preferredGenEds = schedulesService.getPreferredGenEds();
-            $scope.requiredGenEds = schedulesService.getRequiredGenEds();
-        });
-
-        $scope.watch('preferredCourses', function() {
-            angular.forEach(schedulesService.getPreferredCourses(), function(course) {
-                schedulesService.removePreferredCourse(course);
-            });
-            angular.forEach($scope.preferredCourses, function(course) {
-                schedulesService.addPreferredCourse(course);
-            });
-        });
-        $scope.watch('requriedCourses', function() {
-            angular.forEach(schedulesService.getRequiredCourses(), function(course) {
-                schedulesService.removeRequiredCourse(course);
-            });
-            angular.forEach($scope.requiredCourses, function(course) {
-                schedulesService.addRequiredCourse(course);
-            });
-        });
-        $scope.watch('preferredGenEds', function() {
-            angular.forEach(schedulesService.getPreferredGenEds(), function(genEd) {
-                schedulesService.removePreferredGenEd(genEd);
-            });
-            angular.forEach($scope.preferredGenEds, function(genEd) {
-                schedulesService.addPreferredGenEd(genEd);
-            });
-        });
-        $scope.watch('requiredGenEds', function() {
-            angular.forEach(schedulesService.getRequiredGenEds(), function(genEd) {
-                schedulesService.removeRequiredGenEd(genEd);
-            });
-            angular.forEach($scope.requiredGenEds, function(genEd) {
-                schedulesService.addRequiredGenEd(genEd);
-            });
-        });
 
         $scope.toggleExpanded = function(section) {
             if ($scope.expanded === section) {
@@ -114,6 +71,19 @@
                 console.log(schedule);
                 $scope.loadSchedule(schedule.schedule);
             }
+        };
+
+        $scope.formatTime = function(s) {
+            var hours = Number(s.substr(0, 2));
+            var minutes = Number(s.substr(3, 2));
+            var am = true;
+            if (hours > 11) {
+                am = false;
+            }
+            if (hours > 12) {
+                hours -= 12;
+            }
+            return '' + hours + ':' + minutes + ' ' + (am ? 'am' : 'pm');
         };
     });
 })();

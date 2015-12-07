@@ -29,24 +29,36 @@
         publicApi.addPreferredCourse = function(course) {
             if (!publicApi.hasCourse(course)) {
                 privateApi.preferredCoruses.push(course);
+                return true;
+            } else {
+                return false;
             }
         };
 
         publicApi.addRequiredCourse = function(course) {
             if (!publicApi.hasCourse(course)) {
                 privateApi.requiredCourses.push(course);
+                return true;
+            } else {
+                return false;
             }
         };
 
         publicApi.addPreferredGenEd = function(genEd) {
             if (!publicApi.hasGenEd(genEd)) {
                 privateApi.preferredGenEds.push(genEd);
+                return true;
+            } else {
+                return false;
             }
         };
 
         publicApi.addRequiredGenEd = function(genEd) {
             if (!publicApi.hasGenEd(genEd)) {
                 privateApi.requiredGenEds.push(genEd);
+                return true;
+            } else {
+                return false;
             }
         };
 
@@ -101,9 +113,12 @@
                 for (var i = 0; i < privateApi.requiredCourses.length; i++) {
                     if (angular.equals(privateApi.requiredCourses[i], course)) {
                         privateApi.requiredCourses.splice(i, 1);
-                        return;
+                        return true;
                     }
                 }
+                return false;
+            } else {
+                return false;
             }
         };
 
@@ -112,15 +127,19 @@
                 for (var i = 0; i < privateApi.preferredCourses.length; i++) {
                     if (angular.equals(privateApi.preferredCourses[i], course)) {
                         privateApi.preferredCourses.splice(i, 1);
-                        return;
+                        return true;
                     }
                 }
+                return false;
+            } else {
+                return false;
             }
         };
 
         publicApi.removeCourse = function(course) {
-            publicApi.removePreferredCourse(course);
-            publicApi.removeRequiredCourse(course);
+            var foo = publicApi.removePreferredCourse(course);
+            var bar = publicApi.removeRequiredCourse(course);
+            return foo || bar;
         };
 
         publicApi.removeRequiredGenEd = function(genEd) {
@@ -128,9 +147,12 @@
                 for (var i = 0; i < privateApi.requiredGenEds.length; i++) {
                     if (angular.equals(privateApi.requiredGenEds[i], genEd)) {
                         privateApi.requiredGenEds.splice(i, 1);
-                        return;
+                        return true;
                     }
                 }
+                return false;
+            } else {
+                return false;
             }
         };
 
@@ -139,16 +161,21 @@
                 for (var i = 0; i < privateApi.preferredGenEds.length; i++) {
                     if (angular.equals(privateApi.preferredGenEds[i], genEd)) {
                         privateApi.preferredGenEds.splice(i, 1);
-                        return;
+                        return true;
                     }
                 }
+                return false;
+            } else {
+                return false;
             }
         };
 
         publicApi.removeGenEd = function(genEd) {
-            publicApi.removePreferredGenEd(genEd);
-            publicApi.removeRequiredGenEd(genEd);
+            var foo = publicApi.removePreferredGenEd(genEd);
+            var bar = publicApi.removeRequiredGenEd(genEd);
+            return foo || bar;
         };
-        
+
+        return publicApi;
     });
 })();
