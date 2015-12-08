@@ -3,17 +3,18 @@
               md-row-height="5:4">
   <md-grid-tile ng-repeat="courseSection in courses"
                 layout="column"
-                style="background-color:white;">
+                style="background-color:white;padding:4px"
+		> <!--class="md-whiteframe-3dp"-->
     <md-grid-tile-header layout="row" layout-align="space-between center" style="background-color: #5555EE;">
-      <h2>{{courseSection.info.basicDisplay.name}}
+      <h2>{{' '+courseSection.info.basicDisplay.name}}
 	<span class="menu">
 	  <md-menu aria-label="Open add course menu">
 	    <md-button ng-click="$mdOpenMenu($event)" aria-label="add to prefered"><!-- class="md-icon-button">-->
 	      <md-icon class=".material-icons">add_circle_outline</md-icon>
 	    </md-button>
 	    <md-menu-content>
-	      <md-menu-item><md-button ng-click="clickAlert()">Add Preferred Course</md-button></md-menu-item>
-	      <md-menu-item><md-button ng-click="clickAlert()">Add Required Course</md-button></md-menu-item>
+	      <md-menu-item><md-button ng-click="addToSchedule(courseSection,0)">Add Preferred Course</md-button></md-menu-item>
+	      <md-menu-item><md-button ng-click="addToSchedule(courseSection,1)">Add Required Course</md-button></md-menu-item>
 	    </md-menu-content>
 	  </md-menu>
 	</span>
@@ -25,9 +26,9 @@
 
     </div>
     <md-grid-tile-footer>
-      <md-chips ng-model="courseSection.info.basicDisplay.mainGenEds" readonly="true" style="color: pink">
-	<md-chip-template>
-	  {{$chip}} <!-- replace with gen_eds once that is ready-->
+      <md-chips ng-model="courseSection.info.basicDisplay.mainGenEds" readonly="true" style="color: pink" >
+	<md-chip-template ng-click="printPlease($chip)">
+	  {{$chip.abbreviation}} <!-- replace with gen_eds once that is ready-->
 	</md-chip-template>
       </md-chips> 
     </md-grid-tile-footer>

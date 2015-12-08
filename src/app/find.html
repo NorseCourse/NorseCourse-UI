@@ -1,14 +1,15 @@
 <md-content ng-controller="courseFinderController" layout-padding layout-padding-large>
   <md-chips
      ng-model="courseSearchTerms"
-     md-on-append="newKeyword($chip)"
+     md-on-append="newKeyword($chip)" <!--md-on-append-->
      md-require-match="">
     <md-autocomplete
        md-selected-item="foo"
        md-search-text="queryText"
        md-items="item in autocompleteQuery(queryText)"
        md-item-text="item.display"
-       placeholder="Enter a department or gen ed!"
+       placeholder="Search by department, course, gen. ed. or keyword!"
+       md-autoselect="true"
        md-no-cache>
       <md-item-template>
         <span>{{item.data.name}}</span>
@@ -20,9 +21,9 @@
       <span>({{$chip.display | uppercase}})</span>
     </md-chip-template>
   </md-chips>
-  <md-progress-circular ng-hide="loading===null" <!--should this be centered? -->
+  <md-progress-circular ng-hide="loading===null" 
                         md-mode="{{loading}}"
-                        md-diameter="84">
+                        md-diameter="200">
   </md-progress-circular>
   <br/>
   <nc-course-list courses="matchingCourses"></nc-course-list>

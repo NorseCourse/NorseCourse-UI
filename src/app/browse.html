@@ -15,7 +15,11 @@
 	No matches found.
       </md-not-found>
     </md-autocomplete>
-    
+    <md-progress-circular ng-hide="loading===null" 
+                        md-mode="{{loading}}"
+                        md-diameter="200">
+  </md-progress-circular>
+     
     
     <br/>
     <nc-course-list courses="matchingCourses"></nc-course-list>

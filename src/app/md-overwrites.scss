@@ -23,4 +23,18 @@ h2 {
 }
 md-grid-list md-grid-tile md-grid-tile-footer, md-grid-list md-grid-tile md-grid-tile-header {
     height: 65;
+    
 }
+
+md-progress-circular {
+    margin: auto;
+}
+
+.md-chips .md-chip-input-container md-autocomplete input{
+    width: 400px;
+}
+
+md-grid-list md-grid-tile figure{
+    padding: 0px;	
+}
+	  

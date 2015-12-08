@@ -57,7 +57,7 @@
             });
             return deferred.promise;
         };
-
+	
         publicApi.getGenEd = function(genEdId) {
             var deferred = $q.defer();
             genEdsReady.promise.then(function() {
@@ -67,7 +67,9 @@
             });
             return deferred.promise;
         };
-
+	publicApi.getGenEdNoPromise = function(genEdId){  //no promise because I need this done in sequential order
+	    return genEdIdObjectMap[genEdId];
+	};
         publicApi.getDepartment = function(departmentId) {
             var deferred = $q.defer();
             departmentsReady.promise.then(function() {
@@ -246,7 +248,7 @@
 		var type = chip.type + 's';//temporary fix for department. 
 		console.log(chip, type);
 		var id = '';		
-		if (type !== 'keyword'){ //change to keywords in order to allow keywords. Right now we have a problem with the chips that's going to cause more issues than we want.
+		if (type !== 'keywords'){ //change to keywords in order to allow keywords. Right now we have a problem with the chips that's going to cause more issues than we want.
 		
 		    id = eval('chip.data.'+ chip.type+'Id');
 		    console.log('Chip Id:', id);
@@ -372,13 +374,9 @@
 	    if (sectionArray.length === 1 ){
 		var section = sectionArray[0];
 		res.title = section.shortTitle;
-		var temp = section.genEdFulfillments['0'];
-		//console.log(temp);
-		if( temp !== undefined){
-		    res.mainGenEds = [section.genEdFulfillments['0'].abbreviation];
-		}
 		res.term = section.term;
-		res.extraGenEds=null;
+		res.mainGenEds = genEdDisplay(sectionArray)[0];
+		res.extraGenEds=genEdDisplay(sectionArray)[1];
 	    }
 	    else{
 		var firstSection = sectionArray[0];
@@ -401,7 +399,6 @@
 		
 
 	    }
-
 	    return res;
 	    
 	};
@@ -409,22 +406,22 @@
 	var genEdDisplay = function(sectionArray){
 	    var mainGenEds = [];
 	    var extraGenEds = [];
-	    //first section and find it's
 	    var genEdCounts = {};
 	    var keys = [];                      
 	    angular.forEach(sectionArray,function(section){
-		
+		console.log("section",section);
 		//angular.forEach(genEdCounts,function(counts,genEd){ keys.push(genEd );});
 		
 		angular.forEach(section.genEdFulfillments,function(genEd){
 		    console.log('FULFILLMENTS: ',section.genEdFulfillments);
 		    
-		    if (keys.indexOf(genEd.abbreviation) === -1){
-			genEdCounts[genEd.abbreviation] = 1;
-			keys.push(genEd.abbreviation);
+		    if (keys.indexOf(genEd.id) === -1){ //changing these to genEdId. might not work
+			console.log(genEd.id);
+			genEdCounts[genEd.id] = 1;
+			keys.push(genEd.id);
 		    }else{
 			
-			genEdCounts[genEd.abbreviation] += 1;
+			genEdCounts[genEd.id] += 1;
 		    }
 		});
 	    });
@@ -433,14 +430,14 @@
 	    //console.log(genEdCounts);	    
 	    var arrayLength = sectionArray.length;
 	    //console.log(arrayLength);
-	    angular.forEach(genEdCounts,function(count, genEd){
+	    angular.forEach(genEdCounts,function(count, genEdId){
 		//console.log(count);
 		if (count === arrayLength){
-		    mainGenEds.push(genEd);
+		    mainGenEds.push(publicApi.getGenEdNoPromise(genEdId));
 		}
 		else{
-		    console.log('extraGenEd being pushed ',genEd,count,arrayLength);
-		    extraGenEds.push(genEd);
+		    console.log('extraGenEd being pushed ',genEdId,count,arrayLength);
+		    extraGenEds.push(publicApi.getGenEdNoPromise(genEdId));
 		}
 	
 	    });

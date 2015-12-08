@@ -21,7 +21,7 @@
                     }
                 };
             } else {
-                $scope.courseSearchTerms.pop();
+                //$scope.courseSearchTerms.pop();
                 return text;
             }
         };
@@ -30,12 +30,16 @@
 	    
 	    if (newValue !== undefined && newValue.length !== 0) {
 		$scope.loading = 'indeterminate';
+		$scope.matchingCourses = [];
 		//console.log('find',newValue,oldValue);
 		norseCourseService.queryApi(newValue,oldValue).then(function(data){
 		    
 		    $scope.matchingCourses = data;
 		    $scope.loading = null;
 		});
+	    }
+	    else {
+		$scope.matchingCourses = [];
 	    }
 	},true);
 	

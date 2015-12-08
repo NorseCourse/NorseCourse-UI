@@ -28,7 +28,7 @@
 
         publicApi.addPreferredCourse = function(course) {
             if (!publicApi.hasCourse(course)) {
-                privateApi.preferredCoruses.push(course);
+                privateApi.preferredCourses.push(course);
                 return true;
             } else {
                 return false;
