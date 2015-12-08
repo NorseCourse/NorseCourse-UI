@@ -19,5 +19,25 @@
         &--expanded {
             height: 300px;
         }
+
+        &__details {
+            align-items: flex-start;
+
+            &__name {
+                padding-top: 20px;
+            }
+
+            &__meeting {
+                padding-top: 5px;
+            }
+
+            &__teachers {
+                padding-top: 5px;
+            }
+
+            &__gen-eds {
+
+            }
+        }
     }
 }
