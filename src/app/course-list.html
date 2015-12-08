@@ -1,11 +1,12 @@
 <md-grid-list md-cols="3"
-              md-gutter="8px"
+              md-gutter="16px"
               md-row-height="5:4">
   <md-grid-tile ng-repeat="courseSection in courses"
                 layout="column"
+		class="md-whiteframe-3dp"
                 style="background-color:white;padding:4px"
 		> <!--class="md-whiteframe-3dp"-->
-    <md-grid-tile-header layout="row" layout-align="space-between center" style="background-color: #5555EE;">
+    <md-grid-tile-header layout="row" layout-align="space-between center" class="md-primary"><!--style="background-color: #5555EE;"-->
       <h2>{{' '+courseSection.info.basicDisplay.name}}
 	<span class="menu">
 	  <md-menu aria-label="Open add course menu">

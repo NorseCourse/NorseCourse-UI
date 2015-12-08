@@ -1,3 +1,4 @@
+$primary: #3F51B5;
 md-autocomplete input:not(.md-input) {
     /**
      * one of the md rules set this width to 200px,
@@ -21,10 +22,18 @@ md-autocomplete input:not(.md-input) {
 h2 {
     margin: auto;
 }
-md-grid-list md-grid-tile md-grid-tile-footer, md-grid-list md-grid-tile md-grid-tile-header {
+md-grid-list md-grid-tile md-grid-tile-footer{
     height: 65;
-    
+
 }
+
+ md-grid-list md-grid-tile  md-grid-tile-header {
+    padding-left: 4px;
+    height: 65;
+    background-color: #3F51B5;	
+}
+
+
 
 md-progress-circular {
     margin: auto;
@@ -35,6 +44,6 @@ md-progress-circular {
 }
 
 md-grid-list md-grid-tile figure{
-    padding: 0px;	
+    padding: 4px;	
 }
 	  
