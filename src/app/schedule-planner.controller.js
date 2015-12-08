@@ -83,6 +83,8 @@
             if (hours > 12) {
                 hours -= 12;
             }
+            minutes = '0' + minutes.toString();
+            minutes = minutes.substr(minutes.length - 2, 2);
             return '' + hours + ':' + minutes + ' ' + (am ? 'am' : 'pm');
         };
     });
