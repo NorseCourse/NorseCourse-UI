@@ -8,11 +8,13 @@
           Schedule Preferences
         </h6>
         <span class="flex"></span>
-        <md-button class="md-accent md-icon-button"
+        <md-button class="md-icon-button md-accent"
+                   style="padding: 0px;"
                    ng-click="getSchedules()">
-          <md-icon>search</md-icon>
+          <md-icon class="md-48">search</md-icon>
         </md-button>
         <md-button class="md-icon-button"
+                   style="padding: 0px"
                    ng-click="toggleExpanded('form')">
           <md-icon class="schedule-planner__toolbar__icon"
                    ng-class="{'schedule-planner__toolbar__icon--flipped': expanded=='form'}">
@@ -126,6 +128,7 @@
         </h6>
         <span class="flex"></span>
         <md-button class="md-icon-button"
+                   style="padding: 0px;"
                    ng-click="toggleExpanded('results')">
           <md-icon class="schedule-planner__toolbar__icon"
                    ng-class="{'schedule-planner__toolbar__icon--flipped': expanded=='results'}">
@@ -139,6 +142,7 @@
                 ng-show="expanded==='results' && results.length">
       <div class="md-toolbar-tools">
         <md-button class="md-icon-button"
+                   style="padding: 0px;"
                    ng-click="loadPreviousSchedule()"
                    ng-disabled="currentScheduleIndex <= 0">
           <md-icon>
@@ -151,6 +155,7 @@
         </h6>
         <span flex></span>
         <md-button class="md-icon-button"
+                   style="padding: 0px"
                    ng-click="loadNextSchedule()"
                    ng-disabled="currentScheduleIndex >= results.length - 1">
           <md-icon>
@@ -162,17 +167,21 @@
     <md-content class="schedule-planner__section"
                 ng-class="{'schedule-planner__section--expanded': expanded==='results'}">
       <md-list>
-        <md-list-item ng-repeat="section in currentSchedule" layout="column" style="align-items: flex-start; padding-bottom: 20px;">
-          <p>
+        <md-list-item class="schedule-planner__section__details"
+                      ng-repeat="section in currentSchedule"
+                      layout="column">
+          <p class="schedule-planner__section__details__name">
             <b>{{section.name}}</b> {{section.shortTitle}}
           </p>
-          <p ng-repeat="meeting in section.sectionMeetings">
+          <p class="schedule-planner__section__details__meeting"
+             ng-repeat="meeting in section.sectionMeetings">
             Meets {{meeting.days}} {{formatTime(meeting.startTime)}} - {{formatTime(meeting.endTime)}} in {{meeting.room[0].buildingName}} {{meeting.room[0].number}} {{section.sevenWeeks === 1 ? 'for the first seven weeks' : 'section.sevenWeeks' === 2 ? 'for the second seven weeks' : ''}}
           </p>
-          <p>
+          <p class="schedule-planner__section__details__teachers">
             Taught by <span ng-repeat="teacher in section.faculty">{{teacher.firstInitial}}. {{teacher.lastName}} {{!$last ? ', ' : ' '}}</span>
           </p>
-          <md-chips ng-if="section.genEdFulfillments.length"
+          <md-chips class="schedule-planner__section__details__gen-eds"
+                    ng-if="section.genEdFulfillments.length"
                     ng-model="section.genEdFulfillments"
                     readonly="true">
             <md-chip-template>
@@ -199,6 +208,7 @@
         </h6>
         <span class="flex"></span>
         <md-button class="md-icon-button"
+                   style="padding: 0px;"
                    ng-click="toggleExpanded('saved')">
           <md-icon class="schedule-planner__toolbar__icon"
                    ng-class="{'schedule-planner__toolbar__icon--flipped': expanded=='saved'}">
