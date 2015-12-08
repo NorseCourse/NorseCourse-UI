@@ -8,11 +8,13 @@
           Schedule Preferences
         </h6>
         <span class="flex"></span>
-        <md-button class="md-accent md-icon-button"
+        <md-button class="md-icon-button md-accent"
+                   style="padding: 0px;"
                    ng-click="getSchedules()">
-          <md-icon>search</md-icon>
+          <md-icon class="md-48">search</md-icon>
         </md-button>
         <md-button class="md-icon-button"
+                   style="padding: 0px"
                    ng-click="toggleExpanded('form')">
           <md-icon class="schedule-planner__toolbar__icon"
                    ng-class="{'schedule-planner__toolbar__icon--flipped': expanded=='form'}">
@@ -126,6 +128,7 @@
         </h6>
         <span class="flex"></span>
         <md-button class="md-icon-button"
+                   style="padding: 0px;"
                    ng-click="toggleExpanded('results')">
           <md-icon class="schedule-planner__toolbar__icon"
                    ng-class="{'schedule-planner__toolbar__icon--flipped': expanded=='results'}">
@@ -139,6 +142,7 @@
                 ng-show="expanded==='results' && results.length">
       <div class="md-toolbar-tools">
         <md-button class="md-icon-button"
+                   style="padding: 0px;"
                    ng-click="loadPreviousSchedule()"
                    ng-disabled="currentScheduleIndex <= 0">
           <md-icon>
@@ -151,6 +155,7 @@
         </h6>
         <span flex></span>
         <md-button class="md-icon-button"
+                   style="padding: 0px"
                    ng-click="loadNextSchedule()"
                    ng-disabled="currentScheduleIndex >= results.length - 1">
           <md-icon>
@@ -203,6 +208,7 @@
         </h6>
         <span class="flex"></span>
         <md-button class="md-icon-button"
+                   style="padding: 0px;"
                    ng-click="toggleExpanded('saved')">
           <md-icon class="schedule-planner__toolbar__icon"
                    ng-class="{'schedule-planner__toolbar__icon--flipped': expanded=='saved'}">
