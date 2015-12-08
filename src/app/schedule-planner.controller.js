@@ -3,9 +3,9 @@
     angular.module('norseCourse').controller('schedulePlannerController', function($scope, norseCourseService, schedulesService) {
         $scope.expanded = 'form';
         $scope.requiredCourses = schedulesService.getRequiredCourses();
-        $scope.preferredCourses = [];
-        $scope.requiredGenEds = schedulesService.getRequiredGenEds();;
-        $scope.preferredGenEds = [];
+        $scope.preferredCourses = schedulesService.getPreferredCourses();
+        $scope.requiredGenEds = schedulesService.getRequiredGenEds();
+        $scope.preferredGenEds = schedulesService.getPreferredGenEds();;
         $scope.results = [];
         $scope.currentSchedule = [];
         $scope.currentScheduleIndex = -1;
