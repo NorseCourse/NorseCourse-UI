@@ -10,8 +10,8 @@
       <h2>{{' '+courseSection.info.basicDisplay.name}}
 	<span class="menu">
 	  <md-menu aria-label="Open add course menu">
-	    <md-button ng-click="$mdOpenMenu($event)" aria-label="add to prefered"><!-- class="md-icon-button">-->
-	      <md-icon class=".material-icons">add_circle_outline</md-icon>
+	    <md-button class="md-icon-button" style="padding: 0px; margin-top: 4px;" ng-click="$mdOpenMenu($event)" aria-label="add to prefered">
+	      <md-icon class="material-icons">{{icon}}</md-icon><!--Change to check when added-->
 	    </md-button>
 	    <md-menu-content>
 	      <md-menu-item><md-button ng-click="addToSchedule(courseSection,0)">Add Preferred Course</md-button></md-menu-item>
@@ -28,7 +28,7 @@
     </div>
     <md-grid-tile-footer>
       <md-chips ng-model="courseSection.info.basicDisplay.mainGenEds" readonly="true" style="color: pink" >
-	<md-chip-template ng-click="printPlease($chip)">
+	<md-chip-template ng-click="searchGenEd($chip)">
 	  {{$chip.abbreviation}} <!-- replace with gen_eds once that is ready-->
 	</md-chip-template>
       </md-chips> 

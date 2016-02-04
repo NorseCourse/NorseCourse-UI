@@ -460,9 +460,15 @@
 	    }
 	    else
 	    {
-		res = courseDescription.substr(0,500);
+		var idx = 500;
+		while (courseDescription[idx] !==  ' '){
+		    idx--;
+		}
+		res = courseDescription.substr(0,idx);
+		if (courseDescription.length > 500){
+		    res += '...';
+		}
 	    }
-
 	    return res;
 	};
 

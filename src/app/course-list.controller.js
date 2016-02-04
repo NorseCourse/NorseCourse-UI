@@ -2,6 +2,7 @@
     'user strict';
     angular.module('norseCourse').controller('courseListController', function($scope,$mdDialog,schedulesService,norseCourseService) {
 	$scope.isOpen = false;
+	$scope.icon = 'add_circle_outline';
 	$scope.clickAlert = function(){
 	    $mdDialog.show(
 		$mdDialog.alert()
@@ -10,7 +11,7 @@
 		    .ok('Cool'));
 	};
 	$scope.formatBody = null;
-	$scope.printPlease = function(data){
+	$scope.searchGenEd = function(data){
 	    console.log(data);
 	    var genEd = {
 		'type':'genEd',
@@ -19,6 +20,7 @@
 	    };
 	    $scope.$parent.loading = 'indeterminate';
 	    $scope.$parent.matchingCourses = [];
+	    
 	    //console.log('find',newValue,oldValue);
 	    norseCourseService.queryApi(genEd).then(function(data){
 		
@@ -27,10 +29,10 @@
 	    });
 	    //$scope.$parent.matchingCourses= ;
 	    //console.log($scope.$parent.matchingCourses);
-	}
+	};
 
 	$scope.addToSchedule = function(courseSection,required){
-	    console.log('add to Schedule',courseSection)
+	    console.log('add to Schedule',courseSection);
 	    var course = {
 		'type':'course',
 		'display':'course',
