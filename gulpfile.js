@@ -41,6 +41,14 @@ gulp.task('js', function() {
         .pipe(gulp.dest('dist/js'));
 });
 
+// ngdocs task
+gulp.task('ngdocs', [], function () {
+    var gulpDocs = require('gulp-ngdocs');
+    return gulp.src('src/app/*.js')
+        .pipe(gulpDocs.process())
+        .pipe(gulp.dest('./docs'));
+});
+
 // html task
 gulp.task('html', function() {
     gulp.src('src/app/index.html')
@@ -50,7 +58,7 @@ gulp.task('html', function() {
 });
 
 // build task
-gulp.task('build', ['lint', 'html', 'sass', 'js'])
+gulp.task('build', ['lint', 'html', 'sass', 'js','ngdocs'])
 
 // serve task
 gulp.task('serve', ['build'], function() {
