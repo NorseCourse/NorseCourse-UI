@@ -5,7 +5,7 @@
         $scope.requiredCourses = schedulesService.getRequiredCourses();
         $scope.preferredCourses = schedulesService.getPreferredCourses();
         $scope.requiredGenEds = schedulesService.getRequiredGenEds();
-        $scope.preferredGenEds = schedulesService.getPreferredGenEds();;
+        $scope.preferredGenEds = schedulesService.getPreferredGenEds();
         $scope.results = [];
         $scope.currentSchedule = [];
         $scope.currentScheduleIndex = -1;

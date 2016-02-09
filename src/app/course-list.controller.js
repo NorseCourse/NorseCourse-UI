@@ -29,10 +29,10 @@
 	    });
 	    //$scope.$parent.matchingCourses= ;
 	    //console.log($scope.$parent.matchingCourses);
-	}
+	};
 
 	$scope.addToSchedule = function(courseSection,required){
-	    console.log('add to Schedule',courseSection)
+	    console.log('add to Schedule',courseSection);
 	    var course = {
 		'type':'course',
 		'display':'course',
