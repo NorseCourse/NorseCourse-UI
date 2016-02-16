@@ -28,7 +28,7 @@
 	 * courses, of keywords (if none of the others apply)
 	 * 
 	 * @param {string} queryText A string that is the text to be autocompleted
-	 * @returns {Array} Why doesn't this work? 
+	 * @returns {Array}  matchingItems
 	 */
 	
         $scope.autocompleteQuery = function(queryText) {
