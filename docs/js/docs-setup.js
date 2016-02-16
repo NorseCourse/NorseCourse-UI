@@ -14,6 +14,15 @@ NG_DOCS={
     },
     {
       "section": "api",
+      "id": "norseCourse.controller:main",
+      "shortName": "main",
+      "type": "controller",
+      "moduleName": "norseCourse",
+      "shortDescription": "Main controller for NorseCourse app, which doesn&#39;t actually do anything",
+      "keywords": "api app controller doesn main norsecourse"
+    },
+    {
+      "section": "api",
       "id": "norseCourse.controller:schedulePlannerController",
       "shortName": "schedulePlannerController",
       "type": "controller",
