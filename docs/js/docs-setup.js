@@ -14,12 +14,39 @@ NG_DOCS={
     },
     {
       "section": "api",
+      "id": "norseCourse.controller:main",
+      "shortName": "main",
+      "type": "controller",
+      "moduleName": "norseCourse",
+      "shortDescription": "Main controller for NorseCourse app, which doesn&#39;t actually do anything",
+      "keywords": "api app controller doesn main norsecourse"
+    },
+    {
+      "section": "api",
+      "id": "norseCourse.controller:schedulePlannerController",
+      "shortName": "schedulePlannerController",
+      "type": "controller",
+      "moduleName": "norseCourse",
+      "shortDescription": "Controller for the schedule planner tab of the NorseCourse app",
+      "keywords": "$scope api app array autocomplete collapses collapsing controller converts coursequery courses current currentschedule data eds expand expanded expands format formatted formattime gen genedquery getschedules ids loadnextschedule loadpreviousschedule loads loadschedule method norsecourse planner preferences previous promise queries query querytext requests resolved schedule schedules sectionids sections specific storing string tab text time toggleexpanded"
+    },
+    {
+      "section": "api",
       "id": "norseCourse.service:norseCourseService",
       "shortName": "norseCourseService",
       "type": "service",
       "moduleName": "norseCourse",
       "shortDescription": "This service contains functions for use by various controllers. These miscellaneous function make api calls to gather information from the database.",
       "keywords": "api calls controllers database function functions gather getsection method miscellaneous norsecourse request sectionid sectionif service takes"
+    },
+    {
+      "section": "api",
+      "id": "norseCourse.service:schedulesService",
+      "shortName": "schedulesService",
+      "type": "service",
+      "moduleName": "norseCourse",
+      "shortDescription": "Service for syncing schedule preferrences across the NorseCourse app",
+      "keywords": "add addpreferredcourse addpreferredgened addrequiredcourse addrequiredgened adds api app array check checks course courses eds gen gened getpreferredcourses getpreferredgeneds getrequiredcourses getrequiredgeneds hascourse hasgened haspreferredcourse haspreferredgened hasrequiredcourse hasrequiredgened list method norsecourse preferred preferrences remove removecourse removed removegened removepreferredcourse removepreferredgened removerequiredcourse removerequiredgened removes required schedule service syncing true"
     }
   ],
   "apis": {
