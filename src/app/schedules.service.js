@@ -9,12 +9,13 @@
      * Service for syncing schedule preferrences across the NorseCourse app
      *
      */
-    angular.module('norseCourse').service('schedulesService', function() {
+    angular.module('norseCourse').service('schedulesService', function(utils) {
         var privateApi = {
             preferredCourses: [],
             requiredCourses: [],
             preferredGenEds: [],
-            requiredGenEds: []
+            requiredGenEds: [],
+            savedSchedules: []
         };
 
         var publicApi = {};
@@ -392,6 +393,82 @@
             var foo = publicApi.removePreferredGenEd(genEd);
             var bar = publicApi.removeRequiredGenEd(genEd);
             return foo || bar;
+        };
+
+        /**
+         * @ngdoc method
+         * @name saveSchedule
+         * @methodOf norseCourse.service:schedulesService
+         * @description
+         *
+         * Adds a schedule to the saved schedules list.
+         * Does nothing if the schedule is already saved
+         *
+         * @param {number[]} schedule - the schedule to save, as a list of sections IDs
+         * @returns {boolean} true if the schedule is saved
+         */
+        publicApi.saveSchedule = function(schedule) {
+            schedule = angular.copy(schedule).sort();
+            if (!publicApi.hasSavedSchedule(schedule)) {
+                privateApi.savedSchedules.push(schedule);
+                return true;
+            } else {
+                return false;
+            }
+        };
+
+        /**
+         * @ngdoc method
+         * @name removeSavedSchedule
+         * @methodOf norseCourse.service:schedulesService
+         * @description
+         *
+         * Removes a schedule from the saved schedules list.
+         * Does nothing if the schedule is not already saved
+         *
+         * @param {number[]} schedule - the schedule to remove, as a list of sections IDs
+         * @returns {boolean} true if the schedule was removed from the save schedules
+         */
+        publicApi.removeSavedSchedule = function(schedule) {
+            schedule = angular.copy(schedule).sort();
+            if (publicApi.hasSavedSchedule(schedule)) {
+                privateApi.savedSchedules.splice(
+                    utils.indexOfObject(privateApi.savedSchedules, schedule),
+                    1);
+                return true;
+            } else {
+                return false;
+            }
+        };
+
+        /**
+         * @ngdoc method
+         * @name hasSavedSchedule
+         * @methodOf norseCourse.service:schedulesService
+         * @description
+         *
+         * Checks if a schedule is saved
+         *
+         * @param {number[]} schedule - the schedule to check for, as a list of section IDs
+         * @returns {boolean} true if the schedule is saved
+         */
+        publicApi.hasSavedSchedule = function(schedule) {
+            schedule = angular.copy(schedule).sort();
+            return utils.includesObject(privateApi.savedSchedules, schedule);
+        };
+
+        /**
+         * @ngdoc method
+         * @name getSavedSchedules
+         * @methodOf norseCourse.service:schedulesService
+         * @description
+         *
+         * Gets the saved schedules list
+         *
+         * @returns {number[][]} The list of saved schedules, where each schedule is a list of section IDs
+         */
+        publicApi.getSavedSchedules = function() {
+            return privateApi.savedSchedules;
         };
 
         return publicApi;
