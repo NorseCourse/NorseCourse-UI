@@ -1,3 +1,11 @@
+/**
+ *@ngdoc service
+ *@name norseCourse.service:norseCourseService
+ *@description
+ * 
+ *This service contains functions for use by various controllers. These miscellaneous function make api calls to gather information from the database.
+ */
+
 (function() {
     'use strict';
     angular.module('norseCourse').service('norseCourseService', function($q, $http, apiUrl) {
@@ -48,6 +56,16 @@
             coursesReady.resolve();
         });
 
+	/**
+	 *@ngdoc method
+	 *@name getSection
+	 *@methodOf norseCourse.service:norseCourseService
+	 *@description
+	 *
+	 *This function takes a sectionIf and makes an api request for that section
+	 *
+	 *@param {int} sectionId This is the section id! 
+	 */
         publicApi.getSection = function(sectionId) {
             var deferred = $q.defer();
             $http.get(apiUrl + '/sections/' + sectionId).success(function(data) {
