@@ -25,6 +25,8 @@
 	var courses = [];
 	var courseNameIdMap = {};  //mapping of course name to id
         var courseIdObjectMap = {};
+
+        var sectionIdObjectMap = {}; // stores sections after they're first retrieved
 	
         var genEdsRequest = $http.get(apiUrl + '/genEds');
         genEdsRequest.success(function(data) {
@@ -68,11 +70,17 @@
 	 */
         publicApi.getSection = function(sectionId) {
             var deferred = $q.defer();
-            $http.get(apiUrl + '/sections/' + sectionId).success(function(data) {
-                deferred.resolve(data);
-            }).error(function() {
-                deferred.reject();
-            });
+
+            if (sectionIdObjectMap.hasOwnProperty(sectionId)) {
+                deferred.resolve(sectionIdObjectMap[sectionId]);
+            } else {
+                $http.get(apiUrl + '/sections/' + sectionId).success(function(data) {
+                    sectionIdObjectMap[sectionId] = data;
+                    deferred.resolve(data);
+                }).error(function() {
+                    deferred.reject();
+                });
+            }
             return deferred.promise;
         };
 	
