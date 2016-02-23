@@ -89,7 +89,7 @@
                 schedulesService.getPreferredGenEds()).then(function(data) {
                     $scope.results = data;
                     $scope.currentScheduleIndex = 0;
-                    $scope.loadSchedule(data[0].schedule);
+                    $scope.currentSchedule = data[0].schedule;
                     if ($scope.expanded !== 'results') {
                         $scope.toggleExpanded('results');
                     }
@@ -98,113 +98,65 @@
 
         /**
          * @ngdoc method
-         * @name loadSchedule
+         * @name nextSchedule
          * @methodOf norseCourse.controller:schedulePlannerController
          * @description
          *
-         * Loads the section data for a s specific schedule, storing them in $scope.currentSchedule
-         *
-         * @param {number[]} sectionIds - the array of section ids for the sections in the schedule
-         */
-        $scope.loadSchedule = function(sectionIds) {
-            var schedule = [];
-            $scope.currentSchedule = schedule;
-            angular.forEach(sectionIds, function(sectionId) {
-                norseCourseService.getSection(sectionId).then(function(section) {
-                    schedule.push(section);
-                }, function() {
-                    console.log('Failed to load section', sectionId);
-                });
-            });
-        };
-
-        /**
-         * @ngdoc method
-         * @name loadNextSchedule
-         * @methodOf norseCourse.controller:schedulePlannerController
-         * @description
-         *
-         * Loads the next schedule from $scope.results
+         * Sets the current schedule the next schedule from $scope.results
          *
          */
-        $scope.loadNextSchedule = function() {
+        $scope.nextSchedule = function() {
             if ($scope.currentScheduleIndex < $scope.results.length - 1) {
                 $scope.currentScheduleIndex++;
-                var schedule = $scope.results[$scope.currentScheduleIndex];
-                $scope.loadSchedule(schedule.schedule);
+                $scope.currentSchedule = $scope.results[$scope.currentScheduleIndex].schedule;
             }
         };
 
         /**
          * @ngdoc method
-         * @name loadPreviousSchedule
+         * @name previousSchedule
          * @methodOf norseCourse.controller:schedulePlannerController
          * @description
          *
-         * Loads the previous schedule from $scope.results
+         * Sets the current schedule the previous schedule from $scope.results
          *
          */
-        $scope.loadPreviousSchedule = function() {
+        $scope.previousSchedule = function() {
             if ($scope.currentScheduleIndex > 0) {
                 $scope.currentScheduleIndex--;
-                var schedule = $scope.results[$scope.currentScheduleIndex];
-                $scope.loadSchedule(schedule.schedule);
+                $scope.currentSchedule = $scope.results[$scope.currentScheduleIndex].schedule;
             }
         };
 
         /**
          * @ngdoc method
-         * @name loadSavedSchedule
+         * @name nextSavedSchedule
          * @methodOf norseCourse.controller:schedulePlannerController
          * @description
          *
-         * Loads the section data for a s specific schedule, storing them in $scope.currentSavedSchedule
-         *
-         * @param {number[]} sectionIds - the array of section ids for the sections in the schedule
-         */
-        $scope.loadSavedSchedule = function(sectionIds) {
-            var schedule = [];
-            $scope.currentSavedSchedule = schedule;
-            angular.forEach(sectionIds, function(sectionId) {
-                norseCourseService.getSection(sectionId).then(function(section) {
-                    schedule.push(section);
-                }, function() {
-                    console.log('Failed to load section', sectionId);
-                });
-            });
-        };
-
-        /**
-         * @ngdoc method
-         * @name loadNextSavedSchedule
-         * @methodOf norseCourse.controller:schedulePlannerController
-         * @description
-         *
-         * Loads the next schedule from $scope.savedSchedules
+         * Sets the current saved schedule the next schedule from $scope.savedSchedules
          *
          */
         $scope.loadNextSavedSchedule = function() {
             if ($scope.currentSavedScheduleIndex < $scope.savedSchedules.length - 1) {
                 $scope.currentSavedScheduleIndex++;
-                var schedule = $scope.savedSchedules[$scope.currentSavedScheduleIndex];
-                $scope.loadSavedSchedule(schedule);
+                $scope.currentSavedSchedule = $scope.savedSchedules[$scope.currentSavedScheduleIndex];
             }
         };
 
         /**
          * @ngdoc method
-         * @name loadPreviousSavedSchedule
+         * @name previousSavedSchedule
          * @methodOf norseCourse.controller:schedulePlannerController
          * @description
          *
-         * Loads the previous schedule from $scope.savedSchedules
+         * Sets the current saved schedule to the previous schedule from $scope.savedSchedules
          *
          */
-        $scope.loadPreviousSavedSchedule = function() {
+        $scope.previousSavedSchedule = function() {
             if ($scope.currentSavedScheduleIndex > 0) {
                 $scope.currentSavedScheduleIndex--;
-                var schedule = $scope.savedSchedules[$scope.currentSavedScheduleIndex];
-                $scope.loadSavedSchedule(schedule);
+                $scope.currentSavedSchedule = $scope.savedSchedules[$scope.currentSavedScheduleIndex];
             }
         };
         
@@ -245,11 +197,11 @@
          */
         $scope.saveSchedule = function() {
             var schedule = $scope.results[$scope.currentScheduleIndex].schedule;
-            console.log(schedule);
+            console.log('Saving schedule:', schedule.join(', '));
             schedulesService.saveSchedule(schedule);
             if ($scope.savedSchedules.length === 1) {
                 $scope.currentSavedScheduleIndex = 0;
-                $scope.loadSavedSchedule($scope.savedSchedules[0]);
+                $scope.currentSavedSchedule = $scope.savedSchedules[0];
             }
         };
 
