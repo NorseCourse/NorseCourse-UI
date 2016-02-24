@@ -127,6 +127,14 @@
           Results
         </h6>
         <span class="flex"></span>
+        <md-button class="md-icon-button md-accent"
+                   style="padding: 0px"
+                   ng-click="saveSchedule()"
+                   ng-disabled="expanded !== 'results' || results.length === 0 || scheduleSaved()">
+          <md-icon>
+            add
+          </md-icon>
+        </md-button>
         <md-button class="md-icon-button"
                    style="padding: 0px;"
                    ng-click="toggleExpanded('results')">
@@ -143,7 +151,7 @@
       <div class="md-toolbar-tools">
         <md-button class="md-icon-button"
                    style="padding: 0px;"
-                   ng-click="loadPreviousSchedule()"
+                   ng-click="previousSchedule()"
                    ng-disabled="currentScheduleIndex <= 0">
           <md-icon>
             chevron_left
@@ -156,7 +164,7 @@
         <span flex></span>
         <md-button class="md-icon-button"
                    style="padding: 0px"
-                   ng-click="loadNextSchedule()"
+                   ng-click="nextSchedule()"
                    ng-disabled="currentScheduleIndex >= results.length - 1">
           <md-icon>
             chevron_right
@@ -166,35 +174,7 @@
     </md-toolbar>
     <md-content class="schedule-planner__section"
                 ng-class="{'schedule-planner__section--expanded': expanded==='results'}">
-      <md-list>
-        <md-list-item class="schedule-planner__section__details"
-                      ng-repeat="section in currentSchedule"
-                      layout="column">
-          <p class="schedule-planner__section__details__name">
-            <b>{{section.name}}</b> {{section.shortTitle}}
-          </p>
-          <p class="schedule-planner__section__details__meeting"
-             ng-repeat="meeting in section.sectionMeetings">
-            Meets {{meeting.days}} {{formatTime(meeting.startTime)}} - {{formatTime(meeting.endTime)}} in {{meeting.room[0].buildingName}} {{meeting.room[0].number}} {{section.sevenWeeks === 1 ? 'for the first seven weeks' : 'section.sevenWeeks' === 2 ? 'for the second seven weeks' : ''}}
-          </p>
-          <p class="schedule-planner__section__details__teachers">
-            Taught by <span ng-repeat="teacher in section.faculty">{{teacher.firstInitial}}. {{teacher.lastName}} {{!$last ? ', ' : ' '}}</span>
-          </p>
-          <md-chips class="schedule-planner__section__details__gen-eds"
-                    ng-if="section.genEdFulfillments.length"
-                    ng-model="section.genEdFulfillments"
-                    readonly="true">
-            <md-chip-template>
-              {{$chip.abbreviation}}
-            </md-chip-template>
-          </md-chips>
-          <md-chips ng-if="!section.genEdFulfillments.length"
-                    ng-model="section.genEdFulfillments"
-                    readonly="true"
-                    placeholder="This section fulfills no gen eds :(">
-          </md-chips>
-        </md-list-item>
-      </md-list>
+      <nc-section-list sections="currentSchedule"></nc-section-list>
     </md-content>
   </md-content>
   
@@ -207,6 +187,14 @@
           Saved Schedules
         </h6>
         <span class="flex"></span>
+        <md-button class="md-icon-button md-accent"
+                   style="padding: 0px"
+                   ng-click="removeSavedSchedule()"
+                   ng-disabled="expanded !== 'saved' || savedSchedules.length === 0">
+          <md-icon>
+            remove
+          </md-icon>
+        </md-button>
         <md-button class="md-icon-button"
                    style="padding: 0px;"
                    ng-click="toggleExpanded('saved')">
@@ -217,8 +205,35 @@
         </md-button>
       </div>
     </md-toolbar>
+    <md-toolbar class="md-menu-toolbar"
+                ng-show="expanded==='saved' && savedSchedules.length">
+      <div class="md-toolbar-tools">
+        <md-button class="md-icon-button"
+                   style="padding: 0px;"
+                   ng-click="previousSavedSchedule()"
+                   ng-disabled="currentSavedScheduleIndex <= 0">
+          <md-icon>
+            chevron_left
+          </md-icon>
+        </md-button>
+        <span flex></span>
+        <h6>
+          Schedule {{currentSavedScheduleIndex + 1}} / {{savedSchedules.length}}
+        </h6>
+        <span flex></span>
+        <md-button class="md-icon-button"
+                   style="padding: 0px"
+                   ng-click="nextSavedSchedule()"
+                   ng-disabled="currentSavedScheduleIndex >= savedSchedules.length - 1">
+          <md-icon>
+            chevron_right
+          </md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
     <md-content class="schedule-planner__section"
                 ng-class="{'schedule-planner__section--expanded': expanded==='saved'}">
+      <nc-section-list sections="currentSavedSchedule"></nc-section-list>      
     </md-content>
   </md-content>
 </md-content>
