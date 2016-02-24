@@ -19,7 +19,7 @@
 		targetEvent: ev,
 		clickOutsideToClose:true,
 		fullscreen: useFullScreen,
-		locals: {obje: obj}, //pass the obj object into directive scope.
+		locals: {info: obj.info}, //pass the obj object into directive scope.
 		scope: $scope
 	    })
 		.then(function(answer) {
@@ -38,12 +38,10 @@
 	    
 	};
 	
-	function DialogController($scope, $mdDialog,obje) {
-	    $scope.obj = obje;
-	    //$scope.baz = locals.three;
-	    //$scope.foo = 'fooooo';
+	function DialogController($scope, $mdDialog,info) {
+	    $scope.obj = info;
 	    $scope.hide = function() {
-		console.log(baz);
+		
 		$mdDialog.hide();
 	    };
 	    
