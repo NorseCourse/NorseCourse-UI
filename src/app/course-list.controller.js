@@ -1,3 +1,14 @@
+
+/**
+ *@ngdoc controller
+ *@name norseCourse.controller:courseList
+ *@description
+ *
+ *Displays a list of courses in a grid tile formation.
+ *
+ */
+
+
 (function() {
     'user strict';
     angular.module('norseCourse').controller('courseListController', function($scope,$mdDialog, $mdMedia, schedulesService,norseCourseService) {
@@ -11,7 +22,7 @@
 	$scope.courseDialog = function(obj,ev) {
 	    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
 	    console.log(obj);
-	    console.log(ev)
+	    console.log(ev);
 	    $mdDialog.show({
 		controller: DialogController,
 		templateUrl: 'views/app/course-dialog.html',
@@ -19,8 +30,8 @@
 		targetEvent: ev,
 		clickOutsideToClose:true,
 		fullscreen: useFullScreen,
-		locals: {obje: obj}, //pass the obj object into directive scope.
-		scope: $scope
+		locals: {info: obj.info}//, //pass the obj object into directive scope.
+		//scope: $scope
 	    })
 		.then(function(answer) {
 		    $scope.status = 'You said the information was "' + answer + '".';
@@ -38,12 +49,15 @@
 	    
 	};
 	
-	function DialogController($scope, $mdDialog,obje) {
-	    $scope.obj = obje;
-	    //$scope.baz = locals.three;
-	    //$scope.foo = 'fooooo';
+	function DialogController($scope, $mdDialog,info) {
+	    $scope.info = info;
+	    $scope.secIds = [];
+	    angular.forEach(info.section, function(data){
+		$scope.secIds.push(data.id);
+	    });
+	    
 	    $scope.hide = function() {
-		console.log(baz);
+		
 		$mdDialog.hide();
 	    };
 	    
