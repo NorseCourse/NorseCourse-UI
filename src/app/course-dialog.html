@@ -1,0 +1,34 @@
+<md-dialog aria-label="Mango (Fruit)"  ng-cloak>
+  <form>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+	<h2>{{info.basicDisplay.name}}</h2>
+	<span flex></span>
+	<!--<md-button class="md-icon-button" ng-click="cancel()">
+	  <md-icon md-svg-src="img/icons/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+	</md-button> -->
+      </div>
+    </md-toolbar>
+    <md-dialog-content>
+      <div class="md-dialog-content">
+	<h2>{{info.basicDisplay.title}}</h2>
+	<p>
+	  {{info.basicDisplay.description}}
+	</p>
+	
+	<p>
+	  <nc-section-list sections="secIds"></nc-section-list>
+	  
+	</p>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row"> <!--include chips as actions?-->
+      
+      <span flex></span>
+      
+      <md-button ng-click="hide()" style="margin-right:20px;">
+	Exit
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

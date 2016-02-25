@@ -13,7 +13,8 @@
         templateUrl: 'views/app/section-list.html',
         controller: 'sectionListController',
         bindings: {
-            sections: '='
-        }
+            sections: '='//,
+	    //layout: '=' //rows or columns
+	}
     });
 })();

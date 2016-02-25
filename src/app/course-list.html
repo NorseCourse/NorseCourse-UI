@@ -5,8 +5,9 @@
                 layout="column"
 		class="md-whiteframe-3dp"
                 style="background-color:white;padding:4px"
+		ng-click="courseDialog(courseSection,$event)"
 		> <!--class="md-whiteframe-3dp"-->
-    <md-grid-tile-header layout="row" layout-align="space-between center" class="md-primary"><!--style="background-color: #5555EE;"-->
+    <md-grid-tile-header layout="row" layout-align="space-between center" class="md-primary" ng-click="courseDialog(courseSection,$event)"><!--style="background-color: #5555EE;"-->
       <h2>{{' '+courseSection.info.basicDisplay.name}}
 	<span class="menu">
 	  <md-menu aria-label="Open add course menu">
@@ -22,13 +23,13 @@
       </h2>
       <h3>{{courseSection.info.basicDisplay.title}}</h3>
     </md-grid-tile-header>
-    <div class="tileContent"> <!--Rename this later.Make sure to change alignment-->
+    <div class="tileContent" > <!--Rename this later.Make sure to change alignment-->
       {{courseSection.info.basicDisplay.description}}
 
     </div>
-    <md-grid-tile-footer>
+    <md-grid-tile-footer ng-click="">
       <md-chips ng-model="courseSection.info.basicDisplay.mainGenEds" readonly="true" style="color: pink" >
-	<md-chip-template ng-click="searchGenEd($chip)">
+	<md-chip-template ng-click="searchGenEd($chip)" >
 	  {{$chip.abbreviation}} <!-- replace with gen_eds once that is ready-->
 	</md-chip-template>
       </md-chips> 
