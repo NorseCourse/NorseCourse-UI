@@ -28,7 +28,7 @@
                 layout-padding>
       <form>
         <md-input-container>
-          <label>Required Courses</label>
+          <label>Courses</label>
           <md-chips
              ng-model="requiredCourses"
              md-require-match="true">
@@ -43,36 +43,25 @@
                 <span>{{item.data.name}}</span>
               </md-item-template>
             </md-autocomplete>
-            <md-chip-template>
+            <md-chip-template style="width: 100%">
               <span>{{$chip.data.name}}</span>
-            </md-chip-template>
-          </md-chips>
-        </md-input-container>
-        
-        <md-input-container>
-          <label>Preferred Courses</label>
-          <md-chips
-             ng-model="preferredCourses"
-             md-require-match="true">
-            <md-autocomplete
-               md-selected-item="preferredCourse"
-               md-search-text="preferredCourseQueryText"
-               md-items="item in courseQuery(preferredCourseQueryText)"
-               placeholder="DEPT ###"
-               md-autoselect="true"
-               md-no-cache="true">
-              <md-item-template>
-                <span>{{item.data.name}}</span>
-              </md-item-template>
-            </md-autocomplete>
-            <md-chip-template>
-              <span>{{$chip.data.name}}</span>
+              <md-input-container>
+                <md-checkbox ng-model="foo">Required</md-checkbox>
+              </md-input-container>
+              <md-input-container>
+                <md-select placeholder="Section" ng-model="bar">
+                  <md-option ng-value="foo">Foo</md-option>
+                  <md-option ng-value="bar">Bar</md-option>
+                </md-select>
+              </md-input-container>
             </md-chip-template>
           </md-chips>
         </md-input-container>
 
+        <br/>
+        
         <md-input-container>
-          <label>Required Gen Eds</label>
+          <label>Gen Eds</label>
           <md-chips
              ng-model="requiredGenEds"
              md-require-match="true">
@@ -93,27 +82,6 @@
           </md-chips>
         </md-input-container>
         
-        <md-input-container>
-          <label>Preferred GenEds</label>
-          <md-chips
-             ng-model="preferredGenEds"
-             md-require-match="true">
-            <md-autocomplete
-               md-selected-item="preferredGenEd"
-               md-search-text="preferredGenEdQueryText"
-               md-items="item in genEdQuery(preferredGenEdQueryText)"
-               placeholder="Gen Ed"
-               md-autoselect="true"
-               md-no-cache="true">
-              <md-item-template>
-                <span>{{item.data.name}}</span>
-              </md-item-template>
-            </md-autocomplete>
-            <md-chip-template>
-              <span>{{$chip.data.name}}</span>
-            </md-chip-template>
-          </md-chips>
-        </md-input-container>
       </form>
     </md-content>
   </md-content>

@@ -161,32 +161,6 @@
         };
         
         /**
-         * @ngdoc formatTime
-         * @name formatTime
-         * @methodOf norseCourse.controller:schedulePlannerController
-         * @description
-         *
-         * Converts a string from 24-hour format to am/pm format
-         *
-         * @param {string} s - 24-hour formatted time string
-         * @return {string} am/pm formatted time string
-         */
-        $scope.formatTime = function(s) {
-            var hours = Number(s.substr(0, 2));
-            var minutes = Number(s.substr(3, 2));
-            var am = true;
-            if (hours > 11) {
-                am = false;
-            }
-            if (hours > 12) {
-                hours -= 12;
-            }
-            minutes = '0' + minutes.toString();
-            minutes = minutes.substr(minutes.length - 2, 2);
-            return '' + hours + ':' + minutes + ' ' + (am ? 'am' : 'pm');
-        };
-
-        /**
          * @ngdoc method
          * @name saveSchedule
          * @methodOf norseCourse.controller:schedulePlannerController
