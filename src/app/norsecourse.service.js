@@ -57,7 +57,7 @@
 	    });
             coursesReady.resolve();
         });
-
+	
 	/**
 	 *@ngdoc method
 	 *@name getSection
@@ -105,7 +105,7 @@
             });
             return deferred.promise;
         };
-
+	
         publicApi.getCourse = function(courseId) {
             var deferred = $q.defer();
             coursesReady.promise.then(function() {
@@ -484,17 +484,8 @@
 	    if (courseDescription==='nan'){
 		res = 'No description included. Contact your advisor or the department head for more details.'; 
 	    }
-	    else
-	    {
-		var idx = 500;
-		while (courseDescription[idx] !==  ' '){
-		    idx--;
-		}
-		res = courseDescription.substr(0,idx);
-		if (courseDescription.length > 500){
-		    res += '...';
-		}
-	    }
+	    res = courseDescription;
+	    
 	    return res;
 	};
 

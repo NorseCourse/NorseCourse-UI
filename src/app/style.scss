@@ -52,4 +52,10 @@ foo {
 .dialogdemoBasicUsage .footer, .dialogdemoBasicUsage .footer > code {
   font-size: 0.8em;
     margin-top: 50px; }
-    
+.tileContent{
+	text-overflow : ellipsis;
+	overflow: hidden;
+	height : 50%;
+	width : 100%;
+	display: block;
+}
