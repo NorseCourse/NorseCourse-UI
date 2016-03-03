@@ -1,11 +1,13 @@
 <md-grid-list md-cols="3"
+	      md-cols-xs="1" md-cols-sm="2" md-cols-md="3" md-cols-gt-md="3"
               md-gutter="16px"
               md-row-height="5:4">
   <md-grid-tile ng-repeat="courseSection in courses"
                 layout="column"
 		class="md-whiteframe-3dp"
-                style="background-color:white;padding:4px"
+                style="background-color:white;padding:4px;text-overflow:hidden"
 		ng-click="courseDialog(courseSection,$event)"
+		
 		> <!--class="md-whiteframe-3dp"-->
     <md-grid-tile-header layout="row" layout-align="space-between center" class="md-primary" ng-click="courseDialog(courseSection,$event)"><!--style="background-color: #5555EE;"-->
       <h2>{{' '+courseSection.info.basicDisplay.name}}
@@ -23,8 +25,8 @@
       </h2>
       <h3>{{courseSection.info.basicDisplay.title}}</h3>
     </md-grid-tile-header>
-    <div class="tileContent" > <!--Rename this later.Make sure to change alignment-->
-      {{courseSection.info.basicDisplay.description}}
+    <div class="tileContent" > 
+      {{courseSection.info.course.description}}
 
     </div>
     <md-grid-tile-footer ng-click="">
