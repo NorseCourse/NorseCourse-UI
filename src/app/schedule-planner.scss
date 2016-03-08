@@ -1,3 +1,36 @@
+.course-chips {
+    .md-chip {
+        width: 100%;
+    }
+    
+    .md-chip-content {
+        height: 100%;
+        width: 100%;
+    }
+    
+    &__template {
+        display: block;
+        height: 100%;
+        
+        &__name {
+            position: relative;
+            bottom: 6px;
+        }
+
+        &__required {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        &__section {
+            margin: 0px;
+            padding: 0px;
+            position: relative;
+            bottom: 10px;
+        }
+    }
+}
+
 .schedule-planner {
     &__toolbar {
         &__icon {

@@ -11,10 +11,8 @@
      */
     angular.module('norseCourse').controller('schedulePlannerController', function($scope, norseCourseService, schedulesService) {
         $scope.expanded = 'form';
-        $scope.requiredCourses = schedulesService.getRequiredCourses();
-        $scope.preferredCourses = schedulesService.getPreferredCourses();
-        $scope.requiredGenEds = schedulesService.getRequiredGenEds();
-        $scope.preferredGenEds = schedulesService.getPreferredGenEds();
+        $scope.requiredCourses = angular.copy(schedulesService.getRequiredCourses());
+        $scope.requiredGenEds = angular.copy(schedulesService.getRequiredGenEds());
         $scope.results = [];
         $scope.currentSchedule = [];
         $scope.currentScheduleIndex = -1;
@@ -22,6 +20,24 @@
         $scope.currentSavedSchedule = [];
         $scope.currentSavedScheduleIndex = -1;
 
+        $scope.courseSections = {}; // map of courseIds to array of sections for each course
+        $scope.selectedCourseSections = {}; // map of courseIds to selected section
+        
+        $scope.$watch('requiredCourses', function(newRequiredCourses, oldRequiredCourses) {
+            angular.forEach(newRequiredCourses, function(requiredCourse) {
+                if (!$scope.courseSections.hasOwnProperty(requiredCourse.data.courseId)) {
+                    var sections = [];
+                    $scope.courseSections[requiredCourse.data.courseId] = sections;
+                    $scope.selectedCourseSections[requiredCourse.data.courseId] = null;
+                    norseCourseService.fetchSectionsByCourse(requiredCourse.data).then(function(data) {
+                        angular.forEach(data, function(section) {
+                            sections.push(section);
+                        });
+                    });
+                }
+            });
+        }, true);
+        
         /**
          * @ngdoc method
          * @name toggleExpanded
