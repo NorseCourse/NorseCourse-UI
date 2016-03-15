@@ -95,14 +95,14 @@
 	    var course = {
 		'type':'course',
 		'display':'course',
-		'data':courseSection.info.course,
+		'data':courseSection.info.course
 	    };
 	    console.log('add to Schedule',course);
 	    if (required === 1){
-		schedulesService.addRequiredCourse(course);  	
+		schedulesService.addCourse(course, true);  	
 	    }
 	    else if (required === 0) {
-		schedulesService.addPreferredCourse(course);  
+		schedulesService.addCourse(course, false);  
 	    }
 	};
     });

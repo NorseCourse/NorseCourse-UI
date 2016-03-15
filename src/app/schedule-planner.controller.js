@@ -103,14 +103,14 @@
          *
          */
         $scope.getSchedules = function() {
-            schedulesService.requestSchedules();/*.then(function(data) {
+            schedulesService.requestSchedules().then(function(data) {
                 $scope.results = data;
                 $scope.currentScheduleIndex = 0;
                 $scope.currentSchedule = data[0].schedule;
                 if ($scope.expanded !== 'results') {
                     $scope.toggleExpanded('results');
                 }
-            });*/
+            });
         };
 
         /**
