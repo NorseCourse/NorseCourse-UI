@@ -11,8 +11,7 @@
      */
     angular.module('norseCourse').controller('schedulePlannerController', function($scope, norseCourseService, schedulesService) {
         $scope.expanded = 'form';
-        $scope.requiredCourses = angular.copy(schedulesService.getRequiredCourses());
-        $scope.requiredGenEds = angular.copy(schedulesService.getRequiredGenEds());
+        $scope.prefs = schedulesService.getSchedulePreferences();
         $scope.results = [];
         $scope.currentSchedule = [];
         $scope.currentScheduleIndex = -1;
@@ -21,19 +20,25 @@
         $scope.currentSavedScheduleIndex = -1;
 
         $scope.courseSections = {}; // map of courseIds to array of sections for each course
-        $scope.selectedCourseSections = {}; // map of courseIds to selected section
         
-        $scope.$watch('requiredCourses', function(newRequiredCourses, oldRequiredCourses) {
-            angular.forEach(newRequiredCourses, function(requiredCourse) {
-                if (!$scope.courseSections.hasOwnProperty(requiredCourse.data.courseId)) {
+        $scope.$watch('prefs.courses', function(newCourses, oldCourses) {
+            angular.forEach(newCourses, function(course) {
+                // load sections if needed
+                if (!$scope.courseSections.hasOwnProperty(course.data.courseId)) {
                     var sections = [];
-                    $scope.courseSections[requiredCourse.data.courseId] = sections;
-                    $scope.selectedCourseSections[requiredCourse.data.courseId] = null;
-                    norseCourseService.fetchSectionsByCourse(requiredCourse.data).then(function(data) {
+                    $scope.courseSections[course.data.courseId] = sections;
+                    norseCourseService.fetchSectionsByCourse(course.data).then(function(data) {
                         angular.forEach(data, function(section) {
                             sections.push(section);
                         });
                     });
+                }
+
+                // force course to be required if section required
+                if (!course.required &&
+                    course.section &&
+                    course.section.required) {
+                    course.required = true;
                 }
             });
         }, true);
@@ -98,18 +103,14 @@
          *
          */
         $scope.getSchedules = function() {
-            norseCourseService.getSchedules(
-                schedulesService.getRequiredCourses(),
-                schedulesService.getPreferredCourses(),
-                schedulesService.getRequiredGenEds(),
-                schedulesService.getPreferredGenEds()).then(function(data) {
-                    $scope.results = data;
-                    $scope.currentScheduleIndex = 0;
-                    $scope.currentSchedule = data[0].schedule;
-                    if ($scope.expanded !== 'results') {
-                        $scope.toggleExpanded('results');
-                    }
-                });
+            schedulesService.requestSchedules();/*.then(function(data) {
+                $scope.results = data;
+                $scope.currentScheduleIndex = 0;
+                $scope.currentSchedule = data[0].schedule;
+                if ($scope.expanded !== 'results') {
+                    $scope.toggleExpanded('results');
+                }
+            });*/
         };
 
         /**
@@ -229,7 +230,7 @@
          */
         $scope.scheduleSaved = function() {
             var schedule = $scope.results[$scope.currentScheduleIndex].schedule;
-            return schedulesService.hasSavedSchedule(schedule);
+            return schedule && schedulesService.hasSavedSchedule(schedule);
         };
 
     });

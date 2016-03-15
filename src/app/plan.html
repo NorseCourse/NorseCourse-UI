@@ -31,13 +31,13 @@
           <label>Courses</label>
           <md-chips
              class="course-chips"
-             ng-model="requiredCourses"
+             ng-model="prefs.courses"
              md-require-match="true">
             <md-autocomplete
                md-selected-item="requiredCourse"
                md-search-text="requiredCourseQueryText"
                md-items="item in courseQuery(requiredCourseQueryText)"
-               placeholder="Course"
+               placeholder="Add a Course"
                md-autoselect="true"
                md-no-cache="true">
               <md-item-template>
@@ -49,15 +49,26 @@
                 {{$chip.data.name}}
               </span>
               <md-input-container class="course-chips__template__required">
-                <md-checkbox ng-model="foo">Required</md-checkbox>
+                <md-checkbox ng-model="$chip.required">Required</md-checkbox>
               </md-input-container>
+              <span class="course-chips__template__filler"></span>
               <md-input-container class="course-chips__template__section">
-                <md-select placeholder="Section" ng-model="selectedCourseSections[$chip.data.courseId]">
+                <md-select placeholder="Preferred Section"
+                           ng-model="$chip.section">
+                  <md-option ng-value="null">None</md-option>
                   <md-option ng-repeat="section in courseSections[$chip.data.courseId]"
-                             ng-value="section">
-                    {{section.name}} {{section.shortTitle}}
+                             ng-value="section"
+                             class="section-option">
+                    <span class="section-option__basic-info">{{section.name}}</span>
+                    <span class="section-option__advanced-info">{{section.shortTitle}}</span>
                   </md-option>
                 </md-select>
+              </md-input-container>
+              <md-input-container class="course-chips__template__required">
+                <md-checkbox ng-model="$chip.section.required"
+                             ng-disabled="!$chip.section">
+                  Required
+                </md-checkbox>
               </md-input-container>
             </md-chip-template>
           </md-chips>
@@ -68,24 +79,46 @@
         <md-input-container>
           <label>Gen Eds</label>
           <md-chips
-             ng-model="requiredGenEds"
+             ng-model="prefs.genEds"
              md-require-match="true">
             <md-autocomplete
                md-selected-item="requiredGenEds"
                md-search-text="requiredGenEdQueryText"
                md-items="item in genEdQuery(requiredGenEdQueryText)"
-               placeholder="Gen Ed"
+               placeholder="Add a Gen Ed"
                md-autoselect="true"
                md-no-cache="true">
               <md-item-template>
                 <span>{{item.data.name}}</span>
               </md-item-template>
             </md-autocomplete>
-            <md-chip-template>
-              <span>{{$chip.data.name}}</span>
+            <md-chip-template class="course-chips__template">
+              <span class="course-chips__template__name">
+                {{$chip.data.name}}
+              </span>
+              <md-input-container class="course-chips__template__required">
+                <md-checkbox ng-model="$chip.required">Required</md-checkbox>
+              </md-input-container>
             </md-chip-template>
           </md-chips>
         </md-input-container>
+
+        <div>
+          <md-input-container>
+            <label>Minimum Credits</label>
+            <input type="number"
+                   min="0"
+                   max="{{prefs.credits.max}}"
+                   ng-model="prefs.credits.min"/>
+          </md-input-container>
+
+          <md-input-container>
+            <label>Maximum Credits</label>
+            <input type="number"
+                   min="{{prefs.credits.min}}"
+                   ng-model="prefs.credits.max"/>
+          </md-input-container>
+        </div>
         
       </form>
     </md-content>

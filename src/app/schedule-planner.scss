@@ -9,16 +9,14 @@
     }
     
     &__template {
-        display: block;
+        display: flex;
         height: 100%;
         
         &__name {
-            position: relative;
-            bottom: 6px;
         }
 
         &__required {
-            margin: 0px;
+            margin: 0px 20px 0px 10px;
             padding: 0px;
         }
 
@@ -26,7 +24,11 @@
             margin: 0px;
             padding: 0px;
             position: relative;
-            bottom: 10px;
+            bottom: 3px;
+        }
+
+        &__filler {
+            flex-grow: 1;
         }
     }
 }
@@ -71,6 +73,14 @@
             &__gen-eds {
 
             }
+        }
+    }
+}
+
+.md-select-value {
+    .section-option {
+        &__advanced-info {
+            display: none;
         }
     }
 }
