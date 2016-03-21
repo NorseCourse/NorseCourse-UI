@@ -1,0 +1,21 @@
+<div>
+  <div class="data__schedule"
+       style="display: none;"
+       ng-repeat="schedule in scheduleData">
+    <div class="data__schedule__section"
+         ng-repeat="section in schedule">
+      <div class="data__schedule__section__name">
+        {{section.name}}
+      </div>
+      <div class="data__schedule__section__department">
+        {{section.name.split('-')[0]}}
+      </div>
+      <div class="data__schedule__section__course-number">
+        {{section.name.split('-')[1]}}
+      </div>
+      <div class="data__schedule__section__section-number">
+        {{section.name.split('-')[2]}}
+      </div>
+    </div>
+  </div>
+</div>
