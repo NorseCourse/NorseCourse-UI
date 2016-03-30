@@ -154,7 +154,7 @@
          * Sets the current saved schedule the next schedule from $scope.savedSchedules
          *
          */
-        $scope.loadNextSavedSchedule = function() {
+        $scope.nextSavedSchedule = function() {
             if ($scope.currentSavedScheduleIndex < $scope.savedSchedules.length - 1) {
                 $scope.currentSavedScheduleIndex++;
                 $scope.currentSavedSchedule = $scope.savedSchedules[$scope.currentSavedScheduleIndex];
