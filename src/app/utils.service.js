@@ -11,7 +11,8 @@
      */
     angular.module('norseCourse').service('utils', function() {
         var publicApi = {};
-
+        var privateApi = {};
+        
         /**
          * @ngdoc method
          * @name includesObject
@@ -56,6 +57,43 @@
             }
 
             return -1;
+        };
+
+        privateApi.formatTime = function(s) {
+            var hours = Number(s.substr(0, 2));
+            var minutes = Number(s.substr(3, 2));
+            var am = true;
+            if (hours > 11) {
+                am = false;
+            }
+            if (hours > 12) {
+                hours -= 12;
+            }
+            minutes = '0' + minutes.toString();
+            minutes = minutes.substr(minutes.length - 2, 2);
+            return '' + hours + ':' + minutes + ' ' + (am ? 'am' : 'pm');
+        };            
+
+        /**
+         * @ngdoc method
+         * @name sectionMeetingSummary
+         * @methodOf norseCourse.service:utils
+         * @param {Object} meeting - section meeting object to summarize
+         * @returns {string} - summary
+         */
+        publicApi.sectionMeetingSummary = function(meeting) {
+            var summary = '';
+            if (meeting.days !== "nan") {
+                summary =  'Meets ' + meeting.days + ' ' + privateApi.formatTime(meeting.startTime) + ' - ' + privateApi.formatTime(meeting.endTime);
+            } else {
+                summary = 'Time arranged';
+            }
+            if (meeting.room[0].number !== 'ARR') {
+                summary = summary + (summary === '' ? 'In ' : ' in ') + meeting.room[0].buildingAbbrevation + ' ' + meeting.room[0].number;
+            } else {
+                summary = summary + (summary === '' ? 'Room arranged' : ', room arranged');
+            }
+            return summary;
         };
         
         return publicApi;
