@@ -212,9 +212,9 @@
                 $scope.currentSavedSchedule = [];
                 $scope.currentSavedScheduleIndex = -1;
             } else if ($scope.currentSavedScheduleIndex === 0) {
-                $scope.loadSavedSchedule($scope.savedSchedules[0]);
+                $scope.currentSavedSchedule = $scope.savedSchedules[0];
             } else {
-                $scope.loadPreviousSavedSchedule();
+                $scope.previousSavedSchedule();
             }
         };
 
