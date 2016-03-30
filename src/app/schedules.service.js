@@ -42,9 +42,11 @@
          * @returns {boolean} true if preferences has course, either required or preferred
          */
         publicApi.hasCourse = function(course) {
-            return privateApi.preferences.courses.map(function(course) {
-                return course.id;
-            }).indexOf(course.id) !== -1;
+            var foo = privateApi.preferences.courses.map(function(course) {
+                return course.data.courseId;
+            });
+            console.warn(foo, course.data.courseId);
+            return foo.indexOf(course.data.courseId) !== -1;
         };
 
         /**
@@ -56,8 +58,8 @@
          */
         publicApi.hasGenEd = function(genEd) {
             return privateApi.preferences.genEds.map(function(genEd) {
-                return genEd.id;
-            }).indexOf(genEd.id) !== -1;
+                return genEd.data.genEdId;
+            }).indexOf(genEd.data.genEdId) !== -1;
         };
 
         /**
@@ -69,8 +71,8 @@
          */
         publicApi.isCourseRequired = function(course) {
             return publicApi.hasCourse(course) && privateApi.preferences.courses[privateApi.preferences.courses.map(function(course) {
-                return course.id;
-            }).indexOf(course.id)].required;
+                return course.data.courseId;
+            }).indexOf(course.data.courseId)].required;
         };
 
         /**
@@ -82,8 +84,8 @@
          */
         publicApi.isGenEdRequired = function(genEd) {
             return publicApi.hasGenEd(genEd) && privateApi.preferences.genEds[privateApi.preferences.genEds.map(function(genEd) {
-                return genEd.id;
-            }).indexOf(genEd.id)].required;
+                return genEd.data.genEdId;
+            }).indexOf(genEd.data.genEdId)].required;
         };
 
         /**
@@ -94,12 +96,14 @@
          * @param {boolean} required - if the course should be marked required
          */
         publicApi.addCourse = function(course, required) {
+            console.warn('Adding course', course, required);
             if (!publicApi.hasCourse(course)) {
-                course = angular.clone(course);
+                console.warn('Does not have, adding');
+                course = angular.copy(course);
                 course.section = null;
                 course.required = Boolean(required);
                 privateApi.preferences.courses.push(course);
-            }
+            } else { console.warn('Already had, not adding'); }
         };
 
         /**
@@ -111,7 +115,7 @@
          */
         publicApi.addGenEd = function(genEd, required) {
             if (!publicApi.hasGenEd(genEd)) {
-                genEd = angular.clone(genEd);
+                genEd = angular.copy(genEd);
                 genEd.required = Boolean(required);
                 privateApi.preferences.genEds.push(genEd);
             }
@@ -126,8 +130,8 @@
         publicApi.removeCourse = function(course) {
             if (publicApi.hasCourse(course)) {
                 privateApi.preferences.courses.splice(privateApi.preferences.courses.map(function(course) {
-                    return course.id;
-                }).indexOf(course.id), 1);
+                    return course.data.courseId;
+                }).indexOf(course.data.courseId), 1);
             }
         };
 
@@ -140,8 +144,8 @@
         publicApi.removeGenEd = function(genEd) {
             if (publicApi.hasGenEd(genEd)) {
                 privateApi.preferences.genEds.splice(privateApi.preferences.genEds.map(function(genEd) {
-                    return genEd.id;
-                }).indexOf(genEd.id), 1);
+                    return genEd.data.genEdId;
+                }).indexOf(genEd.data.genEdId), 1);
             }
         };
 
@@ -237,13 +241,13 @@
             var requiredSections = privateApi.preferences.courses.filter(function(course) {
                 return course.section && course.section.required;
             }).map(function(course) {
-                return course.section.id;
+                return course.section.data.id;
             });
 
             var preferredSections = privateApi.preferences.courses.filter(function(course) {
                 return course.section && !course.section.required;
             }).map(function(course) {
-                return course.section.id;
+                return course.section.data.id;
             });
             
             var requiredCourses = privateApi.preferences.courses.filter(function(course) {

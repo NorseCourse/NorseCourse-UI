@@ -89,7 +89,7 @@
                 summary = 'Time arranged';
             }
             if (meeting.room[0].number !== 'ARR') {
-                summary = summary + (summary === '' ? 'In ' : ' in ') + meeting.room[0].buildingAbbrevation + ' ' + meeting.room[0].number;
+                summary = summary + (summary === '' ? 'In ' : ' in ') + meeting.room[0].buildingAbbreviation + ' ' + meeting.room[0].number;
             } else {
                 summary = summary + (summary === '' ? 'Room arranged' : ', room arranged');
             }
