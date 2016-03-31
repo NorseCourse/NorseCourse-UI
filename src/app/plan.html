@@ -189,6 +189,14 @@
       <md-progress-circular md-diameter="256"
                             ng-show="resultsLoading.initial">
       </md-progress-circular>
+      <div style="padding: 20px;" layout="row" ng-show="error">
+        <span flex></span>
+        <span>
+          <md-icon class="material-icons md-48 md-warn">sentiment_very_dissatisfied</md-icon>
+          {{error}}
+        </span>
+        <span flex></span>
+      </div>
       <nc-section-list sections="currentSchedule"></nc-section-list>
     </md-content>
   </md-content>

@@ -320,17 +320,23 @@
             console.log('Schedules request url:', url);
 
             $http.get(url).success(function(data) {
-                console.log(data);
-                angular.forEach(data, function(schedule) {
-                    appendTo.push(schedule);
-                });
-                loadingObj.initial = false;
-                deferred.resolve(appendTo);
-                if (data.length === 10) {
-                    console.log('Requesting more schedules');
-                    publicApi.requestSchedules(loadingObj, prefs, data[data.length-1].index, appendTo);
+                if (data[0].error === 'No errors') {
+                    console.log(data);
+                    angular.forEach(data, function(schedule) {
+                        appendTo.push(schedule);
+                    });
+                    loadingObj.initial = false;
+                    deferred.resolve(appendTo);
+                    if (data.length === 10) {
+                        console.log('Requesting more schedules');
+                        publicApi.requestSchedules(loadingObj, prefs, data[data.length-1].index, appendTo);
+                    } else {
+                        loadingObj.full = false;
+                    }
                 } else {
+                    loadingObj.initial = false;
                     loadingObj.full = false;
+                    deferred.reject(data[0].error);
                 }
             }).error(function(data) {
                 console.log(data);

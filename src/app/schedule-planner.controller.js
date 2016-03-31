@@ -110,10 +110,14 @@
                 initial: true,
                 full: true
             };
+            $scope.error = '';
             schedulesService.requestSchedules($scope.resultsLoading).then(function(data) {
                 $scope.results = data;
                 $scope.currentScheduleIndex = 0;
                 $scope.currentSchedule = data[0].schedule;
+            }, function(error) {
+                console.log('No schedules returned with error:', error);
+                $scope.error = error;
             });
         };
 
