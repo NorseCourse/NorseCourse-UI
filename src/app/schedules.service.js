@@ -45,7 +45,6 @@
             var foo = privateApi.preferences.courses.map(function(course) {
                 return course.data.courseId;
             });
-            console.warn(foo, course.data.courseId);
             return foo.indexOf(course.data.courseId) !== -1;
         };
 
@@ -96,14 +95,12 @@
          * @param {boolean} required - if the course should be marked required
          */
         publicApi.addCourse = function(course, required) {
-            console.warn('Adding course', course, required);
             if (!publicApi.hasCourse(course)) {
-                console.warn('Does not have, adding');
                 course = angular.copy(course);
                 course.section = null;
                 course.required = Boolean(required);
                 privateApi.preferences.courses.push(course);
-            } else { console.warn('Already had, not adding'); }
+            }
         };
 
         /**

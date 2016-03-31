@@ -13,10 +13,13 @@
         height: 100%;
         
         &__name {
+            width: 70pt;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         &__required {
-            margin: 0px 20px 0px 10px;
+            margin: 0px 20px 0px 0px;
             padding: 0px;
         }
 
