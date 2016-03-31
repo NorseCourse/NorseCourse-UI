@@ -231,12 +231,13 @@
          * Makes an async request to the schedule API based on the preferences
          * Requests 10 at a time, and automatically initiates next request, appending onto original results
          *
+         * @param {object} loadingObj - object to keep track of the initial and full results status
          * @param {object} prefs - the schedule preferences to use; defaults to current preferencse
          * @param {number} index - the index into the schedules to request at, defaults to -1
          * @param {array} appendTo - the array to append the results onto
          * @returns {object} promise fulfilled by array of schedules
          */
-        publicApi.requestSchedules = function(prefs, index, appendTo) {
+        publicApi.requestSchedules = function(loadingObj, prefs, index, appendTo) {
             console.log('Requesting schedules');
             console.log('Prefs:', prefs);
             console.log('Index:', index);
@@ -323,10 +324,13 @@
                 angular.forEach(data, function(schedule) {
                     appendTo.push(schedule);
                 });
+                loadingObj.initial = false;
                 deferred.resolve(appendTo);
                 if (data.length === 10) {
                     console.log('Requesting more schedules');
-                    publicApi.requestSchedules(prefs, data[data.length-1].index, appendTo);
+                    publicApi.requestSchedules(loadingObj, prefs, data[data.length-1].index, appendTo);
+                } else {
+                    loadingObj.full = false;
                 }
             }).error(function(data) {
                 console.log(data);

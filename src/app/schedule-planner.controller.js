@@ -103,13 +103,17 @@
          *
          */
         $scope.getSchedules = function() {
-            schedulesService.requestSchedules().then(function(data) {
+            if ($scope.expanded !== 'results') {
+                $scope.toggleExpanded('results');
+            }
+            $scope.resultsLoading = {
+                initial: true,
+                full: true
+            };
+            schedulesService.requestSchedules($scope.resultsLoading).then(function(data) {
                 $scope.results = data;
                 $scope.currentScheduleIndex = 0;
                 $scope.currentSchedule = data[0].schedule;
-                if ($scope.expanded !== 'results') {
-                    $scope.toggleExpanded('results');
-                }
             });
         };
 

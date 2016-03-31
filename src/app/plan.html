@@ -95,7 +95,7 @@
             </md-autocomplete>
             <md-chip-template class="course-chips__template">
               <span class="course-chips__template__name">
-                {{$chip.data.name}}
+                {{$chip.data.abbreviation}}
               </span>
               <md-input-container class="course-chips__template__required">
                 <md-checkbox ng-model="$chip.required">Required</md-checkbox>
@@ -152,7 +152,6 @@
         </md-button>
       </div>
     </md-toolbar>
-    <md-divider></md-divider>
     <md-toolbar class="md-menu-toolbar"
                 ng-show="expanded==='results' && results.length">
       <div class="md-toolbar-tools">
@@ -165,9 +164,14 @@
           </md-icon>
         </md-button>
         <span flex></span>
-        <h6>
-          Schedule {{currentScheduleIndex + 1}} / {{results.length}}
-        </h6>
+        <span layout="row">
+          <h6 ng-show="results.length">
+            Schedule {{currentScheduleIndex + 1}} / {{results.length}}
+          </h6>
+          <h6 ng-show="!results.length">
+            Loading Schedules
+          </h6>
+        </span>
         <span flex></span>
         <md-button class="md-icon-button"
                    style="padding: 0px"
@@ -179,8 +183,12 @@
         </md-button>
       </div>
     </md-toolbar>
+    <md-progress-linear ng-show="resultsLoading.full" style="height: 1px;"></md-progress-linear>
     <md-content class="schedule-planner__section"
                 ng-class="{'schedule-planner__section--expanded': expanded==='results'}">
+      <md-progress-circular md-diameter="256"
+                            ng-show="resultsLoading.initial">
+      </md-progress-circular>
       <nc-section-list sections="currentSchedule"></nc-section-list>
     </md-content>
   </md-content>
@@ -243,6 +251,7 @@
       <nc-section-list sections="currentSavedSchedule"></nc-section-list>      
     </md-content>
   </md-content>
+  <span ng-show="false" id="#currentSavedScheduleIndex">{{currentSavedScheduleIndex}}</span>
   <nc-schedule-data schedules="savedSchedules"></nc-schedule-data>
 </md-content>
   
