@@ -183,7 +183,7 @@
         </md-button>
       </div>
     </md-toolbar>
-    <md-progress-linear ng-show="resultsLoading.full" style="height: 1px;"></md-progress-linear>
+    <md-progress-linear ng-show="resultsLoading.full" style="overflow: hidden; height: 1px;"></md-progress-linear>
     <md-content class="schedule-planner__section"
                 ng-class="{'schedule-planner__section--expanded': expanded==='results'}">
       <md-progress-circular md-diameter="256"
