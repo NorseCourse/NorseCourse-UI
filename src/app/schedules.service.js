@@ -229,52 +229,71 @@
          * @description
          *
          * Makes an async request to the schedule API based on the preferences
+         * Requests 10 at a time, and automatically initiates next request, appending onto original results
          *
-         * @returns {object} promise
+         * @param {object} prefs - the schedule preferences to use; defaults to current preferencse
+         * @param {number} index - the index into the schedules to request at, defaults to -1
+         * @param {array} appendTo - the array to append the results onto
+         * @returns {object} promise fulfilled by array of schedules
          */
-        publicApi.requestSchedules = function() {
+        publicApi.requestSchedules = function(prefs, index, appendTo) {
+            console.log('Requesting schedules');
+            console.log('Prefs:', prefs);
+            console.log('Index:', index);
+            console.log('appendTo', appendTo);
+            if (prefs === undefined) {
+                prefs = angular.copy(privateApi.preferences);
+            }
+            if (index === undefined) {
+                index = -1;
+            }
+            if (appendTo === undefined) {
+                appendTo = [];
+            }
+                
             var deferred = $q.defer();
 
-            var requiredSections = privateApi.preferences.courses.filter(function(course) {
+            var requiredSections = prefs.courses.filter(function(course) {
                 return course.section && course.section.required;
             }).map(function(course) {
                 return course.section.data.id;
             });
 
-            var preferredSections = privateApi.preferences.courses.filter(function(course) {
+            var preferredSections = prefs.courses.filter(function(course) {
                 return course.section && !course.section.required;
             }).map(function(course) {
                 return course.section.data.id;
             });
             
-            var requiredCourses = privateApi.preferences.courses.filter(function(course) {
+            var requiredCourses = prefs.courses.filter(function(course) {
                 return course.required;
             }).map(function(course) {
                 return course.data.courseId;
             });
 
-            var preferredCourses = privateApi.preferences.courses.filter(function(course) {
+            var preferredCourses = prefs.courses.filter(function(course) {
                 return !course.required;
             }).map(function(course) {
                 return course.data.courseId;
             });
 
-            var requiredGenEds = privateApi.preferences.genEds.filter(function(genEd) {
+            var requiredGenEds = prefs.genEds.filter(function(genEd) {
                 return genEd.required;
             }).map(function(genEd) {
                 return genEd.data.abbreviation;
             });
 
-            var preferredGenEds = privateApi.preferences.genEds.filter(function(genEd) {
+            var preferredGenEds = prefs.genEds.filter(function(genEd) {
                 return !genEd.required;
             }).map(function(genEd) {
                 return genEd.data.abbreviation;
             });
 
             var urlParams = [
-                'minCredits=' + privateApi.preferences.credits.min,
-                'maxCredits=' + privateApi.preferences.credits.max,
-                'limit=50'
+                'index=' + index,
+                'minCredits=' + prefs.credits.min,
+                'maxCredits=' + prefs.credits.max,
+                'limit=10'
             ];
 
             if (requiredSections.length) {
@@ -301,7 +320,14 @@
 
             $http.get(url).success(function(data) {
                 console.log(data);
-                deferred.resolve(data);
+                angular.forEach(data, function(schedule) {
+                    appendTo.push(schedule);
+                });
+                deferred.resolve(appendTo);
+                if (data.length === 10) {
+                    console.log('Requesting more schedules');
+                    publicApi.requestSchedules(prefs, data[data.length-1].index, appendTo);
+                }
             }).error(function(data) {
                 console.log(data);
                 deferred.reject();
