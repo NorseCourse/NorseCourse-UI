@@ -141,7 +141,8 @@
                     break;
                 case 'course':
                     angular.forEach(courses, function(course) {
-                        if (course.name.toLowerCase().includes(queryText)) {
+                        if (course.name.toLowerCase().includes(queryText) ||
+                            course.title.toLowerCase().includes(queryText)) {
                             results.push({
                                 type: 'course',
                                 data: course,

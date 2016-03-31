@@ -42,6 +42,7 @@
                md-no-cache="true">
               <md-item-template>
                 <span>{{item.data.name}}</span>
+                <span ng-if="item.data.title">- {{item.data.title}}</span>
               </md-item-template>
             </md-autocomplete>
             <md-chip-template class="course-chips__template">

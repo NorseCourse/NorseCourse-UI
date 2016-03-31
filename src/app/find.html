@@ -13,6 +13,7 @@
        md-no-cache>
       <md-item-template>
         <span>{{item.data.name}}</span>
+        <span ng-if="item.data.title">- {{item.data.title}}</span>
         <span>({{item.display | uppercase}})</span>
       </md-item-template>
     </md-autocomplete>
