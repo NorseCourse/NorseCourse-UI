@@ -52,10 +52,12 @@
   </head>
   
   <body layout="column" ng-controller="main">
-
-    <div>
-      <md-button id="inline-install" class="md-raised md-accent" onclick="chrome.webstore.install()" id="install-button">Add to Chrome</md-button>
-    </div>
+    <md-button id="install-button" class="md-raised md-accent" onclick="chrome.webstore.install()" id="install-button">Add to Chrome</md-button>
+    <script>
+      if (chrome.app.isInstalled) {
+        document.getElementById('install-button').style.display = 'none';
+      }
+    </script>
 
     <md-toolbar>
       <div class="md-toolbar-tools">NorseCourse</div>
