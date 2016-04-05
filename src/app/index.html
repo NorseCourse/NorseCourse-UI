@@ -2,6 +2,9 @@
 <html lang="en" ng-app="norseCourse">
   <head>
     <title>NorseCourse</title>
+
+    <!-- Used for inline installatin of NorseCourse Extension -->
+    <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/jcajbgoeehlbkolcfinobaadbffnplhc">
     
     <!-- Angular, Angular Material, Material Icons -->
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.5/angular-material.min.css">
@@ -52,6 +55,8 @@
 
     <md-toolbar>
       <div class="md-toolbar-tools">NorseCourse</div>
+      <div>
+        <md-button class="md-raised" onclick="chrome.webstore.install()" id="install-button">Add to Chrome</md-button>
     </md-toolbar>
     <md-tabs class="md-primary"
              md-dynamic-height>
