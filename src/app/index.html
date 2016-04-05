@@ -54,12 +54,14 @@
       <div class="md-toolbar-tools">NorseCourse</div>
     </md-toolbar>
     <md-tabs class="md-primary"
+             md-selected="tabIndex"
              md-dynamic-height>
-      <md-tab label="Find a Course">
+      <md-tab label="Find a Course"
+              md-on-select="onTabSelect('/find')">
         <ng-include src="'views/app/find.html'"></ng-include>
-	
       </md-tab>
-      <md-tab label="Plan a Schedule">
+      <md-tab label="Plan a Schedule"
+              md-on-select="onTabSelect('/plan')">
         <ng-include src="'views/app/plan.html'"></ng-include>
       </md-tab>
       <!-- <md-tab label="Browse">
@@ -71,6 +73,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-animate.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.5/angular-material.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.6.0/angular-material-icons.min.js"></script> 
     <!-- NorseCourse specific js -->
