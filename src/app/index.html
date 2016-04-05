@@ -53,10 +53,12 @@
   
   <body layout="column" ng-controller="main">
 
+    <div>
+      <md-button id="inline-install" class="md-raised md-accent" onclick="chrome.webstore.install()" id="install-button">Add to Chrome</md-button>
+    </div>
+
     <md-toolbar>
       <div class="md-toolbar-tools">NorseCourse</div>
-      <div>
-        <md-button class="md-raised" onclick="chrome.webstore.install()" id="install-button">Add to Chrome</md-button>
     </md-toolbar>
     <md-tabs class="md-primary"
              md-selected="tabIndex"
