@@ -59,3 +59,11 @@ foo {
 	width : 100%;
 	display: block;
 }
+
+#install-button {
+	display: none;
+	position: absolute;
+	top: .20em;
+	right: 0em;
+	z-index: 3;
+}
