@@ -257,13 +257,13 @@
             var requiredSections = prefs.courses.filter(function(course) {
                 return course.section && course.section.required;
             }).map(function(course) {
-                return course.section.data.id;
+                return course.section.id;
             });
 
             var preferredSections = prefs.courses.filter(function(course) {
                 return course.section && !course.section.required;
             }).map(function(course) {
-                return course.section.data.id;
+                return course.section.id;
             });
             
             var requiredCourses = prefs.courses.filter(function(course) {
