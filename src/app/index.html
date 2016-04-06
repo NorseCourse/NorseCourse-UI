@@ -53,11 +53,14 @@
   
   <body layout="column" ng-controller="main">
     <md-button id="install-button" class="md-raised md-accent" onclick="chrome.webstore.install()" id="install-button">Add to Chrome</md-button>
-    <script>
+    <script async>
+      if (!(!!window.chrome && !!window.chrome.webstore)) {
+        document.getElementById('install-button').style.display = 'none';
+      };
       window.onload = function() {
-        if ((!!window.chrome && !!window.chrome.webstore && !document.getElementById('extension-is-installed')) == true) {
-          document.getElementById('install-button').style.display = 'block';
-        };
+        if (document.getElementById('extension-is-installed')) {
+          document.getElementById('install-button').style.display = 'none';
+        }
       };
     </script>
 
