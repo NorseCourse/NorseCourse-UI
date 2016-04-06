@@ -62,10 +62,17 @@
       //     document.getElementById('install-button').style.display = 'none';
       //   };
       // };
+      // window.onload = function() {
+      //   if (!!window.chrome && !!window.chrome.webstore && !document.getElementById('extension-is-installed')) {
+      //     document.getElementById('install-button').style.display = 'initial';
+      //   };
+      // };
       window.onload = function() {
-        if (!!window.chrome && !!window.chrome.webstore && !document.getElementById('extension-is-installed')) {
-          document.getElementById('install-button').style.display = 'initial';
-        };
+        setTimeout(function() {
+          if (!!window.chrome && !!window.chrome.webstore && !document.getElementById('extension-is-installed')) {
+            document.getElementById('install-button').style.display = 'initial';
+          };
+        }, 1000); 
       };
     </script>
 
