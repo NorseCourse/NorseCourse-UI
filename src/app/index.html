@@ -52,21 +52,8 @@
   </head>
   
   <body layout="column" ng-controller="main">
-    <md-button id="install-button" class="md-raised md-accent" onclick="chrome.webstore.install()" id="install-button">Add to Chrome</md-button>
+    <md-button id="install-button" class="md-raised md-accent" onclick="chrome.webstore.install(function() {window.location.reload()})" id="install-button">Add to Chrome</md-button>
     <script async>
-      // if (!(!!window.chrome && !!window.chrome.webstore)) {
-      //   document.getElementById('install-button').style.display = 'none';
-      // };
-      // window.onload = function() {
-      //   if (document.getElementById('extension-is-installed')) {
-      //     document.getElementById('install-button').style.display = 'none';
-      //   };
-      // };
-      // window.onload = function() {
-      //   if (!!window.chrome && !!window.chrome.webstore && !document.getElementById('extension-is-installed')) {
-      //     document.getElementById('install-button').style.display = 'initial';
-      //   };
-      // };
       window.onload = function() {
         setTimeout(function() {
           if (!!window.chrome && !!window.chrome.webstore && !document.getElementById('extension-is-installed')) {
