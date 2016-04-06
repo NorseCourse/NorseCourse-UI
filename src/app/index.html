@@ -52,7 +52,7 @@
   </head>
   
   <body layout="column" ng-controller="main">
-    <md-button id="install-button" class="md-raised md-accent" onclick="chrome.webstore.install(function() {window.location.reload()})" id="install-button">Add to Chrome</md-button>
+    <md-button id="install-button" class="md-raised md-accent" onclick="chrome.webstore.install('https://chrome.google.com/webstore/detail/jcajbgoeehlbkolcfinobaadbffnplhc',function() {window.location.reload()})" id="install-button">Add to Chrome</md-button>
     <script async>
       window.onload = function() {
         setTimeout(function() {
