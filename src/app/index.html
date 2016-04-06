@@ -55,7 +55,7 @@
     <md-button id="install-button" class="md-raised md-accent" onclick="chrome.webstore.install()" id="install-button">Add to Chrome</md-button>
     <script>
       window.onload = function() {
-        if (!!window.chrome && !!window.chrome.webstore && !document.getElementById('extension-is-installed')) {
+        if ((!!window.chrome && !!window.chrome.webstore && !document.getElementById('extension-is-installed')) == true) {
           document.getElementById('install-button').style.display = 'block';
         };
       };
