@@ -9,7 +9,7 @@
      * Main controller for NorseCourse app, which doesn't actually do anything
      *
      */
-    angular.module('norseCourse').controller('main',function($location, $scope) {
+    angular.module('norseCourse').controller('main',function($location, $scope, $route) {
         $scope.tabIndex = 0;
         $scope.$on('$routeChangeSuccess', function(event, current) {
             $scope.tabIndex = current.locals.index;
