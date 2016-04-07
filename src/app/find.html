@@ -22,6 +22,35 @@
       <span>({{$chip.display | uppercase}})</span>
     </md-chip-template>
   </md-chips>
+  <md-content class="md-whiteframe-3dp"
+              style="padding: 20px"
+              ng-hide="matchingCourses.length || loading">
+    <h3 style="margin-top: 5px">Getting Started</h3>
+    <p>NorseCourse is the new way to find your perfect schedule, created by students, for students.</p>
+    <md-list>
+      <md-divider></md-divider>
+      <md-list-item>
+        <div class="md-list-item-text" layout="column">
+          <h4 style="margin-bottom: 0px">Step 1: Find some courses</h4>
+          <p>Start typing terms above to search for courses. You can search by course name, department, gen ed, or just plain words. Once you've found some you like, click the "plus" to add them to your schedule.</p>
+        </div>
+      </md-list-item>
+      <md-divider></md-divider>
+      <md-list-item>
+        <div class="md-list-item-text" layout="column">
+          <h4 style="margin-bottom: 0px">Step 2: Refine your preferences</h4>
+          <p>Now you can head over to the "Plan a schedule" tab to add further preferences, like specific sections of courses, gen eds you'd like to fulfill, and how many credits you want.</p>
+        </div>
+      </md-list-item>
+      <md-divider></md-divider>
+      <md-list-item>
+        <div class="md-list-item-text" layout="column">
+          <h4 style="margin-bottom: 0px">Step 3: Let us do the work</h4>
+          <p>Hit search and we'll show you the schedules that meet your requirements. It's that easy.</p>
+        </div>
+      </md-list-item>
+    </md-list>
+  </md-content>
   <md-progress-circular ng-hide="loading===null" 
                         md-mode="{{loading}}"
                         md-diameter="200">
