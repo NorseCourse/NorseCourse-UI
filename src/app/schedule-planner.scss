@@ -55,6 +55,10 @@
         box-sizing: border-box;
         border-top: 1px solid rgba(0, 0, 0, 0.0);
         
+        md-autocomplete {
+            margin-left: 12px;
+        }
+        
         &--expanded {
             height: 300px;
             border-top: 1px solid rgba(0, 0, 0, 0.2);
