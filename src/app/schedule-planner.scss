@@ -48,19 +48,14 @@
     }
 
     &__section-container {
-        height: 48px;
         overflow: hidden;
         transition: height 0.5s ease-in-out;
     }
     
     &__section {
-        //height: 0px;
         padding-top: 0px;
         padding-bottom: 0px;
-        transition: height 500ms ease, padding-top 500ms ease, padding-bottom 500ms ease, border-top 500ms ease;
         box-sizing: border-box;
-        //border-top: 1px solid rgba(0, 0, 0, 0.0);
-        //height: 300px;
         border-top: 1px solid rgba(0, 0, 0, 0.2);
         
         md-autocomplete {

@@ -25,7 +25,6 @@
       </div>
     </md-toolbar>
     <md-content class="schedule-planner__section" id="form"
-                ng-class="{'schedule-planner__section--expanded': expanded==='form'}"
                 layout-padding>
       <form>
         <md-input-container>
@@ -161,8 +160,7 @@
         </md-button>
       </div>
     </md-toolbar>
-    <md-content class="schedule-planner__section" id="results"
-                ng-class="{'schedule-planner__section--expanded': expanded==='results'}">
+    <md-content class="schedule-planner__section" id="results">
       <md-toolbar class="md-menu-toolbar"
                   style="border-top: 1px solid rgba(0, 0, 0, 0.2)"
                   ng-show="expanded==='results' && results.length">
@@ -240,8 +238,7 @@
         </md-button>
       </div>
     </md-toolbar>
-    <md-content class="schedule-planner__section" id="saved"
-                ng-class="{'schedule-planner__section--expanded': expanded==='saved'}">
+    <md-content class="schedule-planner__section" id="saved">
       <md-toolbar class="md-menu-toolbar"
                   style="border-top: 1px solid rgba(0, 0, 0, 0.2)"
                   ng-show="expanded==='saved' && savedSchedules.length">
