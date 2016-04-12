@@ -9,7 +9,7 @@
      * Controller for the schedule planner tab of the NorseCourse app
      *
      */
-    angular.module('norseCourse').controller('schedulePlannerController', function($scope, norseCourseService, schedulesService) {
+    angular.module('norseCourse').controller('schedulePlannerController', function($scope, norseCourseService, schedulesService, utils) {
         $scope.expanded = 'form';
         $scope.prefs = schedulesService.getSchedulePreferences();
         $scope.results = [];
@@ -240,6 +240,8 @@
             var schedule = $scope.results[$scope.currentScheduleIndex].schedule;
             return schedule && schedulesService.hasSavedSchedule(schedule);
         };
+
+        $scope.sectionMeetingSummary = utils.sectionMeetingSummary;
 
     });
 })();

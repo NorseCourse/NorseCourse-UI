@@ -61,7 +61,7 @@
                              ng-value="section"
                              class="section-option">
                     <span class="section-option__basic-info">{{section.name}}</span>
-                    <span class="section-option__advanced-info">{{section.shortTitle}}</span>
+                    <span class="section-option__advanced-info">{{section.shortTitle}}, {{sectionMeetingSummary(section.sectionMeetings[0])}} with {{section.faculty[0].lastName}}</span>
                   </md-option>
                 </md-select>
               </md-input-container>

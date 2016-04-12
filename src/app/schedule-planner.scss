@@ -93,3 +93,11 @@
         }
     }
 }
+
+.md-select-menu-container {
+    .section-option {
+        &__basic-info {
+            display: none;
+        }
+    }
+}
