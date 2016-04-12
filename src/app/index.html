@@ -77,9 +77,12 @@
               md-on-select="onTabSelect('/plan')">
         <ng-include src="'views/app/plan.html'"></ng-include>
       </md-tab>
-      <!-- <md-tab label="Browse">
-        <ng-include src="'views/app/browse.html'"></ng-include>
-      </md-tab> -->
+      <md-tab label="Instructions"
+              md-on-select="onTabSelect('/help')">
+        <md-content layout-padding layout-padding-large>
+          <nc-help></nc-help>
+        </md-content>
+      </md-tab>
     </md-tabs>
 
     <!-- Angular and Angular Material -->

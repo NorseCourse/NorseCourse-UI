@@ -23,6 +23,10 @@
                 resolve: {
                     index: function() { return 1; }
                 }
+            }).when('/help', {
+                resolve: {
+                    index: function() { return 2; }
+                }
             }).otherwise('/find');
         });
 })();
