@@ -8,6 +8,13 @@
                 .warnPalette('red')
                 .backgroundPalette('grey');
 
+            // $mdThemingProvider.theme("darkTheme")
+            //     .primaryPalette('deep-purple')
+            //     .accentPalette('teal')
+            //     .warnPalette('red')
+            //     .backgroundPalette('grey')
+            //     .dark();
+
             $routeProvider.when('/find', {
                 resolve: {
                     index: function() { return 0; }
@@ -20,3 +27,5 @@
         });
 })();
 
+//  red, pink, purple, deep-purple, indigo, blue, light-blue, cyan, teal, green,
+//  light-green, lime, yellow, amber, orange, deep-orange, brown, grey, blue-grey
