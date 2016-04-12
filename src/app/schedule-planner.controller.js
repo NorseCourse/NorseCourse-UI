@@ -242,6 +242,8 @@
         };
 
         $scope.sectionMeetingSummary = utils.sectionMeetingSummary;
-
+        $scope.getHeight = function(selector) {
+            return $(selector).height();
+        };
     });
 })();
