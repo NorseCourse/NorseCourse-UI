@@ -1,0 +1,32 @@
+.help {
+    padding: 20px;
+
+    // .help__text
+    &__text {
+        padding-right: 20px;
+
+        // .help__text__title
+        &__title {
+            margin-top: 5px;
+        }
+
+        // .help__text__step
+        &__step {
+            // .help__text__step__title
+            &__title {
+                margin-bottom: 0px;
+            }
+        }
+    }
+
+    // .help__demo
+    &__demo {
+        width: 100%;
+
+        // .help__demo iframe
+        iframe {
+            width: 100%;
+            height: calc(100% - 10px);
+        }
+    }
+}
