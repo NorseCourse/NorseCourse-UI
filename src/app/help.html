@@ -1,5 +1,5 @@
 <md-content layout="row" class="help md-whiteframe-3dp">
-  <md-content class="help__text">
+  <md-content class="help__text" id="helpText">
     <h3 class="help__text__title">Getting Started</h3>
     <p class="help__text__subtitle">NorseCourse is the new way to find your perfect schedule, created by students, for students.</p>
     <md-list>
@@ -27,7 +27,8 @@
     </md-list>
   </md-content>
   <md-content class="help__demo">
-    <iframe title="YouTube Demo"
+    <iframe title="YouTube Demo" id="demo"
+            ng-style="{height: '' + (getWidth('#demo') * 0.625) + 'px'}"
             src="http://www.youtube.com/embed/aBEDrFttsBk?rel=0"
             frameborder="0" allowFullScreen></iframe>
   </md-content>
