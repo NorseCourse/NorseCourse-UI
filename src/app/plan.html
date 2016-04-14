@@ -79,7 +79,7 @@
         
         <md-input-container>
           <label>Gen Eds</label>
-          <md-chips
+          <md-chips class="gen-ed-chips"
              ng-model="prefs.genEds"
              md-require-match="true">
             <md-autocomplete
@@ -94,10 +94,10 @@
               </md-item-template>
             </md-autocomplete>
             <md-chip-template class="course-chips__template">
-              <span class="course-chips__template__name">
+              <span class="gen-ed-chips__template__name">
                 {{$chip.data.abbreviation}}
               </span>
-              <md-input-container class="course-chips__template__required">
+              <md-input-container class="gen-ed-chips__template__required">
                 <md-checkbox ng-model="$chip.required">Required</md-checkbox>
               </md-input-container>
             </md-chip-template>

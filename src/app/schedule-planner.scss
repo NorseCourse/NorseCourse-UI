@@ -25,6 +25,7 @@
 
         &__section {
             margin: 0px;
+            margin-right: 20px;
             padding: 0px;
             position: relative;
             bottom: 3px;
@@ -35,6 +36,19 @@
         }
     }
 }
+
+.gen-ed-chips {
+    &__template {
+        &__name {
+            margin-right: 20px;
+        }
+        &__required {
+            margin: 0px 20px 0px 0px;
+            padding: 0px;
+        }
+    }
+}
+        
 
 .schedule-planner {
     &__toolbar {
