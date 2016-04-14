@@ -12,11 +12,13 @@
         <md-button class="md-icon-button md-accent"
                    style="padding: 0px;"
                    ng-click="getSchedules()">
+          <md-tooltip md-direction="left" md-delay="250">Search</md-tooltip>
           <md-icon class="md-48">search</md-icon>
         </md-button>
         <md-button class="md-icon-button"
                    style="padding: 0px"
                    ng-click="toggleExpanded('form')">
+          <md-tooltip md-direction="top" md-delay="250">{{expanded=='form'? 'Collapse':'Expand'}}</md-tooltip>
           <md-icon class="schedule-planner__toolbar__icon"
                    ng-class="{'schedule-planner__toolbar__icon--flipped': expanded=='form'}">
             expand_more
@@ -146,6 +148,7 @@
                    style="padding: 0px"
                    ng-click="saveSchedule()"
                    ng-disabled="expanded !== 'results' || results.length === 0 || scheduleSaved()">
+          <md-tooltip md-direction="top" md-delay="250">Add to Saved Schedules</md-tooltip>
           <md-icon>
             add
           </md-icon>
@@ -153,6 +156,7 @@
         <md-button class="md-icon-button"
                    style="padding: 0px;"
                    ng-click="toggleExpanded('results')">
+          <md-tooltip md-direction="top" md-delay="250">{{expanded=='results'? 'Collapse':'Expand'}}</md-tooltip>
           <md-icon class="schedule-planner__toolbar__icon"
                    ng-class="{'schedule-planner__toolbar__icon--flipped': expanded=='results'}">
             expand_more
@@ -224,6 +228,7 @@
                    style="padding: 0px"
                    ng-click="removeSavedSchedule()"
                    ng-disabled="expanded !== 'saved' || savedSchedules.length === 0">
+          <md-tooltip md-direction="top" md-delay="250">Remove Saved Schedule</md-tooltip>
           <md-icon>
             remove
           </md-icon>
@@ -231,6 +236,7 @@
         <md-button class="md-icon-button"
                    style="padding: 0px;"
                    ng-click="toggleExpanded('saved')">
+          <md-tooltip md-direction="top" md-delay="250">{{expanded=='saved'? 'Collapse':'Expand'}}</md-tooltip>
           <md-icon class="schedule-planner__toolbar__icon"
                    ng-class="{'schedule-planner__toolbar__icon--flipped': expanded=='saved'}">
             expand_more
