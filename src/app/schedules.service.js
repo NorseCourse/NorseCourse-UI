@@ -9,7 +9,7 @@
      * Service for syncing schedule preferrences across the NorseCourse app
      *
      */
-    angular.module('norseCourse').service('schedulesService', function($http, $q, apiUrl, utils) {
+    angular.module('norseCourse').service('schedulesService', function($cookies, $http, $q, apiUrl, utils) {
         var privateApi = {
             savedSchedules: [],
             preferences: {
@@ -21,6 +21,14 @@
                 }
             }
         };
+
+        privateApi.expirationDate = new Date();
+        privateApi.expirationDate.setFullYear(privateApi.expirationDate.getFullYear() + 1);
+
+        privateApi.savedSchedules = $cookies.getObject('savedSchedules');
+        if (privateApi.savedSchedules === undefined) {
+            privateApi.savedSchedules = [];
+        }
 
         var publicApi = {};
 
@@ -162,6 +170,9 @@
             schedule = angular.copy(schedule).sort();
             if (!publicApi.hasSavedSchedule(schedule)) {
                 privateApi.savedSchedules.push(schedule);
+                $cookies.putObject('savedSchedules', privateApi.savedSchedules, {
+                    expires: privateApi.expirationDate
+                });
                 return true;
             } else {
                 return false;
@@ -186,6 +197,9 @@
                 privateApi.savedSchedules.splice(
                     utils.indexOfObject(privateApi.savedSchedules, schedule),
                     1);
+                $cookies.putObject('savedSchedules', privateApi.savedSchedules, {
+                    expires: privateApi.expirationDate
+                });
                 return true;
             } else {
                 return false;

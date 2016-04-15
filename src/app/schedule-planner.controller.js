@@ -241,6 +241,11 @@
             return schedule && schedulesService.hasSavedSchedule(schedule);
         };
 
+        // load the first saved schedule if there are any
+        if ($scope.savedSchedules.length) {
+            $scope.nextSavedSchedule();
+        }
+
         $scope.sectionMeetingSummary = utils.sectionMeetingSummary;
         $scope.getHeight = function(selector) {
             return $(selector).height();

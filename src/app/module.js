@@ -1,6 +1,6 @@
 (function() {
     'use strict';
-    angular.module('norseCourse', ['ngRoute', 'ngMaterial','ngMdIcons'])
+    angular.module('norseCourse', ['ngRoute', 'ngMaterial', 'ngMdIcons', 'ngCookies'])
         .config(function($mdThemingProvider, $routeProvider) {
             $mdThemingProvider.theme('default')
                 .primaryPalette('indigo')
