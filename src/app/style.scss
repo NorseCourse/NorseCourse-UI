@@ -55,7 +55,7 @@ foo {
 .tileContent{
 	text-overflow : ellipsis;
 	overflow: hidden;
-	height : 50%;
+	height : calc(100%-96px);
 	width : 100%;
 	display: block;
 }

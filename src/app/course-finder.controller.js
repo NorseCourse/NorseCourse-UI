@@ -32,7 +32,7 @@
 	 */
 	
         $scope.autocompleteQuery = function(queryText) {
-            var types = ['gen ed', 'dept', 'course', 'keyword'];
+            var types = ['gen ed', 'dept', 'course','faculty', 'keyword'];
             return norseCourseService.autocompleteQuery(queryText, types);
         };
 
@@ -81,10 +81,11 @@
 		$scope.matchingCourses = [];
 		//console.log('find',newValue,oldValue);
 		norseCourseService.queryApi(newValue,oldValue).then(function(data){
-		    
+		    console.log('COURSE_FINDER', data); 
 		    $scope.matchingCourses = data;
 		    $scope.loading = null;
 		});
+
 	    }
 	    else {
 		$scope.matchingCourses = [];

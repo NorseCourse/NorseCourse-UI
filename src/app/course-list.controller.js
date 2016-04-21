@@ -21,24 +21,18 @@
 	
 	$scope.courseDialog = function(obj,ev) {
 	    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
-	    console.log(obj);
-	    console.log(ev);
 	    $mdDialog.show({
 		controller: DialogController,
+		closeto: ev,
 		templateUrl: 'views/app/course-dialog.html',
 		parent: angular.element(document.body),
 		targetEvent: ev,
-		clickOutsideToClose:true,
+		clickOutsideToClose: true,
+		escapeToClose: true,
 		fullscreen: useFullScreen,
 		locals: {info: obj.info}//, //pass the obj object into directive scope.
 		//scope: $scope
-	    })
-		.then(function(answer) {
-		    $scope.status = 'You said the information was "' + answer + '".';
-		}, function() {
-		    $scope.status = 'You cancelled the dialog.';
-		});
-	    
+	    });
 	    
 	    
 	    $scope.$watch(function() {
@@ -57,16 +51,16 @@
 	    });
 	    
 	    $scope.hide = function() {
-		
-		$mdDialog.hide();
-	    };
-	    
-	    $scope.cancel = function() {
 		$mdDialog.cancel();
 	    };
 	    
-	    $scope.answer = function(answer) {
-		$mdDialog.hide(answer);
+	    $scope.cancel = function() {
+		$mdDialog.hide();
+	    };
+	    
+	    $scope.answer = function() {
+		$mdDialog.hide();   //some problems with closing the dailog
+		
 	    };
 	}
 	//********************************************** done with dialog*************///
@@ -91,7 +85,6 @@
 	};
 
 	$scope.addToSchedule = function(courseSection,required){
-	    console.log('add to Schedule',courseSection);
 	    var course = {
 		'type':'course',
 		'display':'course',
