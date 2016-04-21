@@ -1,7 +1,8 @@
 <md-content ng-controller="schedulePlannerController"
             layout-padding
             layout-padding-large>
-  <md-content class="md-whiteframe-3dp">
+  <md-content class="md-whiteframe-3dp schedule-planner__section-container"
+              ng-style="{height: '' + (getHeight('#form') * (expanded==='form') + 64) + 'px'}">
     <md-toolbar class="md-menu-toolbar">
       <div class="md-toolbar-tools">
         <h6>
@@ -11,11 +12,13 @@
         <md-button class="md-icon-button md-accent"
                    style="padding: 0px;"
                    ng-click="getSchedules()">
+          <md-tooltip md-direction="left" md-delay="250">Search</md-tooltip>
           <md-icon class="md-48">search</md-icon>
         </md-button>
         <md-button class="md-icon-button"
                    style="padding: 0px"
                    ng-click="toggleExpanded('form')">
+          <md-tooltip md-direction="top" md-delay="250">{{expanded=='form'? 'Collapse':'Expand'}}</md-tooltip>
           <md-icon class="schedule-planner__toolbar__icon"
                    ng-class="{'schedule-planner__toolbar__icon--flipped': expanded=='form'}">
             expand_more
@@ -23,25 +26,28 @@
         </md-button>
       </div>
     </md-toolbar>
-    <md-content class="schedule-planner__section"
-                ng-class="{'schedule-planner__section--expanded': expanded==='form'}"
+    <md-content class="schedule-planner__section" id="form"
                 layout-padding>
       <form>
         <md-input-container>
+          <md-tooltip md-direction="right" md-delay="250">
+            Add preferred or required courses and or sections
+          </md-tooltip>
           <label>Courses</label>
           <md-chips
              class="course-chips"
-             ng-model="requiredCourses"
+             ng-model="prefs.courses"
              md-require-match="true">
             <md-autocomplete
                md-selected-item="requiredCourse"
                md-search-text="requiredCourseQueryText"
                md-items="item in courseQuery(requiredCourseQueryText)"
-               placeholder="Course"
+               placeholder="Add a Course"
                md-autoselect="true"
                md-no-cache="true">
               <md-item-template>
                 <span>{{item.data.name}}</span>
+                <span ng-if="item.data.title">- {{item.data.title}}</span>
               </md-item-template>
             </md-autocomplete>
             <md-chip-template class="course-chips__template">
@@ -49,15 +55,26 @@
                 {{$chip.data.name}}
               </span>
               <md-input-container class="course-chips__template__required">
-                <md-checkbox ng-model="foo">Required</md-checkbox>
+                <md-checkbox ng-model="$chip.required">Required</md-checkbox>
               </md-input-container>
+              <span class="course-chips__template__filler"></span>
               <md-input-container class="course-chips__template__section">
-                <md-select placeholder="Section" ng-model="selectedCourseSections[$chip.data.courseId]">
+                <md-select placeholder="Preferred Section"
+                           ng-model="$chip.section">
+                  <md-option ng-value="null">None</md-option>
                   <md-option ng-repeat="section in courseSections[$chip.data.courseId]"
-                             ng-value="section">
-                    {{section.name}} {{section.shortTitle}}
+                             ng-value="section"
+                             class="section-option">
+                    <span class="section-option__basic-info">{{section.name}}</span>
+                    <span class="section-option__advanced-info">{{section.shortTitle}}, {{sectionMeetingSummary(section.sectionMeetings[0])}} with {{section.faculty[0].lastName}}</span>
                   </md-option>
                 </md-select>
+              </md-input-container>
+              <md-input-container class="course-chips__template__required">
+                <md-checkbox ng-model="$chip.section.required"
+                             ng-disabled="!$chip.section">
+                  Required
+                </md-checkbox>
               </md-input-container>
             </md-chip-template>
           </md-chips>
@@ -66,26 +83,58 @@
         <br/>
         
         <md-input-container>
+          <md-tooltip md-direction="right" md-delay="250">
+            Add preferred or rqeuired gen eds
+          </md-tooltip>
           <label>Gen Eds</label>
-          <md-chips
-             ng-model="requiredGenEds"
+          <md-chips class="gen-ed-chips"
+             ng-model="prefs.genEds"
              md-require-match="true">
             <md-autocomplete
                md-selected-item="requiredGenEds"
                md-search-text="requiredGenEdQueryText"
                md-items="item in genEdQuery(requiredGenEdQueryText)"
-               placeholder="Gen Ed"
+               placeholder="Add a Gen Ed"
                md-autoselect="true"
                md-no-cache="true">
               <md-item-template>
                 <span>{{item.data.name}}</span>
               </md-item-template>
             </md-autocomplete>
-            <md-chip-template>
-              <span>{{$chip.data.name}}</span>
+            <md-chip-template class="course-chips__template">
+              <span class="gen-ed-chips__template__name">
+                {{$chip.data.abbreviation}}
+              </span>
+              <md-input-container class="gen-ed-chips__template__required">
+                <md-checkbox ng-model="$chip.required">Required</md-checkbox>
+              </md-input-container>
             </md-chip-template>
           </md-chips>
         </md-input-container>
+
+        <div>
+          <md-input-container>
+            <label>Minimum Credits</label>
+            <input type="number"
+                   min="0"
+                   max="{{prefs.credits.max}}"
+                   ng-model="prefs.credits.min"/>
+          </md-input-container>
+
+          <md-input-container>
+            <label>Maximum Credits</label>
+            <input type="number"
+                   min="{{prefs.credits.min}}"
+                   ng-model="prefs.credits.max"/>
+          </md-input-container>
+        </div>
+
+        <div layout="row">
+          <span flex></span>
+          <md-button class="md-raised md-accent" ng-click="getSchedules()">
+            Search
+          </md-button>
+        </div>
         
       </form>
     </md-content>
@@ -93,7 +142,8 @@
 
   <br/>
   
-  <md-content class="md-whiteframe-3dp">
+  <md-content class="md-whiteframe-3dp schedule-planner__section-container"
+              ng-style="{height: '' + (getHeight('#results') * (expanded==='results') + 64) + 'px'}">
     <md-toolbar class="md-menu-toolbar">
       <div class="md-toolbar-tools">
         <h6>
@@ -104,6 +154,7 @@
                    style="padding: 0px"
                    ng-click="saveSchedule()"
                    ng-disabled="expanded !== 'results' || results.length === 0 || scheduleSaved()">
+          <md-tooltip md-direction="top" md-delay="250">Add to Saved Schedules</md-tooltip>
           <md-icon>
             add
           </md-icon>
@@ -111,6 +162,7 @@
         <md-button class="md-icon-button"
                    style="padding: 0px;"
                    ng-click="toggleExpanded('results')">
+          <md-tooltip md-direction="top" md-delay="250">{{expanded=='results'? 'Collapse':'Expand'}}</md-tooltip>
           <md-icon class="schedule-planner__toolbar__icon"
                    ng-class="{'schedule-planner__toolbar__icon--flipped': expanded=='results'}">
             expand_more
@@ -118,42 +170,60 @@
         </md-button>
       </div>
     </md-toolbar>
-    <md-divider></md-divider>
-    <md-toolbar class="md-menu-toolbar"
-                ng-show="expanded==='results' && results.length">
-      <div class="md-toolbar-tools">
-        <md-button class="md-icon-button"
-                   style="padding: 0px;"
-                   ng-click="previousSchedule()"
-                   ng-disabled="currentScheduleIndex <= 0">
-          <md-icon>
-            chevron_left
-          </md-icon>
-        </md-button>
+    <md-content class="schedule-planner__section" id="results">
+      <md-toolbar class="md-menu-toolbar"
+                  style="border-top: 1px solid rgba(0, 0, 0, 0.2)"
+                  ng-show="expanded==='results' && results.length">
+        <div class="md-toolbar-tools">
+          <md-button class="md-icon-button"
+                     style="padding: 0px;"
+                     ng-click="previousSchedule()"
+                     ng-disabled="currentScheduleIndex <= 0">
+            <md-icon>
+              chevron_left
+            </md-icon>
+          </md-button>
+          <span flex></span>
+          <span layout="row">
+            <h6 ng-show="results.length">
+              Schedule {{currentScheduleIndex + 1}} / {{results.length}}
+            </h6>
+            <h6 ng-show="!results.length">
+              Loading Schedules
+            </h6>
+          </span>
+          <span flex></span>
+          <md-button class="md-icon-button"
+                     style="padding: 0px"
+                     ng-click="nextSchedule()"
+                     ng-disabled="currentScheduleIndex >= results.length - 1">
+            <md-icon>
+              chevron_right
+            </md-icon>
+          </md-button>
+        </div>
+      </md-toolbar>
+      <md-progress-linear ng-show="resultsLoading.full" style="overflow: hidden; height: 1px;"></md-progress-linear>
+      <md-progress-circular md-diameter="256"
+                            ng-show="resultsLoading.initial">
+      </md-progress-circular>
+      <div style="padding: 20px;" layout="row" ng-show="error">
         <span flex></span>
-        <h6>
-          Schedule {{currentScheduleIndex + 1}} / {{results.length}}
-        </h6>
+        <span>
+          <md-icon class="material-icons md-48 md-warn">sentiment_very_dissatisfied</md-icon>
+          {{error}}
+        </span>
         <span flex></span>
-        <md-button class="md-icon-button"
-                   style="padding: 0px"
-                   ng-click="nextSchedule()"
-                   ng-disabled="currentScheduleIndex >= results.length - 1">
-          <md-icon>
-            chevron_right
-          </md-icon>
-        </md-button>
       </div>
-    </md-toolbar>
-    <md-content class="schedule-planner__section"
-                ng-class="{'schedule-planner__section--expanded': expanded==='results'}">
       <nc-section-list sections="currentSchedule"></nc-section-list>
     </md-content>
   </md-content>
   
   <br/>
   
-  <md-content class="md-whiteframe-3dp">
+  <md-content class="md-whiteframe-3dp schedule-planner__section-container"
+              ng-style="{height: '' + (getHeight('#saved') * (expanded==='saved') + 64) + 'px'}">
+    
     <md-toolbar class="md-menu-toolbar">
       <div class="md-toolbar-tools">
         <h6>
@@ -164,6 +234,7 @@
                    style="padding: 0px"
                    ng-click="removeSavedSchedule()"
                    ng-disabled="expanded !== 'saved' || savedSchedules.length === 0">
+          <md-tooltip md-direction="top" md-delay="250">Remove Saved Schedule</md-tooltip>
           <md-icon>
             remove
           </md-icon>
@@ -171,6 +242,7 @@
         <md-button class="md-icon-button"
                    style="padding: 0px;"
                    ng-click="toggleExpanded('saved')">
+          <md-tooltip md-direction="top" md-delay="250">{{expanded=='saved'? 'Collapse':'Expand'}}</md-tooltip>
           <md-icon class="schedule-planner__toolbar__icon"
                    ng-class="{'schedule-planner__toolbar__icon--flipped': expanded=='saved'}">
             expand_more
@@ -178,36 +250,38 @@
         </md-button>
       </div>
     </md-toolbar>
-    <md-toolbar class="md-menu-toolbar"
-                ng-show="expanded==='saved' && savedSchedules.length">
-      <div class="md-toolbar-tools">
-        <md-button class="md-icon-button"
-                   style="padding: 0px;"
-                   ng-click="previousSavedSchedule()"
-                   ng-disabled="currentSavedScheduleIndex <= 0">
-          <md-icon>
-            chevron_left
-          </md-icon>
-        </md-button>
-        <span flex></span>
-        <h6>
-          Schedule {{currentSavedScheduleIndex + 1}} / {{savedSchedules.length}}
-        </h6>
-        <span flex></span>
-        <md-button class="md-icon-button"
-                   style="padding: 0px"
-                   ng-click="nextSavedSchedule()"
-                   ng-disabled="currentSavedScheduleIndex >= savedSchedules.length - 1">
-          <md-icon>
-            chevron_right
-          </md-icon>
-        </md-button>
-      </div>
-    </md-toolbar>
-    <md-content class="schedule-planner__section"
-                ng-class="{'schedule-planner__section--expanded': expanded==='saved'}">
+    <md-content class="schedule-planner__section" id="saved">
+      <md-toolbar class="md-menu-toolbar"
+                  style="border-top: 1px solid rgba(0, 0, 0, 0.2)"
+                  ng-show="expanded==='saved' && savedSchedules.length">
+        <div class="md-toolbar-tools">
+          <md-button class="md-icon-button"
+                     style="padding: 0px;"
+                     ng-click="previousSavedSchedule()"
+                     ng-disabled="currentSavedScheduleIndex <= 0">
+            <md-icon>
+              chevron_left
+            </md-icon>
+          </md-button>
+          <span flex></span>
+          <h6>
+            Schedule {{currentSavedScheduleIndex + 1}} / {{savedSchedules.length}}
+          </h6>
+          <span flex></span>
+          <md-button class="md-icon-button"
+                     style="padding: 0px"
+                     ng-click="nextSavedSchedule()"
+                     ng-disabled="currentSavedScheduleIndex >= savedSchedules.length - 1">
+            <md-icon>
+              chevron_right
+            </md-icon>
+          </md-button>
+        </div>
+      </md-toolbar>
       <nc-section-list sections="currentSavedSchedule"></nc-section-list>      
     </md-content>
   </md-content>
+  <span ng-show="false" id="currentSavedScheduleIndex">{{currentSavedScheduleIndex}}</span>
+  <nc-schedule-data schedules="savedSchedules"></nc-schedule-data>
 </md-content>
   

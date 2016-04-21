@@ -157,7 +157,14 @@
 				    break;
                 case 'dept':
                     angular.forEach(departments, function(department) {
-                        if (department.abbreviation.toLowerCase().includes(queryText) ||
+                        if (department.abbreviation.toLowerCase() === queryText ||
+                            department.name.toLowerCase() === queryText) {
+                            results.unshift({
+                                type: 'department',
+                                data: department,
+                                display: 'dept'
+                            });
+                        } else if (department.abbreviation.toLowerCase().includes(queryText) ||
                             department.name.toLowerCase().includes(queryText)) {
                             results.push({
                                 type: 'department',
@@ -169,7 +176,15 @@
                     break;
                 case 'course':
                     angular.forEach(courses, function(course) {
-                        if (course.name.toLowerCase().includes(queryText)) {
+                        if (course.name.toLowerCase() === queryText ||
+                            course.title.toLowerCase() === queryText) {
+                            results.unshift({
+                                type: 'course',
+                                data: course,
+                                display: 'course'
+                            });
+                        } else if (course.name.toLowerCase().includes(queryText) ||
+                            course.title.toLowerCase().includes(queryText)) {
                             results.push({
                                 type: 'course',
                                 data: course,
@@ -180,7 +195,14 @@
                     break;
 		case 'gen ed':
                     angular.forEach(genEds, function(genEd) {
-                        if (genEd.abbreviation.toLowerCase().includes(queryText) ||
+                        if (genEd.abbreviation.toLowerCase() === queryText ||
+                            genEd.name.toLowerCase === queryText) {
+                            results.unshift({
+                                type: 'genEd',
+                                data: genEd,
+                                display: 'gen ed'
+                            });
+                        } else if (genEd.abbreviation.toLowerCase().includes(queryText) ||
                             genEd.name.toLowerCase().includes(queryText)) {
                             results.push({
                                 type: 'genEd',

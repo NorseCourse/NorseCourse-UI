@@ -9,27 +9,46 @@
     }
     
     &__template {
-        display: block;
+        display: flex;
         height: 100%;
         
         &__name {
-            position: relative;
-            bottom: 6px;
+            width: 70pt;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         &__required {
-            margin: 0px;
+            margin: 0px 20px 0px 0px;
             padding: 0px;
         }
 
         &__section {
             margin: 0px;
+            margin-right: 20px;
             padding: 0px;
             position: relative;
-            bottom: 10px;
+            bottom: 3px;
+        }
+
+        &__filler {
+            flex-grow: 1;
         }
     }
 }
+
+.gen-ed-chips {
+    &__template {
+        &__name {
+            margin-right: 20px;
+        }
+        &__required {
+            margin: 0px 20px 0px 0px;
+            padding: 0px;
+        }
+    }
+}
+        
 
 .schedule-planner {
     &__toolbar {
@@ -41,16 +60,20 @@
             }
         }
     }
+
+    &__section-container {
+        overflow: hidden;
+        transition: height 0.5s ease-in-out;
+    }
     
     &__section {
-        height: 0px;
         padding-top: 0px;
         padding-bottom: 0px;
-        transition: height 500ms ease, padding-top 500ms ease, padding-bottom 500ms ease;
+        box-sizing: border-box;
         border-top: 1px solid rgba(0, 0, 0, 0.2);
         
-        &--expanded {
-            height: 300px;
+        md-autocomplete {
+            margin-left: 12px;
         }
 
         &__details {
@@ -71,6 +94,22 @@
             &__gen-eds {
 
             }
+        }
+    }
+}
+
+.md-select-value {
+    .section-option {
+        &__advanced-info {
+            display: none;
+        }
+    }
+}
+
+.md-select-menu-container {
+    .section-option {
+        &__basic-info {
+            display: none;
         }
     }
 }

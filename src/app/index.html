@@ -2,9 +2,12 @@
 <html lang="en" ng-app="norseCourse">
   <head>
     <title>NorseCourse</title>
+
+    <!-- Used for inline installatin of NorseCourse Extension -->
+    <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/jcajbgoeehlbkolcfinobaadbffnplhc">
     
     <!-- Angular, Angular Material, Material Icons -->
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.5/angular-material.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     
@@ -30,36 +33,11 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
-  </head>
-  
-  <body layout="column" ng-controller="main">
 
-    <md-toolbar>
-      <div class="md-toolbar-tools">NorseCourse</div>
-    </md-toolbar>
-    <md-tabs class="md-primary"
-             md-dynamic-height>
-      <md-tab label="Find a Course">
-        <ng-include src="'views/app/find.html'"></ng-include>
-	
-      </md-tab>
-      <md-tab label="Plan a Schedule">
-        <ng-include src="'views/app/plan.html'"></ng-include>
-      </md-tab>
-      <!-- <md-tab label="Browse">
-        <ng-include src="'views/app/browse.html'"></ng-include>
-      </md-tab> -->
-    </md-tabs>
 
-    
-    <!-- Angular and Angular Material -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-animate.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-aria.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.6.0/angular-material-icons.min.js"></script> 
-    <!-- NorseCourse specific js -->
-    <script src="/js/main.js"></script>
+    <!-- Link to NorseCourse Scheduler Extension -->
+    <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/jcajbgoeehlbkolcfinobaadbffnplhc">
+
     <!-- Google Analytics Tracking -->
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -71,5 +49,54 @@
       ga('send', 'pageview');
 
     </script>
+  </head>
+  
+  <body layout="column" ng-controller="main" md-theme="default">
+    <md-button id="install-button" class="md-raised md-accent" onclick="chrome.webstore.install('https://chrome.google.com/webstore/detail/jcajbgoeehlbkolcfinobaadbffnplhc',function() {window.location.reload()})" id="install-button">Add to Chrome</md-button>
+    <script async>
+      window.onload = function() {
+        setTimeout(function() {
+          if (!!window.chrome && !!window.chrome.webstore && !document.getElementById('extension-is-installed')) {
+            document.getElementById('install-button').style.display = 'initial';
+          };
+        }, 1); 
+      };
+    </script>
+
+    <md-toolbar>
+      <div class="md-toolbar-tools">NorseCourse</div>
+    </md-toolbar>
+    <md-tabs class="md-primary"
+             md-selected="tabIndex"
+             md-dynamic-height>
+      <md-tab label="Find a Course"
+              md-on-select="onTabSelect('/find')">
+        <ng-include src="'views/app/find.html'"></ng-include>
+      </md-tab>
+      <md-tab label="Plan a Schedule"
+              md-on-select="onTabSelect('/plan')">
+        <ng-include src="'views/app/plan.html'"></ng-include>
+      </md-tab>
+      <md-tab label="Instructions"
+              md-on-select="onTabSelect('/help')">
+        <md-content layout-padding layout-padding-large>
+          <nc-help></nc-help>
+        </md-content>
+      </md-tab>
+    </md-tabs>
+
+    
+    <!-- Angular and Angular Material -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-cookies.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.5/angular-material.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.6.0/angular-material-icons.min.js"></script> 
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <!-- NorseCourse specific js -->
+    <script src="/js/main.js"></script>
   </body>
 </html>

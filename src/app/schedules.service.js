@@ -9,303 +9,120 @@
      * Service for syncing schedule preferrences across the NorseCourse app
      *
      */
-    angular.module('norseCourse').service('schedulesService', function(utils) {
+    angular.module('norseCourse').service('schedulesService', function($cookies, $http, $q, apiUrl, utils) {
         var privateApi = {
-            preferredCourses: [],
-            requiredCourses: [],
-            preferredGenEds: [],
-            requiredGenEds: [],
-            savedSchedules: []
+            savedSchedules: [],
+            preferences: {
+                genEds: [],
+                courses: [],
+                credits: {
+                    min: 12,
+                    max: 16
+                }
+            }
         };
+
+        privateApi.expirationDate = new Date();
+        privateApi.expirationDate.setFullYear(privateApi.expirationDate.getFullYear() + 1);
+
+        privateApi.savedSchedules = $cookies.getObject('savedSchedules');
+        if (privateApi.savedSchedules === undefined) {
+            privateApi.savedSchedules = [];
+        }
 
         var publicApi = {};
 
         /**
          * @ngdoc method
-         * @name getPreferredCourses
+         * @name getSchedulePreferences
          * @methodOf norseCourse.service:schedulesService
-         * @returns {Object[]} array of preferred courses
+         * @returns {Object} schedules preferences
          */
-        publicApi.getPreferredCourses = function() {
-            return privateApi.preferredCourses;
-        };
-
-        /**
-         * @ngdoc method
-         * @name getRequiredCourses
-         * @methodOf norseCourse.service:schedulesService
-         * @returns {Object[]} array of required courses
-         */
-        publicApi.getRequiredCourses = function() {
-            return privateApi.requiredCourses;
-        };
-
-        /**
-         * @ngdoc method
-         * @name getPreferredGenEds
-         * @methodOf norseCourse.service:schedulesService
-         * @returns {Object[]} array of preferred gen eds
-         */
-        publicApi.getPreferredGenEds = function() {
-            return privateApi.preferredGenEds;
-        };
-
-        /**
-         * @ngdoc method
-         * @name getRequiredGenEds
-         * @methodOf norseCourse.service:schedulesService
-         * @returns {Object[]} array of required gen eds
-         */
-        publicApi.getRequiredGenEds = function() {
-            return privateApi.requiredGenEds;
-        };
-
-        /**
-         * @ngdoc method
-         * @name addPreferredCourse
-         * @methodOf norseCourse.service:schedulesService
-         * @description
-         *
-         * Adds a course to the preferred courses list
-         * If the course is already in the preferred or required courses, it does nothing
-         *
-         * @param {Object} course - the course to add
-         * @returns {boolean} true if the course was added
-         */
-        publicApi.addPreferredCourse = function(course) {
-            if (!publicApi.hasCourse(course)) {
-                privateApi.preferredCourses.push(course);
-                return true;
-            } else {
-                return false;
-            }
-        };
-
-        /**
-         * @ngdoc method
-         * @name addRequiredCourse
-         * @methodOf norseCourse.service:schedulesService
-         * @description
-         *
-         * Adds a course to the required courses list
-         * If the course is already in the preferred or required courses, it does nothing
-         *
-         * @param {Object} course - the course to add
-         * @returns {boolean} true if the course was added
-         */
-        publicApi.addRequiredCourse = function(course) {
-            if (!publicApi.hasCourse(course)) {
-                privateApi.requiredCourses.push(course);
-                return true;
-            } else {
-                return false;
-            }
-        };
-
-        /**
-         * @ngdoc method
-         * @name addPreferredGenEd
-         * @methodOf norseCourse.service:schedulesService
-         * @description
-         *
-         * Adds a gen ed to the preferred gen eds list
-         * If the gen ed is already in the preferred or required gen eds, it does nothing
-         *
-         * @param {Object} genEd - the gen ed to add
-         * @returns {boolean} true if the gen ed was added
-         */
-        publicApi.addPreferredGenEd = function(genEd) {
-            if (!publicApi.hasGenEd(genEd)) {
-                privateApi.preferredGenEds.push(genEd);
-                return true;
-            } else {
-                return false;
-            }
-        };
-
-        /**
-         * @ngdoc method
-         * @name addRequiredGenEd
-         * @methodOf norseCourse.service:schedulesService
-         * @description
-         *
-         * Adds a gen ed to the required gen eds list
-         * If the gen ed is already in the preferred or required gen eds, it does nothing
-         *
-         * @param {Object} genEd - the gen ed to add
-         * @returns {boolean} true if the gen ed was added
-         */
-        publicApi.addRequiredGenEd = function(genEd) {
-            if (!publicApi.hasGenEd(genEd)) {
-                privateApi.requiredGenEds.push(genEd);
-                return true;
-            } else {
-                return false;
-            }
-        };
-
-        /**
-         * @ngdoc method
-         * @name hasRequiredCourse
-         * @methodOf norseCourse.service:schedulesService
-         * @description
-         *
-         * checks if a course is in the required courses
-         *
-         * @param {Object} course - the course to check for
-         * @returns {boolean} true if the course is in the required courses
-         */
-        publicApi.hasRequiredCourse = function(course) {
-            for (var i = 0; i < privateApi.requiredCourses.length; i++) {
-                if (angular.equals(privateApi.requiredCourses[i], course)) {
-                    return true;
-                }
-            }
-            return false;
-        };
-
-        /**
-         * @ngdoc method
-         * @name hasPreferredCourse
-         * @methodOf norseCourse.service:schedulesService
-         * @description
-         *
-         * checks if a course is in the preferred courses
-         *
-         * @param {Object} course - the course to check for
-         * @returns {boolean} true if the course is in the preferred courses
-         */
-        publicApi.hasPreferredCourse = function(course) {
-            for (var i = 0; i < privateApi.preferredCourses.length; i++) {
-                if (angular.equals(privateApi.preferredCourses[i], course)) {
-                    return true;
-                }
-            }
-            return false;
+        publicApi.getSchedulePreferences = function() {
+            return privateApi.preferences;
         };
 
         /**
          * @ngdoc method
          * @name hasCourse
          * @methodOf norseCourse.service:schedulesService
-         * @description
-         *
-         * checks if a course in the preferred or required courses
-         *
-         * @param {Object} course - the course to check for
-         * @returns {Object} true if the course is in the preferred or required courses
+         * @param {object} course - the course to check for
+         * @returns {boolean} true if preferences has course, either required or preferred
          */
         publicApi.hasCourse = function(course) {
-            return (publicApi.hasRequiredCourse(course) ||
-                    publicApi.hasPreferredCourse(course));
-        };
-
-        /**
-         * @ngdoc method
-         * @name hasRequiredGenEd
-         * @methodOf norseCourse.service:schedulesService
-         * @description
-         *
-         * checks if a gen ed is in the required gen eds
-         *
-         * @param {Object} genEd - the gen ed to check for
-         * @returns {Object} true if the gen ed is in the required gen eds
-         */
-        publicApi.hasRequiredGenEd = function(genEd) {
-            for (var i = 0; i < privateApi.requiredGenEds.length; i++) {
-                if (angular.equals(privateApi.requiredGenEds[i], genEd)) {
-                    return true;
-                }
-            }
-            return false;
-        };
-
-
-        /**
-         * @ngdoc method
-         * @name hasPreferredGenEd
-         * @methodOf norseCourse.service:schedulesService
-         * @description
-         *
-         * checks if a gen ed is in the preferred gen eds
-         *
-         * @param {Object} genEd - the gen ed to check for
-         * @returns {Object} true if the gen ed is in the preferred gen eds
-         */
-        publicApi.hasPreferredGenEd = function(genEd) {
-            for (var i = 0; i < privateApi.preferredGenEds.length; i++) {
-                if (angular.equals(privateApi.preferredGenEds[i], genEd)) {
-                    return true;
-                }
-            }
-            return false;
+            var foo = privateApi.preferences.courses.map(function(course) {
+                return course.data.courseId;
+            });
+            return foo.indexOf(course.data.courseId) !== -1;
         };
 
         /**
          * @ngdoc method
          * @name hasGenEd
          * @methodOf norseCourse.service:schedulesService
-         * @description
-         *
-         * checks if a gen ed is in the preferred or required gen eds
-         *
-         * @param {Object} genEd - the gen ed to check for
-         * @returns {Object} true if the gen ed is in the preferred or required gen eds
+         * @param {object} genEd - the gen ed to check for
+         * @returns {boolean} true if preferences has gen ed, either required or preferred
          */
         publicApi.hasGenEd = function(genEd) {
-            return (publicApi.hasRequiredGenEd(genEd) ||
-                    publicApi.hasPreferredGenEd(genEd));
+            return privateApi.preferences.genEds.map(function(genEd) {
+                return genEd.data.genEdId;
+            }).indexOf(genEd.data.genEdId) !== -1;
         };
 
         /**
          * @ngdoc method
-         * @name removeRequiredCourse
+         * @name isCourseRequired
          * @methodOf norseCourse.service:schedulesService
-         * @description
-         *
-         * removes a required course
-         * If the course is not in the required courses, does nothing
-         *
-         * @param {Object} course - the course to remove
-         * @returns {boolean} true if the course was removed
+         * @param {object} course - the course to check for
+         * @returns {boolean} true if the course is marked required
          */
-        publicApi.removeRequiredCourse = function(course) {
-            if (publicApi.hasRequiredCourse(course)) {
-                for (var i = 0; i < privateApi.requiredCourses.length; i++) {
-                    if (angular.equals(privateApi.requiredCourses[i], course)) {
-                        privateApi.requiredCourses.splice(i, 1);
-                        return true;
-                    }
-                }
-                return false;
-            } else {
-                return false;
+        publicApi.isCourseRequired = function(course) {
+            return publicApi.hasCourse(course) && privateApi.preferences.courses[privateApi.preferences.courses.map(function(course) {
+                return course.data.courseId;
+            }).indexOf(course.data.courseId)].required;
+        };
+
+        /**
+         * @ngdoc method
+         * @name isGenEdRequired
+         * @methodOf norseCourse.service:schedulesService
+         * @param {object} genEd - the gen ed to check for
+         * @returns {boolean} true if the gen ed is marked required
+         */
+        publicApi.isGenEdRequired = function(genEd) {
+            return publicApi.hasGenEd(genEd) && privateApi.preferences.genEds[privateApi.preferences.genEds.map(function(genEd) {
+                return genEd.data.genEdId;
+            }).indexOf(genEd.data.genEdId)].required;
+        };
+
+        /**
+         * @ngdoc method
+         * @name addCourse
+         * @methodOf norseCourse.service:schedulesService
+         * @param {object} course - the course to add
+         * @param {boolean} required - if the course should be marked required
+         */
+        publicApi.addCourse = function(course, required) {
+            if (!publicApi.hasCourse(course)) {
+                course = angular.copy(course);
+                course.section = null;
+                course.required = Boolean(required);
+                privateApi.preferences.courses.push(course);
             }
         };
 
         /**
          * @ngdoc method
-         * @name removePreferredCourse
+         * @name addGenEd
          * @methodOf norseCourse.service:schedulesService
-         * @description
-         *
-         * removes a preferred course
-         * If the course is not in the preferred courses, does nothing
-         *
-         * @param {Object} course - the course to remove
-         * @returns {boolean} true if the course was removed
+         * @param {object} genEd - the gen ed to add
+         * @param {boolean} required - if the gen ed should be marked required
          */
-        publicApi.removePreferredCourse = function(course) {
-            if (publicApi.hasPreferredCourse(course)) {
-                for (var i = 0; i < privateApi.preferredCourses.length; i++) {
-                    if (angular.equals(privateApi.preferredCourses[i], course)) {
-                        privateApi.preferredCourses.splice(i, 1);
-                        return true;
-                    }
-                }
-                return false;
-            } else {
-                return false;
+        publicApi.addGenEd = function(genEd, required) {
+            if (!publicApi.hasGenEd(genEd)) {
+                genEd = angular.copy(genEd);
+                genEd.required = Boolean(required);
+                privateApi.preferences.genEds.push(genEd);
             }
         };
 
@@ -313,68 +130,13 @@
          * @ngdoc method
          * @name removeCourse
          * @methodOf norseCourse.service:schedulesService
-         * @description
-         *
-         * removes a course if it is either the required or preferred courses
-         *
-         * @param {Object} course - the course to remove
-         * @returns {boolean} true if the course was removed
+         * @param {object} course - the course to remove
          */
         publicApi.removeCourse = function(course) {
-            var foo = publicApi.removePreferredCourse(course);
-            var bar = publicApi.removeRequiredCourse(course);
-            return foo || bar;
-        };
-
-        /**
-         * @ngdoc method
-         * @name removeRequiredGenEd
-         * @methodOf norseCourse.service:schedulesService
-         * @description
-         *
-         * removes a required gen ed
-         * If the gen ed is not in the required gen eds, does nothing
-         *
-         * @param {Object} genEd - the gen ed to remove
-         * @returns {boolean} true if the gen ed was removed
-         */
-        publicApi.removeRequiredGenEd = function(genEd) {
-            if (publicApi.hasRequiredGenEd(genEd)) {
-                for (var i = 0; i < privateApi.requiredGenEds.length; i++) {
-                    if (angular.equals(privateApi.requiredGenEds[i], genEd)) {
-                        privateApi.requiredGenEds.splice(i, 1);
-                        return true;
-                    }
-                }
-                return false;
-            } else {
-                return false;
-            }
-        };
-
-        /**
-         * @ngdoc method
-         * @name removePreferredGenEd
-         * @methodOf norseCourse.service:schedulesService
-         * @description
-         *
-         * removes a preferred gen ed
-         * If the gen ed is not in the preferred gen eds, does nothing
-         *
-         * @param {Object} genEd - the gen ed to remove
-         * @returns {boolean} true if the gen ed was removed
-         */
-        publicApi.removePreferredGenEd = function(genEd) {
-            if (publicApi.hasPreferredGenEd(genEd)) {
-                for (var i = 0; i < privateApi.preferredGenEds.length; i++) {
-                    if (angular.equals(privateApi.preferredGenEds[i], genEd)) {
-                        privateApi.preferredGenEds.splice(i, 1);
-                        return true;
-                    }
-                }
-                return false;
-            } else {
-                return false;
+            if (publicApi.hasCourse(course)) {
+                privateApi.preferences.courses.splice(privateApi.preferences.courses.map(function(course) {
+                    return course.data.courseId;
+                }).indexOf(course.data.courseId), 1);
             }
         };
 
@@ -382,17 +144,14 @@
          * @ngdoc method
          * @name removeGenEd
          * @methodOf norseCourse.service:schedulesService
-         * @description
-         *
-         * removes a gen ed from either the required or preferred gen eds
-         *
-         * @param {Object} genEd - the gen ed to remove
-         * @returns {boolean} true if the gen ed was removed
+         * @param {object} genEd - the gen ed to remove
          */
         publicApi.removeGenEd = function(genEd) {
-            var foo = publicApi.removePreferredGenEd(genEd);
-            var bar = publicApi.removeRequiredGenEd(genEd);
-            return foo || bar;
+            if (publicApi.hasGenEd(genEd)) {
+                privateApi.preferences.genEds.splice(privateApi.preferences.genEds.map(function(genEd) {
+                    return genEd.data.genEdId;
+                }).indexOf(genEd.data.genEdId), 1);
+            }
         };
 
         /**
@@ -411,6 +170,9 @@
             schedule = angular.copy(schedule).sort();
             if (!publicApi.hasSavedSchedule(schedule)) {
                 privateApi.savedSchedules.push(schedule);
+                $cookies.putObject('savedSchedules', privateApi.savedSchedules, {
+                    expires: privateApi.expirationDate
+                });
                 return true;
             } else {
                 return false;
@@ -435,6 +197,9 @@
                 privateApi.savedSchedules.splice(
                     utils.indexOfObject(privateApi.savedSchedules, schedule),
                     1);
+                $cookies.putObject('savedSchedules', privateApi.savedSchedules, {
+                    expires: privateApi.expirationDate
+                });
                 return true;
             } else {
                 return false;
@@ -469,6 +234,130 @@
          */
         publicApi.getSavedSchedules = function() {
             return privateApi.savedSchedules;
+        };
+
+        /**
+         * @ngdoc method
+         * @name requestSchedules
+         * @methodOf norseCourse.service:schedulesService
+         * @description
+         *
+         * Makes an async request to the schedule API based on the preferences
+         * Requests 10 at a time, and automatically initiates next request, appending onto original results
+         *
+         * @param {object} loadingObj - object to keep track of the initial and full results status
+         * @param {object} prefs - the schedule preferences to use; defaults to current preferencse
+         * @param {number} index - the index into the schedules to request at, defaults to -1
+         * @param {array} appendTo - the array to append the results onto
+         * @returns {object} promise fulfilled by array of schedules
+         */
+        publicApi.requestSchedules = function(loadingObj, prefs, index, appendTo) {
+            console.log('Requesting schedules');
+            console.log('Prefs:', prefs);
+            console.log('Index:', index);
+            console.log('appendTo', appendTo);
+            if (prefs === undefined) {
+                prefs = angular.copy(privateApi.preferences);
+            }
+            if (index === undefined) {
+                index = -1;
+            }
+            if (appendTo === undefined) {
+                appendTo = [];
+            }
+                
+            var deferred = $q.defer();
+
+            var requiredSections = prefs.courses.filter(function(course) {
+                return course.section && course.section.required;
+            }).map(function(course) {
+                return course.section.id;
+            });
+
+            var preferredSections = prefs.courses.filter(function(course) {
+                return course.section && !course.section.required;
+            }).map(function(course) {
+                return course.section.id;
+            });
+            
+            var requiredCourses = prefs.courses.filter(function(course) {
+                return course.required;
+            }).map(function(course) {
+                return course.data.courseId;
+            });
+
+            var preferredCourses = prefs.courses.filter(function(course) {
+                return !course.required;
+            }).map(function(course) {
+                return course.data.courseId;
+            });
+
+            var requiredGenEds = prefs.genEds.filter(function(genEd) {
+                return genEd.required;
+            }).map(function(genEd) {
+                return genEd.data.abbreviation;
+            });
+
+            var preferredGenEds = prefs.genEds.filter(function(genEd) {
+                return !genEd.required;
+            }).map(function(genEd) {
+                return genEd.data.abbreviation;
+            });
+
+            var urlParams = [
+                'index=' + index,
+                'minCredits=' + prefs.credits.min,
+                'maxCredits=' + prefs.credits.max,
+                'limit=10'
+            ];
+
+            if (requiredSections.length) {
+                urlParams.push('requiredSections=' + requiredSections.join(','));
+            }
+            if (preferredSections.length) {
+                urlParams.push('preferredSections=' + preferredSections.join(','));
+            }
+            if (requiredCourses.length) {
+                urlParams.push('requiredCourses=' + requiredCourses.join(','));
+            }
+            if (preferredCourses.length) {
+                urlParams.push('preferredCourses=' + preferredCourses.join(','));
+            }
+            if (requiredGenEds.length) {
+                urlParams.push('requiredGenEds=' + requiredGenEds.join(','));
+            }
+            if (preferredGenEds.length) {
+                urlParams.push('preferredGenEds=' + preferredGenEds.join(','));
+            }
+
+            var url = apiUrl + '/schedules?' + urlParams.join('&');
+            console.log('Schedules request url:', url);
+
+            $http.get(url).success(function(data) {
+                if (data[0].error === 'No errors') {
+                    console.log(data);
+                    angular.forEach(data, function(schedule) {
+                        appendTo.push(schedule);
+                    });
+                    loadingObj.initial = false;
+                    deferred.resolve(appendTo);
+                    if (data.length === 10) {
+                        console.log('Requesting more schedules');
+                        publicApi.requestSchedules(loadingObj, prefs, data[data.length-1].index, appendTo);
+                    } else {
+                        loadingObj.full = false;
+                    }
+                } else {
+                    loadingObj.initial = false;
+                    loadingObj.full = false;
+                    deferred.reject(data[0].error);
+                }
+            }).error(function(data) {
+                console.log(data);
+                deferred.reject();
+            });
+            
+            return deferred.promise;
         };
 
         return publicApi;

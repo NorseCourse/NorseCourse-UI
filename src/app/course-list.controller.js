@@ -15,55 +15,30 @@
 
 	$scope.icon = 'add_circle_outline';
 	$scope.formatBody = null;
+        
 //**********************************Everything for dialog*******************///
-	$scope.status = '  ';
-	$scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
-	
 	$scope.courseDialog = function(obj,ev) {
-	    var useFullScreen = ($mdMedia('sm') || $mdMedia('xs'))  && $scope.customFullscreen;
 	    $mdDialog.show({
-		controller: DialogController,
-		closeto: ev,
+		controller: function($scope, $mdDialog,info) {
+	            $scope.info = info;
+	            $scope.secIds = info.section.map(function(sectionObj) {
+                        return sectionObj.id;
+                    });
+	            $scope.hide = function() {
+		        $mdDialog.hide();
+	            };
+	        },
+
 		templateUrl: 'views/app/course-dialog.html',
-		parent: angular.element(document.body),
 		targetEvent: ev,
-		clickOutsideToClose: true,
-		escapeToClose: true,
-		fullscreen: useFullScreen,
-		locals: {info: obj.info}//, //pass the obj object into directive scope.
-		//scope: $scope
+
+		clickOutsideToClose:true,
+		locals: {info: obj.info}
 	    });
-	    
-	    
-	    $scope.$watch(function() {
-		return $mdMedia('xs') || $mdMedia('sm');
-	    }, function(wantsFullScreen) {
-		$scope.customFullscreen = (wantsFullScreen === true);
-	    });
-	    
-	};
-	
-	function DialogController($scope, $mdDialog,info) {
-	    $scope.info = info;
-	    $scope.secIds = [];
-	    angular.forEach(info.section, function(data){
-		$scope.secIds.push(data.id);
-	    });
-	    
-	    $scope.hide = function() {
-		$mdDialog.cancel();
-	    };
-	    
-	    $scope.cancel = function() {
-		$mdDialog.hide();
-	    };
-	    
-	    $scope.answer = function() {
-		$mdDialog.hide();   //some problems with closing the dailog
-		
-	    };
-	}
-	//********************************************** done with dialog*************///
+	};	
+//********************************************** done with dialog*************///
+        
+
 	$scope.searchGenEd = function(data){
 	    console.log(data);
 	    var genEd = {
@@ -88,14 +63,14 @@
 	    var course = {
 		'type':'course',
 		'display':'course',
-		'data':courseSection.info.course,
+		'data':courseSection.info.course
 	    };
 	    console.log('add to Schedule',course);
 	    if (required === 1){
-		schedulesService.addRequiredCourse(course);  	
+		schedulesService.addCourse(course, true);  	
 	    }
 	    else if (required === 0) {
-		schedulesService.addPreferredCourse(course);  
+		schedulesService.addCourse(course, false);  
 	    }
 	};
     });
