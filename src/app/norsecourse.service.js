@@ -419,7 +419,7 @@
 	    var url = apiUrl + '/courses?'; 
 	    var searchArray = [];
 	    
-	    
+	    //construct Url string
 	    angular.forEach(parameters, function(value,key){
 		console.log(key,value);
 		if (key !== 'courses'){
@@ -434,10 +434,11 @@
 	    });
 	    
 	    if (url === apiUrl + '/courses?'){ //no parameters other than courses
-		url += 'genEds=0000001';    //THIS IS A REALLY SHITTY QUICK FIX. LOOK AT THIS LATER.
+		url += 'genEds=0000001'; // quick fix   
 	    }
 	    url = url.slice(0,-1);
 
+	    
 	    $http.get(url).success(function(arrayOfCourses) {
 		console.log('COURSES: ',parameters.courses);
 		angular.forEach(arrayOfCourses,function(course,index){
@@ -468,11 +469,7 @@
 			appendArray.push(publicApi.getCourseNoPromise(courseId));
 		    }
 
-		    		/**publicApi.getCourse(courseId).then(function(course){
-		        console.log('COURSE: ', course,courseId); // I might need this to not be a promise.
-			arrayOfCourses.push(course);
-		    });
-		    **/
+
 		    
 		});
 
@@ -488,23 +485,31 @@
 		    var matchingSections = [];
 		    
 		    var resultsArray = setifyCourses(searchArray);
+
 		    
-		    angular.forEach(resultsArray,function(course,index){
+		    if (Object.getOwnPropertyNames(resultsArray).length > 0){
+		    //if (resultsArray[0] !== undefined ){
 			
-			var obj = {};
-			obj.info={
-			    'course':course,
-			    'section':arrayOfSectionArrays[index],
-			    'basicDisplay': getBasicDisplay(course,arrayOfSectionArrays[index])
-			};
-			matchingSections.push(obj);
-			deferred.resolve(matchingSections);
-		    });
-				   
+			angular.forEach(resultsArray,function(course,index){
+			    
+			    var obj = {};
+			    obj.info={
+				'course':course,
+				'section':arrayOfSectionArrays[index],
+				'basicDisplay': getBasicDisplay(course,arrayOfSectionArrays[index])
+			    };
+			    matchingSections.push(obj);
+			    deferred.resolve(matchingSections);
+			});
+		    }
+		    else {
+			deferred.resolve([{'empty':true}]);
+		    };
+		    
 		});
 	    });
 	    var res = deferred.promise;
-	    console.log('THIS IS WHAT HAPPENS WHEN ITS EMPTY', res);
+
 	    return res;
 	};
 

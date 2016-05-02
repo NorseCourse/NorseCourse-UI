@@ -82,8 +82,15 @@
 		//console.log('find',newValue,oldValue);
 		norseCourseService.queryApi(newValue,oldValue).then(function(data){
 		    console.log('COURSE_FINDER', data); 
-		    $scope.matchingCourses = data;
-		    $scope.loading = null;
+		    if (data[0].empty === true){
+			console.log('empty result')
+			$scope.matchingCourses = [];
+			$scope.loading = null;
+		    }
+		    else{
+			$scope.matchingCourses = data;
+			$scope.loading = null;
+		    }
 		});
 
 	    }
