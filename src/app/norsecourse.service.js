@@ -299,6 +299,7 @@
 
 
 	publicApi.queryApi = function(newValue,oldValue){
+
 	    var deferred = $q.defer();
 	    
 	    var chip_array = [];
@@ -310,9 +311,9 @@
 
 	    /** set up parameters object **/
 	    //console.log('START setting up parameters');
-	    console.log('chip_array: ',chip_array);
+	    //console.log('chip_array: ',chip_array);
 	    var parameters = {};  //what happens if I try and add the types right now?
-	    console.log(chip_array);
+	    //console.log(chip_array);
 
 	    //TODO: make multiple api calls for each added course they add
 	    
@@ -333,12 +334,12 @@
 		var chipType = '';
 		console.log('chip type = ',chip.type);
 		if (chip.type === 'faculty'){
-		    console.log('received faculty');
+		    //console.log('received faculty');
 		    var facId = chip.data.facultyId;
 		    type = 'courses';
 		    chipType = 'course';
 		    var url = apiUrl + '/sections?facultyId=' + facId; //%2C
-		    console.log('URL: ', url);
+		    //console.log('URL: ', url);
 		    var facultyPromise = $http.get(url);
 		    facultyPromises.push(facultyPromise); //adds a single promise to be popped later
 		    allPromises.push(facultyPromise);
@@ -377,7 +378,7 @@
 		    }
 		    //console.log(parameters);		
 		    for(var k in parameters) keys.push(k);     // object.keys() isn't working
-		    console.log(type, id);
+		    //console.log(type, id);
 		    if (id !== undefined){
 			//if (keys.indexOf(type) === -1){
 			//    parameters[type] = [id];
@@ -393,11 +394,12 @@
 		
 		
 	    });
+
 	    /** end set up parameters object **/
 	    
 	    /** beware of the shitty fix for the ansych nature of all this.**/
 	    $q.all(allPromises).then(function(temp){
-		console.log('parameters object: ', parameters);
+		//console.log('parameters object: ', parameters);
 		publicApi.getCourseAndSectionData(parameters).then(function(data){
 		    console.log(data);
 		    deferred.resolve(data);
@@ -406,41 +408,45 @@
 	    
 		
 	    });
+	    
 	    return deferred.promise;
 	};
 	    
 	publicApi.getCourseAndSectionData = function(parameters){
+
 	    //console.log('inCourseAndSectionData');
 	    /**
 	       parameters -> JSON Object that maps query parameters to arrays of id's 
 	    **/
-	    console.log('parameters: ',parameters);
+	    //console.log('parameters: ',parameters);
 	    var deferred = $q.defer();
 	    var url = apiUrl + '/courses?'; 
 	    var searchArray = [];
 	    
+
 	    //construct Url string
 	    angular.forEach(parameters, function(value,key){
-		console.log(key,value);
+		//console.log(key,value);
 		if (key !== 'courses'){
 		    url += key + '=';
 		    angular.forEach(value, function(item){
-			print('item: ', item);
+			
 			url += item + '%2C';
 		    });
 		    url = url.slice(0,-3)+"&";
 		}
 
 	    });
-	    
+
 	    if (url === apiUrl + '/courses?'){ //no parameters other than courses
 		url += 'genEds=0000001'; // quick fix   
 	    }
 	    url = url.slice(0,-1);
-
-	    
+	   
+	    //make api call
 	    $http.get(url).success(function(arrayOfCourses) {
-		console.log('COURSES: ',parameters.courses);
+		//console.log('COURSES: ',parameters.courses);
+		//make sure not to repeat courses or show courses that shouldnt' be shown
 		angular.forEach(arrayOfCourses,function(course,index){
 		    if (parameters.courses === undefined){
 			searchArray.push(course);
@@ -449,7 +455,7 @@
 			searchArray.push(course);
 		    }
 		    
-	
+		    
 		});
 
 		var appendArray = [];
@@ -476,8 +482,8 @@
 		angular.forEach(appendArray,function(course){
 		    searchArray.push(course);
 		});
-		
-		console.log("ARRAYS: ", searchArray,arrayOfCourses,parameters.courses);
+
+		//console.log("ARRAYS: ", searchArray,arrayOfCourses,parameters.courses);
 		//console.log('ARRAY OF COURSES',arrayOfCourses);
 		$q.all(searchArray.map(function(course) { //MAKING TOO MANY API CALLS
 		    return publicApi.fetchSectionsByCourse(course);
@@ -530,7 +536,7 @@
 		found = false;
 		
 	    });
-	    console.log("Setify Results", res);
+	    //console.log("Setify Results", res);
 	    return res;
 	};
 	    
