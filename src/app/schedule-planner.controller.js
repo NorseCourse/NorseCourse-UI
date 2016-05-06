@@ -103,6 +103,9 @@
          *
          */
         $scope.getSchedules = function() {
+            $scope.results = [];
+            $scope.currentSchedule = [];
+            $scope.currentScheduleIndex = -1;
             if ($scope.expanded !== 'results') {
                 $scope.toggleExpanded('results');
             }

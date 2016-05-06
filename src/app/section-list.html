@@ -10,7 +10,7 @@
       {{sectionMeetingSummary(meeting)}} {{section.sevenWeeks === 1 ? 'for the first seven weeks' : section.sevenWeeks === 2 ? 'for the second seven weeks' : ''}}
     </p>
     <p class="schedule-planner__section__details__teachers">
-      Taught by <span ng-repeat="teacher in section.faculty">{{teacher.firstInitial}}. {{teacher.lastName}} {{!$last ? ', ' : ' '}}</span>
+      Taught by <span ng-repeat="teacher in section.faculty">{{teacher.firstInitial === 'nan' ? ' ' : teacher.firstInitial + '.'}} {{teacher.lastName === 'nan' ? 'TBD' : teacher.lastName}}{{!$last ? ', ' : ' '}}</span>
     </p>
     <md-chips class="schedule-planner__section__details__gen-eds"
               ng-if="section.genEdFulfillments.length"
