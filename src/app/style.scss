@@ -55,7 +55,7 @@ foo {
 .tileContent{
 	text-overflow : ellipsis;
 	overflow: hidden;
-	height : 50%;
+	height : calc(100% - 96px);
 	width : 100%;
 	display: block;
 }
@@ -66,4 +66,11 @@ foo {
 	top: .20em;
 	right: 0em;
 	z-index: 3;
+}
+.warning {
+      border-color : #FF4080;
+      border-width : 2px;
+      border-style: solid;
+      text-align: center;
+      width: 100%;
 }

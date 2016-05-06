@@ -1,3 +1,4 @@
+
 var gulp = require('gulp');
 
 var jshint = require('gulp-jshint');
@@ -21,6 +22,7 @@ gulp.task('lint', function() {
 
 // compile sass
 gulp.task('sass', function() {
+    console.log('helllllooooo?5');
     return gulp.src('src/**/*.scss')
         .pipe(concat('style.scss'))
         .pipe(sass({onError: function(e) { console.log(e); } }))
@@ -30,6 +32,7 @@ gulp.task('sass', function() {
 
 // prepare scripts
 gulp.task('js', function() {
+    console.log('helllllooooo?4');
     gulp.src(['src/**/module.js', 'src/**/*.js'])
         .pipe(debug())
         .pipe(sourcemaps.init())
@@ -43,6 +46,7 @@ gulp.task('js', function() {
 
 // ngdocs task
 gulp.task('ngdocs', [], function () {
+    console.log('helllllooooo?3');
     var gulpDocs = require('gulp-ngdocs');
     return gulp.src('src/app/*.js')
         .pipe(gulpDocs.process())
@@ -51,6 +55,7 @@ gulp.task('ngdocs', [], function () {
 
 // html task
 gulp.task('html', function() {
+    console.log('helllllooooo2?');
     gulp.src('src/app/index.html')
         .pipe(gulp.dest('dist/'));
     gulp.src('src/**/*.html')
@@ -65,6 +70,7 @@ gulp.task('serve', ['build'], function() {
     browserSync.init({
         server: "./dist"
     });
+    console.log('helllllooooo1?');
     gulp.watch('src/**/*.js', ['lint', 'js']).on('change', browserSync.reload);
     gulp.watch('src/**/*.scss', ['sass']).on('change', browserSync.reload);
     gulp.watch('src/**/*.html', ['html']).on('change', browserSync.reload);

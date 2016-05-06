@@ -26,7 +26,24 @@
 	var courseNameIdMap = {};  //mapping of course name to id
         var courseIdObjectMap = {};
 
+	var facultyReady = $q.defer() ;
+	var faculty = [];
+	var facultyLastNameIdMap = {};
+	var facultyIdObjectMap = {};
+
         var sectionIdObjectMap = {}; // stores sections after they're first retrieved
+
+	var facultyRequest = $http.get(apiUrl + '/faculty');
+	facultyRequest.success(function(data){
+	    faculty = data;
+	    angular.forEach(data,function(fac){
+		facultyLastNameIdMap[fac.lastName] = fac.facultyId;
+		facultyIdObjectMap[fac.facultyId] = faculty;
+	    });
+	    facultyReady.resolve();
+	});
+			       
+
 	
         var genEdsRequest = $http.get(apiUrl + '/genEds');
         genEdsRequest.success(function(data) {
@@ -127,6 +144,17 @@
             var results = [];
             angular.forEach(types, function(type) {
                 switch(type) {
+		case 'faculty':
+		    angular.forEach(faculty, function(fac) {
+			if (fac.lastName.toLowerCase().includes(queryText)){
+			    results.push({
+				type: 'faculty',
+				data: fac,
+				display: 'prof'
+			    });
+			}
+		    });
+				    break;
                 case 'dept':
                     angular.forEach(departments, function(department) {
                         if (department.abbreviation.toLowerCase() === queryText ||
@@ -246,11 +274,9 @@
 
             $http.get(url).success(function(data) {
                 deferred.resolve(data);
-                console.log(url);
             }).error(function() {
                 deferred.reject();
-                console.log(url);
-            });
+	    });
                          
             return deferred.promise;
         };
@@ -273,71 +299,135 @@
 
 
 	publicApi.queryApi = function(newValue,oldValue){
-	    console.log('QUERYING API',newValue);
+
 	    var deferred = $q.defer();
 	    
-	    var temp_array = [];
+	    var chip_array = [];
 	    if (angular.isArray(newValue)){
-		temp_array = newValue;
+		chip_array = newValue;
 	    }else{
-		temp_array = [newValue];
+		chip_array = [newValue];
 	    }
 
 	    /** set up parameters object **/
 	    //console.log('START setting up parameters');
-	    var parameters = {};
-	    //console.log(temp_array);
+	    //console.log('chip_array: ',chip_array);
+	    var parameters = {};  //what happens if I try and add the types right now?
+	    //console.log(chip_array);
 
 	    //TODO: make multiple api calls for each added course they add
 	    
 	    var keys = [];                      //may be in the wrong spot
+	    var dumbyDeferred = $q.defer();
+	    dumbyDeferred.resolve();
+	   
 
-	    angular.forEach(temp_array,function(chip){
-		var type = chip.type + 's';//temporary fix for department. 
-		console.log(chip, type);
-		var id = '';		
-		if (type !== 'keywords'){ //change to keywords in order to allow keywords. Right now we have a problem with the chips that's going to cause more issues than we want.
+	    var allPromises = [dumbyDeferred.promise];
+	    angular.forEach(chip_array,function(chip){
+                //If faculty, query section api, find sections, and then find courses associated with them.
+		// add those courseIds to the courses parameter.
+		var facultyPromises = [dumbyDeferred.promise];
+		var dumbyDeferred2 = $q.defer();
+		allPromises.push(dumbyDeferred2.promise);
 		
-		    id = eval('chip.data.'+ chip.type+'Id');
-		    console.log('Chip Id:', id);
-		}else{
-		    //console.log(type);
-		    id = chip.data.text;
+		var type = '';
+		var chipType = '';
+		console.log('chip type = ',chip.type);
+		if (chip.type === 'faculty'){
+		    //console.log('received faculty');
+		    var facId = chip.data.facultyId;
+		    type = 'courses';
+		    chipType = 'course';
+		    var url = apiUrl + '/sections?facultyId=' + facId; //%2C
+		    //console.log('URL: ', url);
+		    var facultyPromise = $http.get(url);
+		    facultyPromises.push(facultyPromise); //adds a single promise to be popped later
+		    allPromises.push(facultyPromise);
+		    //make request for those faculty. 
 		}
 
-		for(var k in parameters) keys.push(k);     // object.keys() isn't working
-
-		if (keys.indexOf(type) === -1){
-		    parameters[type] = [id];
-		}else{
-		    parameters[type].push(id);
+		else{
+		    type = chip.type + 's';//temporary fix for department. 
+		    chipType = chip.type;
 		}
-		keys = [];                      //may be in the wrong spot
-		//console.log(parameters);
+		parameters[type]=[];
+
+		$q.all(facultyPromises).then(function(data) {
+		    data.shift();
+		    console.log(data);
+		    
+		    var id = '';		
+		    if (type !== 'keywords'){ //change to keywords in order to allow keywords. Right now we have a problem with the chips that's going to cause more issues than we want.
+			id = eval('chip.data.'+ chipType+'Id');
+		    }else{
+			//console.log(type);
+			id = chip.data.text;
+		    }
+		    //console.log('chip: ', chip);
+		    //console.log('id: ', id);
+		    
+		    if (data.length !== 0){
+			angular.forEach(data[0].data, function(course){
+			    parameters[type].push(course.courseId);
+			    //if (parameters['courseIsFaculty'] === undefined){
+			//	parameters['courseIsFaculty'] =[1];
+			   // } else {
+			//	parameters['courseIsFaculty'].push(1);
+			  //  };//course is faculty?
+			});
+		    }
+		    //console.log(parameters);		
+		    for(var k in parameters) keys.push(k);     // object.keys() isn't working
+		    //console.log(type, id);
+		    if (id !== undefined){
+			//if (keys.indexOf(type) === -1){
+			//    parameters[type] = [id];
+			//}else{
+			    parameters[type].push(id);
+			//}
+		    }
+		    keys = [];
+		    dumbyDeferred2.resolve();
+		    facultyPromises.pop();//console.log(parameters);			     
+		});//may be in the wrong spot
+
+		
+		
 	    });
+
 	    /** end set up parameters object **/
-
-	    publicApi.getCourseAndSectionData(parameters).then(function(data){
+	    
+	    /** beware of the shitty fix for the ansych nature of all this.**/
+	    $q.all(allPromises).then(function(temp){
+		//console.log('parameters object: ', parameters);
+		publicApi.getCourseAndSectionData(parameters).then(function(data){
+		    console.log(data);
+		    deferred.resolve(data);
+		});
 		//console.log(data);
-		deferred.resolve(data);
-		console.log(data);
+	    
+		
 	    });
+	    
 	    return deferred.promise;
 	};
-	    
+
+
+	/***** getCourse and SectionData *****/
+	
 	publicApi.getCourseAndSectionData = function(parameters){
-	    //console.log('inCourseAndSectionData');
+
 	    /**
 	       parameters -> JSON Object that maps query parameters to arrays of id's 
-	     **/
+	    **/
+	    
 	    var deferred = $q.defer();
-	    var requestString = 'SOMETHING';
 	    var url = apiUrl + '/courses?'; 
-	    console.log('apiUrl: ', url);
-	    //section off into it's own function
-	    console.log('parameters: ',parameters);
+	    var searchArray = [];
+	    
+
+	    //construct Url string
 	    angular.forEach(parameters, function(value,key){
-		//consol.log( 
 		if (key !== 'courses'){
 		    url += key + '=';
 		    angular.forEach(value, function(item){
@@ -345,57 +435,123 @@
 		    });
 		    url = url.slice(0,-3)+"&";
 		}
-		
 	    });
+
+	    //quick fix. Ignorse this
 	    if (url === apiUrl + '/courses?'){ //no parameters other than courses
-		url += 'genEds=123134';    //THIS IS A REALLY SHITTY QUICK FIX. LOOK AT THIS LATER.
+		url += 'genEds=0000001'; // quick fix   
 	    }
 	    url = url.slice(0,-1);
-	    console.log(url);
+	   
+	    //make api call
 	    $http.get(url).success(function(arrayOfCourses) {
-		console.log('what the heck?');
-		//console.log(arrayOfCourses.length);
-		console.log(url);
-		angular.forEach(parameters.courses,function(courseId,index){
-		    arrayOfCourses.push(publicApi.getCourseNoPromise(courseId));
-		    /**publicApi.getCourse(courseId).then(function(course){
-		        console.log('COURSE: ', course,courseId); // I might need this to not be a promise.
-			arrayOfCourses.push(course);
-		    });
-		    **/
+		//console.log('COURSES: ',parameters.courses);
+		//make sure not to repeat courses or show courses that shouldnt' be shown
+		angular.forEach(arrayOfCourses,function(course,index){
+		    if (parameters.courses === undefined){
+			searchArray.push(course);
+		    }
+		    else if (parameters.courses.indexOf(course.courseId) !== -1 ){
+			searchArray.push(course);
+		    }
+		    
 		    
 		});
 
-		console.log('ARRAY OF COURSES',arrayOfCourses);
-		$q.all(arrayOfCourses.map(function(course) { //MAKING TOO MANY API CALLS
+		var appendArray = [];
+		angular.forEach(parameters.courses,function(courseId,index){
+		    //right here I'm adding in all the extra course ids. if they are faculty related, I want the intersection.
+		    var found = false;
+
+		    if (arrayOfCourses.length === 0){
+			found = true;
+		    };
+		    angular.forEach(searchArray, function(course,index){
+			if (courseId === course){
+			    found = true;
+			};
+		    });
+		    if (found){
+			appendArray.push(publicApi.getCourseNoPromise(courseId));
+		    }
+
+
+		    
+		});
+
+		angular.forEach(appendArray,function(course){
+		    searchArray.push(course);
+		});
+
+		//console.log("ARRAYS: ", searchArray,arrayOfCourses,parameters.courses);
+		//console.log('ARRAY OF COURSES',arrayOfCourses);
+		$q.all(searchArray.map(function(course) { //MAKING TOO MANY API CALLS
 		    return publicApi.fetchSectionsByCourse(course);
 		})).then(function(arrayOfSectionArrays) {
 		    var matchingSections = [];
-		    angular.forEach(arrayOfCourses,function(course,index){
+		    
+		    var resultsArray = setifyCourses(searchArray);
+
+		    
+		    if (Object.getOwnPropertyNames(resultsArray).length > 0){
+		    //if (resultsArray[0] !== undefined ){
 			
-			var obj = {};
-			obj.info={
-			    'course':course,
-			    'section':arrayOfSectionArrays[index],
-			    'basicDisplay': getBasicDisplay(course,arrayOfSectionArrays[index])
-			};
-			matchingSections.push(obj);
-			deferred.resolve(matchingSections);
-		    });
-				   
+			angular.forEach(resultsArray,function(course,index){
+			    
+			    var obj = {};
+			    obj.info={
+				'course':course,
+				'section':arrayOfSectionArrays[index],
+				'basicDisplay': getBasicDisplay(course,arrayOfSectionArrays[index])
+			    };
+			    matchingSections.push(obj);
+			    deferred.resolve(matchingSections);
+			});
+		    }
+		    else {
+			deferred.resolve([{'empty':true}]);
+		    };
+		    
 		});
 	    });
-	    return deferred.promise;
-	    //$q.all(array of promises.
+	    var res = deferred.promise;
+
+	    return res;
+	};
+	var orderCourses = function(courseArray,searchParameters){
+	    var res = [];
+
+	    return res;
+	};
+
+	var setifyCourses = function(someArray){
+	    var res = {};
+	    angular.forEach(someArray, function(item,index) {
+		var found = false;
+		angular.forEach(res,function(courseSection,index) {
+		    if (courseSection.courseId == item.courseId){
+			found = true;
+		    }
+		});
+		if (!found) {
+
+		    res[index]=item;
+		};
+		found = false;
+		
+	    });
+	    //console.log("Setify Results", res);
+	    return res;
 	};
 	    
+
+
+	
 	publicApi.fetchSectionsByCourse = function(course){
-	    //input: course object
 	    var deferred = $q.defer();
 	    var courseId = course.courseId; //check name
-	    //var matchingSections =
 	    var url = apiUrl + '/sections?courses='+courseId;
-	    //console.log('IN SECTION FETCH: ', url);
+
 	    $http.get(url).success(function(data) {
                 deferred.resolve(data);
             }).error(function() {
@@ -407,7 +563,6 @@
 
 	    
 	var getBasicDisplay= function(course,sectionArray){
-	    console.log('Getting Basic Display',course.name);
 	    /**What do I wanto display?
 	       Course name
 	       Section shorttitle. Not sure how to best do this
@@ -418,7 +573,7 @@
 	    var res = {};
 	    res.name=course.name;
 	    res.description = descriptionDisplay(course.description);//course.description;
-	    
+
 	    if (sectionArray.length === 1 ){
 		var section = sectionArray[0];
 		res.title = section.shortTitle;
@@ -428,18 +583,8 @@
 	    }
 	    else{
 		var firstSection = sectionArray[0];
-		var foo = function(item){
-		    return item.shortTitle === firstSection.shortTitle;
-		};
-		if (sectionArray.every(foo)){
-		    res.title=firstSection.shortTitle;
-		}
-		else{
-		    res.title='Click for Details';
-		}
-		//console.log('Section Display');
-		console.log('genEdDisplay(sectionArray)',sectionArray);
 		var genEdArray = genEdDisplay(sectionArray);//firstSection.generalEdFulfillments; //gened objects
+		res.title= course.title;
 		res.mainGenEds = genEdArray[0];
 		res.extraGenEds = genEdArray[1]; 
 		res.term = firstSection.term;
@@ -450,21 +595,18 @@
 	    return res;
 	    
 	};
-	
+
 	var genEdDisplay = function(sectionArray){
 	    var mainGenEds = [];
 	    var extraGenEds = [];
 	    var genEdCounts = {};
 	    var keys = [];                      
 	    angular.forEach(sectionArray,function(section){
-		console.log("section",section);
 		//angular.forEach(genEdCounts,function(counts,genEd){ keys.push(genEd );});
 		
 		angular.forEach(section.genEdFulfillments,function(genEd){
-		    console.log('FULFILLMENTS: ',section.genEdFulfillments);
-		    
+		   		    
 		    if (keys.indexOf(genEd.id) === -1){ //changing these to genEdId. might not work
-			console.log(genEd.id);
 			genEdCounts[genEd.id] = 1;
 			keys.push(genEd.id);
 		    }else{
@@ -473,18 +615,15 @@
 		    }
 		});
 	    });
-	    
-	    console.log('GenEdCounts:',genEdCounts);
-	    //console.log(genEdCounts);	    
 	    var arrayLength = sectionArray.length;
-	    //console.log(arrayLength);
+	    
+
 	    angular.forEach(genEdCounts,function(count, genEdId){
-		//console.log(count);
+
 		if (count === arrayLength){
 		    mainGenEds.push(publicApi.getGenEdNoPromise(genEdId));
 		}
 		else{
-		    console.log('extraGenEd being pushed ',genEdId,count,arrayLength);
 		    extraGenEds.push(publicApi.getGenEdNoPromise(genEdId));
 		}
 	
@@ -501,12 +640,12 @@
 	};
 	var descriptionDisplay = function(courseDescription){
 	    var res = '';
-	    //console.log(courseDescription);
-	    //console.log(typeof courseDescription);
+	    	    //console.log(typeof courseDescription);
+	    res = courseDescription;
 	    if (courseDescription==='nan'){
 		res = 'No description included. Contact your advisor or the department head for more details.'; 
 	    }
-	    res = courseDescription;
+	    
 	    
 	    return res;
 	};

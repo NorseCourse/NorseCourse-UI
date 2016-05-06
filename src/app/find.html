@@ -1,3 +1,4 @@
+
 <md-content ng-controller="courseFinderController" layout-padding layout-padding-large>
   <md-chips
      ng-model="courseSearchTerms"
@@ -22,6 +23,7 @@
       <span>({{$chip.display | uppercase}})</span>
     </md-chip-template>
   </md-chips>
+  <md-content class="warning md-whiteframe-3dp" ng-hide="warn===false">Your search did not match any courses</md-content>
   <nc-help ng-hide="matchingCourses.length || loading"></nc-help>
   <md-progress-circular ng-hide="loading===null" 
                         md-mode="{{loading}}"
@@ -30,4 +32,24 @@
   <br/>
   <nc-course-list courses="matchingCourses"></nc-course-list>
 </md-content>
+<md-content ng-hide="1 === 1"  layout="row" layout-xs="column" layout-padding>  <!-- Try to incorporate something to hide this if the search bar isn't empty.-->
+  
+  <div flex>
+    <h>About NorseCourse</h>
 
+    <br/><br/>
+    Welcome To NorseCourse! This user friendly website allows Luther College students to easily browse course offerings. Our website allows students to search for courses by general education requirement, department, course ID and keyword. Once students have found a course they are interested in taking they can add it to our custom built scheduler planner. After a student decides on the particular criteria for their desired scheduled they can use our scheduling algorithm to generate all of the possible different schedules the user can take.
+  </div>
+  <div flex>
+    <h>Quick Reference</h>:
+    <ol>
+      <li> Search for Course by general education requirement (i.e. Quantative), department, course ID, or keyword. </li>
+      <li> Click on course for detailed information. </li>
+      <li> Press the '+' button to add a course to your schedule.</li>
+      <li> Go to the 'Plan A Schedule' tab.</li>
+      <li> Seach for all possible schedules</li>
+      
+      
+    </ol>
+  </div>
+</md-content>

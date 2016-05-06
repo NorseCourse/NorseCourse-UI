@@ -16,7 +16,7 @@
         $scope.courseSearchTerms = [];
         $scope.matchingCourses = [];
         $scope.loading = null;
-	
+	$scope.warn = false;
 	/**
 	 *@ngdoc method
 	 *@name autocompleteQuery
@@ -32,7 +32,7 @@
 	 */
 	
         $scope.autocompleteQuery = function(queryText) {
-            var types = ['gen ed', 'dept', 'course', 'keyword'];
+            var types = ['gen ed', 'dept', 'course','faculty', 'keyword'];
             return norseCourseService.autocompleteQuery(queryText, types);
         };
 
@@ -75,16 +75,26 @@
 	 *
 	 */
 	$scope.findCourses = function(newValue,oldValue){
-	    
+	    $scope.warn=false;
 	    if (newValue !== undefined && newValue.length !== 0) {
 		$scope.loading = 'indeterminate';
 		$scope.matchingCourses = [];
 		//console.log('find',newValue,oldValue);
 		norseCourseService.queryApi(newValue,oldValue).then(function(data){
-		    
-		    $scope.matchingCourses = data;
-		    $scope.loading = null;
+		    console.log('COURSE_FINDER', data); 
+		    if (data[0].empty === true){
+			console.log('empty result')
+			$scope.matchingCourses = [];
+			$scope.loading = null;
+			$scope.warn=true;
+		    }
+		    else{
+			$scope.matchingCourses = data;
+			$scope.loading = null;
+			$scope.warn=false;
+		    }
 		});
+
 	    }
 	    else {
 		$scope.matchingCourses = [];

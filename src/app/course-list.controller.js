@@ -28,14 +28,17 @@
 		        $mdDialog.hide();
 	            };
 	        },
+
 		templateUrl: 'views/app/course-dialog.html',
 		targetEvent: ev,
+
 		clickOutsideToClose:true,
 		locals: {info: obj.info}
 	    });
 	};	
 //********************************************** done with dialog*************///
         
+
 	$scope.searchGenEd = function(data){
 	    console.log(data);
 	    var genEd = {
@@ -57,7 +60,6 @@
 	};
 
 	$scope.addToSchedule = function(courseSection,required){
-	    console.log('add to Schedule',courseSection);
 	    var course = {
 		'type':'course',
 		'display':'course',

@@ -30,6 +30,9 @@
                 layout-padding>
       <form>
         <md-input-container>
+          <md-tooltip md-direction="right" md-delay="250">
+            Add preferred or required courses and or sections
+          </md-tooltip>
           <label>Courses</label>
           <md-chips
              class="course-chips"
@@ -80,6 +83,9 @@
         <br/>
         
         <md-input-container>
+          <md-tooltip md-direction="right" md-delay="250">
+            Add preferred or rqeuired gen eds
+          </md-tooltip>
           <label>Gen Eds</label>
           <md-chips class="gen-ed-chips"
              ng-model="prefs.genEds"
