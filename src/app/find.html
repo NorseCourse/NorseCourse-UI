@@ -1,3 +1,4 @@
+
 <md-content ng-controller="courseFinderController" layout-padding layout-padding-large>
   <md-chips
      ng-model="courseSearchTerms"
@@ -22,6 +23,7 @@
       <span>({{$chip.display | uppercase}})</span>
     </md-chip-template>
   </md-chips>
+  <md-content class="warning md-whiteframe-3dp" ng-hide="warn===false">Your search did not match any courses</md-content>
   <nc-help ng-hide="matchingCourses.length || loading"></nc-help>
   <md-progress-circular ng-hide="loading===null" 
                         md-mode="{{loading}}"

@@ -411,14 +411,16 @@
 	    
 	    return deferred.promise;
 	};
-	    
+
+
+	/***** getCourse and SectionData *****/
+	
 	publicApi.getCourseAndSectionData = function(parameters){
 
-	    //console.log('inCourseAndSectionData');
 	    /**
 	       parameters -> JSON Object that maps query parameters to arrays of id's 
 	    **/
-	    //console.log('parameters: ',parameters);
+	    
 	    var deferred = $q.defer();
 	    var url = apiUrl + '/courses?'; 
 	    var searchArray = [];
@@ -426,18 +428,16 @@
 
 	    //construct Url string
 	    angular.forEach(parameters, function(value,key){
-		//console.log(key,value);
 		if (key !== 'courses'){
 		    url += key + '=';
 		    angular.forEach(value, function(item){
-			
 			url += item + '%2C';
 		    });
 		    url = url.slice(0,-3)+"&";
 		}
-
 	    });
 
+	    //quick fix. Ignorse this
 	    if (url === apiUrl + '/courses?'){ //no parameters other than courses
 		url += 'genEds=0000001'; // quick fix   
 	    }
@@ -518,7 +518,11 @@
 
 	    return res;
 	};
+	var orderCourses = function(courseArray,searchParameters){
+	    var res = [];
 
+	    return res;
+	};
 
 	var setifyCourses = function(someArray){
 	    var res = {};

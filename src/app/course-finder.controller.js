@@ -16,7 +16,7 @@
         $scope.courseSearchTerms = [];
         $scope.matchingCourses = [];
         $scope.loading = null;
-	
+	$scope.warn = false;
 	/**
 	 *@ngdoc method
 	 *@name autocompleteQuery
@@ -75,7 +75,7 @@
 	 *
 	 */
 	$scope.findCourses = function(newValue,oldValue){
-	    
+	    $scope.warn=false;
 	    if (newValue !== undefined && newValue.length !== 0) {
 		$scope.loading = 'indeterminate';
 		$scope.matchingCourses = [];
@@ -86,10 +86,12 @@
 			console.log('empty result')
 			$scope.matchingCourses = [];
 			$scope.loading = null;
+			$scope.warn=true;
 		    }
 		    else{
 			$scope.matchingCourses = data;
 			$scope.loading = null;
+			$scope.warn=false;
 		    }
 		});
 
